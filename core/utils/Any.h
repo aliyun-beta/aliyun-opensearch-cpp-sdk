@@ -102,11 +102,11 @@ class Any {
     }
 
     virtual PlaceHolder* clone() const {
-      return new ValueType(held_);
+      return new Holder(held_);
     }
 
     virtual std::string toString() const {
-      utils::StringUtils::ToString(held_);
+      return utils::StringUtils::ToString(held_);
     }
 
    private:
@@ -116,10 +116,10 @@ class Any {
  private:
 
   template<typename ValueType>
-  friend ValueType* any_cast(Any*);
+  friend ValueType* AnyCast(Any*);
 
   template<typename ValueType>
-  friend ValueType* unsafe_any_cast(Any*);
+  friend ValueType* UnsafeAnyCast(Any*);
 
   PlaceHolder* content_;
 };
@@ -128,47 +128,68 @@ inline void swap(Any& lhs, Any& rhs) {
   lhs.swap(rhs);
 }
 
-class bad_any_cast : public std::bad_cast {
+class BadAnyCast : public std::bad_cast {
  public:
   virtual const char * what() const throw () {
-    return "aliyun::Any: failed conversion using aliyun::any_cast";
+    return "aliyun::Any: failed conversion using aliyun::AnyCast";
   }
 };
 
 template<typename ValueType>
-ValueType* any_cast(Any* operand) {
+ValueType* AnyCast(Any* operand) {
   return
       operand && operand->type() == typeid(ValueType) ?
           &static_cast<Any::Holder<ValueType>*>(operand->content_)->held_ : 0;
 }
 
 template<typename ValueType>
-inline const ValueType* any_cast(const Any* operand) {
-  return any_cast<ValueType>(const_cast<Any*>(operand));
+inline const ValueType* AnyCast(const Any* operand) {
+  return AnyCast<ValueType>(const_cast<Any*>(operand));
 }
 
+template <typename T>
+struct TypeTraits {
+  typedef T Type;
+};
+
+template <typename T>
+struct TypeTraits<const T> {
+  typedef T Type;
+};
+
+template <typename T>
+struct TypeTraits<T&> {
+  typedef T Type;
+};
+
+template <typename T>
+struct TypeTraits<const T&> {
+  typedef T Type;
+};
+
 template<typename ValueType>
-inline ValueType any_cast(Any& operand) {
-  ValueType* result = any_cast<ValueType>(&operand);
+inline ValueType AnyCast(Any& operand) {
+  typedef typename TypeTraits<ValueType>::Type NonRef;
+  NonRef* result = AnyCast<NonRef>(&operand);
   if (!result) {
-    throw bad_any_cast();
+    throw BadAnyCast();
   }
   return *result;
 }
 
 template<typename ValueType>
-inline ValueType any_cast(const Any& operand) {
-  return any_cast<ValueType>(const_cast<Any&>(operand));
+inline ValueType AnyCast(const Any& operand) {
+  return AnyCast<ValueType>(const_cast<Any&>(operand));
 }
 
 template<typename ValueType>
-inline ValueType* unsafe_any_cast(Any* operand) throw () {
+inline ValueType* UnsafeAnyCast(Any* operand) {
   return &static_cast<Any::Holder<ValueType>*>(operand->content_)->held_;
 }
 
 template<typename ValueType>
-inline const ValueType* unsafe_any_cast(const Any* operand) throw () {
-  return unsafe_any_cast<ValueType>(const_cast<Any*>(operand));
+inline const ValueType* UnsafeAnyCast(const Any* operand) {
+  return UnsafeAnyCast<ValueType>(const_cast<Any*>(operand));
 }
 
 }  // namespace utils
