@@ -19,9 +19,8 @@
 
 #include "SchemaTable.h"
 
+// use C++0x(C++11) as default regex library
 #include <regex>
-
-#include "SchemaTableFieldType.h"
 
 namespace aliyun {
 namespace opensearch {

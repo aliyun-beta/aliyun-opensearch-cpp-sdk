@@ -39,7 +39,7 @@ void SchemaTableField::addIndex(std::string indexStr) {
   if (indexStr.length() == 0 || trim.length() == 0) {
     return;
   }
-  for (int i = 0; i < indexList_.size(); i++) {
+  for (size_t i = 0; i < indexList_.size(); i++) {
     if (indexList_[i] == trim) {
       return;
     }

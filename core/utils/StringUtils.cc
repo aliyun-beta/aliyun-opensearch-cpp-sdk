@@ -31,7 +31,7 @@ namespace StringUtils {
 
 std::string ToLowerCase(std::string str) {
   std::string lowered(str);
-  for (int i = 0; i < str.length(); i++) {
+  for (size_t i = 0; i < str.length(); i++) {
     if (::isalpha(lowered[i]))
       lowered[i] = (char) ::tolower((int) str[i]);
   }
@@ -40,7 +40,7 @@ std::string ToLowerCase(std::string str) {
 
 std::string ToUpperCase(std::string str) {
   std::string lowered(str);
-  for (int i = 0; i < str.length(); i++) {
+  for (size_t i = 0; i < str.length(); i++) {
     if (::isalpha(lowered[i]))
       lowered[i] = (char) ::toupper((int) str[i]);
   }
@@ -55,7 +55,7 @@ std::string ToEncoding(std::string src, std::string encoding) {
 std::string hexString(std::string src, bool caps) {
   std::string result;
   const char* HEX = caps ? "0123456789ABCDEF" : "0123456789abcdef";
-  for (int i = 0; i < src.length(); i++) {
+  for (size_t i = 0; i < src.length(); i++) {
     result.push_back(HEX[(src[i] >> 4) & 0x0F]);
     result.push_back(HEX[src[i] & 0x0F]);
   }
@@ -76,20 +76,19 @@ std::string hexDump(void* ptr, int len, bool caps) {
 
 std::string trim(std::string src) {
   std::string dst = src;
-  std::string::size_type i;
-  for (i = 0; i < dst.length(); i++) {
+  for (size_t i = 0; i < dst.length(); i++) {
     if (!::isspace(dst[i])) {
+      dst = dst.substr(i); // trim head spaces.
       break;
     }
   }
-  dst = dst.substr(i); // trim head spaces.
 
-  for (i = dst.length() - 1; i >= 0; i++) {
+  for (int i = dst.length() - 1; i >= 0; i++) {
     if (!::isspace(dst[i])) {
+      dst.resize(i + 1); // trim tail spaces.
       break;
     }
   }
-  dst.resize(i + 1); // trim tail spaces.
   return dst;
 }
 

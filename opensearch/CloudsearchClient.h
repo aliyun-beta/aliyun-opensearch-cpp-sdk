@@ -130,38 +130,7 @@ class CloudsearchClient {
    * @throws IOException
    */
   string call(string path, const std::map<string, string>& params,
-              string method, bool isPB, string& debugInfo)
-                  throw (aliyun::Exception) {
-    string uri;
-    if (this->keyType_ == KeyTypeEnum::OPENSEARCH) {
-      uri = '/' + this->version_ + "/api";
-    }
-    string url = this->baseURI_ + uri + path;
-
-    std::map<string, string> parameters(params);
-    if (this->keyType_ == KeyTypeEnum::OPENSEARCH) {
-      parameters["client_id"] = this->clientId_;
-      parameters["nonce"] = getNonce();
-      parameters["sign"] = doSign(parameters);
-    } else if (this->keyType_ == KeyTypeEnum::ALIYUN) {
-      parameters["Version"] = "v2";
-      parameters["AccessKeyId"] = this->accesskey_;
-      parameters["Timestamp"] = utils::ParameterHelper::getISO8601Date(
-          utils::Date());
-      parameters["SignatureMethod"] = "HMAC-SHA1";
-      parameters["SignatureVersion"] = "1.0";
-      parameters["SignatureNonce"] = utils::ParameterHelper::getUUID();
-      parameters["Signature"] = getAliyunSign(parameters, method);
-    }
-    if (method.length() == 0) {
-      method == DEFAULT_METHOD;
-    }
-
-    debugInfo.resize(0);
-    debugInfo.append(url + buildHttpParameterString(parameters));
-
-    return this->doRequest(url, parameters, method, isPB);
-  }
+              string method, bool isPB, string& debugInfo);
 
   /**
    * 向服务器发出请求并获得返回结果
@@ -193,56 +162,13 @@ class CloudsearchClient {
     return call(path, params, method, false, debugInfo);
   }
 
-  string getNonce() {
-    time_t timestamp = ::time(NULL);
-    string timeStr = utils::StringUtils::ToString(timestamp);
-    string signStr = this->clientId_ + this->clientSecret_ + timeStr;
-    string encoded = utils::StringUtils::ToEncoding(signStr, "UTF-8");
-    return utils::ParameterHelper::md5hex(encoded) + "." + timeStr;
-  }
+  string getNonce();
 
-  string buildQuery(std::map<string, string>& params) {
-    string query;
-    for (std::map<string, string>::iterator it = params.begin();
-        it != params.end(); it++) {
-      query += '&' + it->first + '=' + it->second;
-    }
-    return query.substr(1);
-  }
+  string buildQuery(std::map<string, string>& params);
 
-  string doSign(std::map<string, string>& params) {
-    bool hasSignMode = false;
-    string itemsValue;
-    std::map<string, string>::iterator sign = params.find("sign_mode");
-    std::map<string, string>::iterator items = params.find("items");
-    if (sign != params.end() && sign->second == "1" && items != params.end()) {
-      hasSignMode = true;
-      itemsValue = items->second;
-      params.erase(items);
-    }
+  string doSign(std::map<string, string>& params);
 
-    string query = buildQuery(params) + this->clientSecret_;
-    string enc = utils::StringUtils::ToEncoding(query, "UTF-8");
-    string md5 = utils::ParameterHelper::md5hex(enc);
-    if (hasSignMode) {
-      params["items"] = itemsValue;
-    }
-    return md5;
-  }
-
-  static string buildHttpParameterString(const std::map<string, string>& params) {
-    if (params.size() == 0) {
-      return "";
-    }
-    string str;
-    for (std::map<string, string>::const_iterator it = params.begin();
-        it != params.end(); ++it) {
-      string key = auth::AcsURLEncoder::percentEncode(it->first);
-      string val = auth::AcsURLEncoder::percentEncode(it->second);
-      str += "&" + key + "=" + val;
-    }
-    return "?" + str.substr(1);
-  }
+  static string buildHttpParameterString(const std::map<string, string>& params);
 
   /**
    * 获取阿里云使用的签名
@@ -250,43 +176,10 @@ class CloudsearchClient {
    * @param parameters 参数
    * @return
    */
-  string getAliyunSign(std::map<string, string>& params, string method) {
-    bool hasSignMode = false;
-    string itemsValue;
-    std::map<string, string>::iterator sign = params.find("sign_mode");
-    std::map<string, string>::iterator items = params.find("items");
-    if (sign != params.end() && sign->second == "1" && items != params.end()) {
-      hasSignMode = true;
-      itemsValue = items->second;
-      params.erase(items);
-    }
-
-    string strToSign = buildQuery(params);
-    strToSign = method + "&%2F&"
-        + auth::AcsURLEncoder::percentEncode(strToSign);
-    string signature = auth::HmacSha1::getInstance()->signString(
-        strToSign, this->secret_ + "&");
-
-    if (hasSignMode) {
-      params["items"] = itemsValue;
-    }
-    return signature;
-  }
+  string getAliyunSign(std::map<string, string>& params, string method);
 
   string doRequest(string url, const std::map<string, string>& requestParams,
-                   string method, bool isPB) throw (aliyun::Exception) {
-    url = url + buildHttpParameterString(requestParams);
-    http::HttpRequest request(url);
-    request.setMethod(method);
-
-    http::HttpResponse response = http::HttpResponse::getResponse(request);
-
-    string result = response.getContent();
-    if (isPB) {
-      // TODO(xu): handle response content encoding.
-    }
-    return result;
-  }
+                   string method, bool isPB);
  private:
 
   /**

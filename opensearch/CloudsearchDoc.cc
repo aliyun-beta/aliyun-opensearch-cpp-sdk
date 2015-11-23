@@ -85,7 +85,7 @@ void CloudsearchDoc::remove(const std::map<string, string>& fields) {
 
 static string toJsonArray(const std::vector<string>& vec) {
   string jsonArray = "[";
-  for (int i = 0; i < vec.size(); i++) {
+  for (size_t i = 0; i < vec.size(); i++) {
     jsonArray += vec[i] + ',';
   }
   if (jsonArray.length() > 1) {

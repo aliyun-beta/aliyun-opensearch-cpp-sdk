@@ -200,7 +200,7 @@ void XmlReader::read(apr_xml_elem* element, string path, bool appendPath) {
     elementsAsList(children, path);
     read(children[0], path, true);
   } else {
-    for (int i = 0; i < children.size(); i++) {
+    for (size_t i = 0; i < children.size(); i++) {
       read(children[i], path, true);
     }
   }
@@ -214,7 +214,7 @@ std::string XmlReader::buildPath(apr_xml_elem* element, string& path,
 void XmlReader::elementsAsList(std::vector<apr_xml_elem*>& elems, string path) {
   using namespace aliyun::utils::StringUtils;
   map_[path + ".Length"] = ToString(elems.size());
-  for (int i = 0; i < elems.size(); i++) {
+  for (size_t i = 0; i < elems.size(); i++) {
     read(elems[i], path + "[" + ToString(i) + "]", false);
   }
 }

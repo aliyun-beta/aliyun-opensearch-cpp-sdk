@@ -22,23 +22,19 @@
 namespace aliyun {
 namespace opensearch {
 
-DocItems::DocItems() {
-  // TODO Auto-generated constructor stub
-
+std::string DocItems::getJsonString() const {
+  std::string json = "{";
+  for (size_t i = 0; i < docList_.size(); ++i) {
+    json += docList_[i].getJsonString() + ',';
+  }
+  if (json.length() > 1) {
+    json[json.length() - 1] = '}';
+  }
+  else {
+    json.resize(0);
+  }
+  return json;
 }
 
-    std::string DocItems::getJsonString() const {
-        std::string json = "{";
-        for (int i = 0; i < docList_.size(); ++i) {
-            json += docList_[i].getJsonString() + ',';
-        }
-        if (json.length() > 1) {
-            json[json.length() - 1] = '}';
-        }
-        else {
-            json.resize(0);
-        }
-        return json;
-    }
 } /* namespace opensearch */
 } /* namespace aliyun */

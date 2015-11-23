@@ -155,7 +155,7 @@ void CloudsearchSearch::addIndex(std::string indexName) {
 
 void CloudsearchSearch::removeIndex(std::string indexName) {
   std::vector<std::string> buffer;
-  for (int i = 0; i < this->indexes_.size(); ++i) {
+  for (size_t i = 0; i < this->indexes_.size(); ++i) {
     if (this->indexes_[i] != indexName) {
       buffer.push_back(this->indexes_[i]);
     }
@@ -251,12 +251,6 @@ static std::string ToString(
   return str.substr(1);
 }
 
-static std::string ToString(
-    const CloudsearchSearch::StringSummaryMap &stringSummaryMap) {
-  return ToString(
-      const_cast<CloudsearchSearch::StringSummaryMap &>(stringSummaryMap));
-}
-
 std::string CloudsearchSearch::getSummaryString() {
   return ToString(this->summary_);
 }
@@ -301,7 +295,7 @@ std::string CloudsearchSearch::getAggregateString() const {
   std::string str;
   const std::vector<SummaryMap> &aggs = this->getAggregate();
   if (aggs.size() > 0) {
-    for (int i = 0; i < aggs.size(); i++) {
+    for (size_t i = 0; i < aggs.size(); i++) {
       str += ';' + ToString(aggs[i]);
     }
     return str.substr(1);
@@ -315,7 +309,7 @@ std::string CloudsearchSearch::getSortString() const {
   if (sort_.size() > 0) {
     for (std::map<std::string, std::string>::const_iterator it = sort_.begin();
         it != sort_.end(); ++it) {
-      // FIXME(xu): leak separator ?
+      // FIXME(xu): missing separator ?
       sortStr += ';' + it->second + it->first;
     }
     return sortStr.substr(1);
@@ -482,7 +476,7 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
 
   std::string searchIndexes;
   if (this->indexes_.size() > 0) {
-    for (int i = 0; i < this->indexes_.size(); ++i) {
+    for (size_t i = 0; i < this->indexes_.size(); ++i) {
       searchIndexes += ';' + utils::StringUtils::ToString(this->indexes_[i]);
     }
   }
@@ -507,7 +501,7 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
 
   if (this->fetches_.size() > 0) {
     std::string fetchFields;
-    for (int i = 0; i < this->fetches_.size(); ++i) {
+    for (size_t i = 0; i < this->fetches_.size(); ++i) {
       fetchFields += ';' + this->fetches_[i];
     }
     params["fetch_fields"] = fetchFields.substr(1);
@@ -515,7 +509,7 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
 
   if (this->qp_.size() > 0) {
     std::string qpNames;
-    for (int i = 0; i < this->qp_.size(); ++i) {
+    for (size_t i = 0; i < this->qp_.size(); ++i) {
       qpNames += ',' + this->qp_[i];
     }
     params["qp"] = qpNames.substr(1);
@@ -560,7 +554,7 @@ void CloudsearchSearch::disableQp(
 }
 std::string CloudsearchSearch::getIndexInQp(std::vector<std::string> indexes) {
   std::string indexNames = "";
-  for (int i = 0; i < indexes.size(); ++i) {
+  for (size_t i = 0; i < indexes.size(); ++i) {
     indexNames += '|' + indexes[i];
   }
   if (indexNames.length() > 0) {

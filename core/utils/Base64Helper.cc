@@ -81,7 +81,6 @@ std::string Base64Helper::encode(std::string str, std::string encoding) {
 }
 
 std::string Base64Helper::decode(std::string str, std::string encoding) {
-  // TODO: porting or call curl's implements
   if (str.length() == 0 || encoding.length() == 0) {
     return "";
   }
@@ -97,23 +96,23 @@ std::string Base64Helper::decode(std::string str, std::string encoding) {
   int index = 0;
   int count4 = decodeLen - decodeLen % 4;
 
-#define nDEC sizeof(BASE64_DECODE)/sizeof(BASE64_DECODE[0]);
+  const byte* bytes = reinterpret_cast<const byte*>(str.c_str());
   for (int i = 0; i < count4; i += 4) {
-    unsigned c0 = BASE64_DECODE[str[i]];
-    unsigned c1 = BASE64_DECODE[str[i + 1]];
-    unsigned c2 = BASE64_DECODE[str[i + 2]];
-    unsigned c3 = BASE64_DECODE[str[i + 3]];
+    unsigned c0 = BASE64_DECODE[bytes[i]];
+    unsigned c1 = BASE64_DECODE[bytes[i + 1]];
+    unsigned c2 = BASE64_DECODE[bytes[i + 2]];
+    unsigned c3 = BASE64_DECODE[bytes[i + 3]];
     buffer[index++] = (byte) (((c0 << 2) | (c1 >> 4)) & 0xFF);
     buffer[index++] = (byte) ((((c1 & 0x0F) << 4) | (c2 >> 2)) & 0xFF);
     buffer[index++] = (byte) ((((c2 & 3) << 6) | c3) & 0xFF);
   }
 
   if (2 <= decodeLen % 4) {
-    int c0 = BASE64_DECODE[str[count4]];
-    int c1 = BASE64_DECODE[str[count4 + 1]];
+    int c0 = BASE64_DECODE[bytes[count4]];
+    int c1 = BASE64_DECODE[bytes[count4 + 1]];
     buffer[index++] = (byte) (((c0 << 2) | (c1 >> 4)) & 0xFF);
     if (3 == decodeLen % 4) {
-      int c2 = BASE64_DECODE[str[count4 + 2]];
+      int c2 = BASE64_DECODE[bytes[count4 + 2]];
       buffer[index++] = (byte) ((((c1 & 0x0F) << 4) | (c2 >> 2)) & 0xFF);
     }
   }

@@ -31,8 +31,6 @@ namespace opensearch {
 
 class DocItems {
  public:
-  DocItems();
-
   void addDoc(const SingleDoc& doc) {
     docList_.push_back(doc);
   }
