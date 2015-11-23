@@ -29,50 +29,103 @@ namespace opensearch {
 
 class CloudsearchSuggest {
  public:
-  typedef std::string String;
+  CloudsearchSuggest(std::string indexName, std::string suggestName, CloudsearchClient *client);
 
-  CloudsearchSuggest();
+  /**
+   * 获取应用名称
+   *
+   * @return 应用名称
+   */
+  std::string getIndexName();
 
-  CloudsearchSuggest(String indexName, String suggestName, CloudsearchClient* client);
+  /**
+   * 获取下拉提示名称
+   *
+   * @return 下拉提示名称
+   */
+  std::string getSuggestName();
 
-  ~CloudsearchSuggest();
+  /**
+   * 设置获取的下拉提示结果条数
+   *
+   * @param hit 设置获取的下拉提示结果条数 默认值：10
+   */
+  void setHit(int hit);
+
+  /**
+   * 获取设置的下拉提示结果条数
+   *
+   * @return int 获取设置的下拉提示结果条数
+   */
+  int getHit();
+
+  /**
+   * 设置查询词
+   *
+   * @param query 查询词
+   */
+  void setQuery(std::string query);
+
+  /**
+   * 获取查询词
+   *
+   * @return std::string 查询词
+   */
+  std::string getQuery();
+
+
+  /**
+   * 发起查询请求获取查询结果
+   *
+   * @return String 下拉提示查询结果
+   * @throws ClientProtocolException
+   * @throws IOException
+   */
+  std::string search();
+
+  /**
+   * 获取上次请求的信息
+   *
+   * @return std::string
+   */
+  std::string getDebugInfo();
 
  private:
   /**
    * CloudsearchClient实例
    */
-  CloudsearchClient* client_;
+  CloudsearchClient *client_;
 
   /**
    * 索引名称
    */
-  String indexName;
+  std::string indexName_;
 
   /**
    * 下拉提示名称
    */
-  String suggestName;
+  std::string suggestName_;
 
   /**
-   * 返回下拉结果条数
+   * 下拉结果条数
    */
-  int hit;
+  int hit_;
 
   /**
    * 搜索内容
    */
-  String query;
+  std::string query_;
 
   /**
    * 请求API的部分path。
    */
-  String path;
+  std::string path_;
 
   /*
    * 调试信息
    * 用户上次调用的请求串
    */
-  String debugInfo;
+  std::string debugInfo_;
 };
 
 }  // namespace opensearch

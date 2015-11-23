@@ -24,21 +24,49 @@
 namespace aliyun {
 namespace opensearch {
 
-CloudsearchSuggest::CloudsearchSuggest() {
-  // TODO Auto-generated constructor stub
-  hit = 0;
-  path = "/suggest";
-}
+using std::string;
 
-CloudsearchSuggest::CloudsearchSuggest(String indexName, String suggestName,
+CloudsearchSuggest::CloudsearchSuggest(string indexName, string suggestName,
                                        CloudsearchClient* client) {
-  hit = 0;
-  path = "/suggest";
+  client_ = client;
+  indexName_ = indexName;
+  suggestName_ = suggestName;
+  hit_ = 10;
+  path_ = "/suggest";
 }
 
-CloudsearchSuggest::~CloudsearchSuggest() {
-  // TODO Auto-generated destructor stub
-}
+std::string CloudsearchSuggest::search() {
+  std::map<std::string, std::string> params;
+  params["index_name"] = this->indexName_;
+  params["suggest_name"] = this->suggestName_;
+  params["hit"] = utils::StringUtils::ToString(this->hit_);
+  params["query"] = this->query_;
 
+  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+}
+std::string CloudsearchSuggest::getIndexName() {
+  return this->indexName_;
+}
+std::string CloudsearchSuggest::getSuggestName() {
+  return this->suggestName_;
+}
+void CloudsearchSuggest::setHit(int hit) {
+  if (hit < 0) {
+    hit = 10;
+  }
+  this->hit_ = hit;
+}
+int CloudsearchSuggest::getHit() {
+  return this->hit_;
+}
+void CloudsearchSuggest::setQuery(std::string query) {
+  this->query_ = query;
+}
+std::string CloudsearchSuggest::getQuery() {
+  return this->query_;
+}
+std::string CloudsearchSuggest::getDebugInfo() {
+  return this->debugInfo_;
+}
 } /* namespace opensearch */
 } /* namespace aliyun */

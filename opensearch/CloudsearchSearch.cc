@@ -600,5 +600,16 @@ std::string CloudsearchSearch::search() {
   SummaryMap emptyMap;
   return this->search(emptyMap);
 }
+
+std::string CloudsearchSearch::scroll(SummaryMap& opts) {
+  this->extract(opts, SearchTypeEnum::SCROLL);
+  return this->call(SearchTypeEnum::SCROLL);
+}
+
+std::string CloudsearchSearch::scroll() {
+  SummaryMap emptyMap;
+  return this->scroll(emptyMap);
+}
+
 } /* namespace opensearch */
 } /* namespace aliyun */

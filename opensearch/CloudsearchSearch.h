@@ -133,7 +133,7 @@ class CloudsearchSearch {
    * @throws ClientProtocolException
    *
    */
-  std::string scroll(std::map<std::string, std::string> opts);
+  std::string scroll(SummaryMap& opts);
 
 
   /**
