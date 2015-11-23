@@ -83,7 +83,7 @@ std::string trim(std::string src) {
     }
   }
 
-  for (int i = dst.length() - 1; i >= 0; i++) {
+  for (int i = dst.length() - 1; i >= 0; i--) {
     if (!::isspace(dst[i])) {
       dst.resize(i + 1); // trim tail spaces.
       break;

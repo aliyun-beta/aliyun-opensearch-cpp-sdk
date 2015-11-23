@@ -214,7 +214,7 @@ bool CloudsearchSearch::addSummary(std::string fieldName, int len,
 
 CloudsearchSearch::SummaryMap CloudsearchSearch::getSummary(
     std::string fieldName) {
-  StringSummaryMap::iterator pos = this->summary_.begin();
+  StringSummaryMap::iterator pos = this->summary_.find(fieldName);
   if (pos != this->summary_.end()) {
     return pos->second;
   }

@@ -248,8 +248,13 @@ std::string HttpRequest::getContentTypeValue(FormatType contentType,
   }
   return "";  // empty string.
 }
-}  // namespace http
-}  // namespace aliyun
+
+void HttpRequest::enableGzip(bool enable) {
+  // TODO: implement gzip on curl
+}
+
+
+
 
 // don't use it in other place!
 class CurlGlobalWrapper {
@@ -264,3 +269,6 @@ class CurlGlobalWrapper {
   }
 };
 static CurlGlobalWrapper gCurlGlobalInitializer;
+
+}  // namespace http
+}  // namespace aliyun

@@ -36,7 +36,7 @@ int gTraceCounter = 0;
 } while(0)
 #else
 #define TRACE_FUNC
-#define trace
+#define trace(...)
 #endif
 
 namespace aliyun {

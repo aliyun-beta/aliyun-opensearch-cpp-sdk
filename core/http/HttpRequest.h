@@ -149,9 +149,7 @@ class HttpRequest {
     return sSSLVerifyPeer;
   }
 
-  static void enableGzip(bool enable) {
-    // TODO: implement gzip on curl
-  }
+  static void enableGzip(bool enable);
 
  protected:
   std::string url_;
