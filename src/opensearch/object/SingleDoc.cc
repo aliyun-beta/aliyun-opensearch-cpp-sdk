@@ -52,22 +52,32 @@ void SingleDoc::addField(string key, string value) {
 }
 
 std::string SingleDoc::getJsonString() const {
-  string json = "{cmd:" + command_;
+  string json = "{";
 
+  // build command
+  if (command_.length() > 0) {
+    json += "cmd:" + command_;
+  }
+
+  // build fields
   string jsonFields = "{";
   for (std::map<string, string>::const_iterator it = fields_.begin();
       it != fields_.end(); ++it) {
     jsonFields += it->first + ':' + it->second + ',';
   }
-
   if (jsonFields.length() > 1) {
     jsonFields[jsonFields.length() - 1] = '}';
-    json += ',' + jsonFields + '}';
   } else {
-    jsonFields.resize(0);
-    json += '}';
+    jsonFields.clear();
   }
 
+  // concat two part
+  if (json.length() > 1) {
+    json += ',' + jsonFields + '}';
+  }
+  else {
+    json.clear();
+  }
   return json;
 }
 

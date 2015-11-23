@@ -1,18 +1,23 @@
 cmake_minimum_required(VERSION 2.8)
 project(AliyunOpenSearchSDK CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+option(AOSS_BUILD_TEST "Build Aliyun OpenSeach SDK unittests" ON)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -Wextra")
-    set(APR_INCLUDES /usr/include/apr-1.0/)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -march=native -Wall -Wextra -rdynamic")
+    set(AOSS_INCLUDES ${AOSS_INCLUDES} /usr/include/apr-1.0/)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -Wextra")
-    #set(APR_INCLUDES /usr/include/apr-1.0/)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -march=native -Wall -Wextra")
+    #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* apr include path */)
+    #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* curl include path */)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
-    #set(APR_INCLUDES /usr/include/apr-1.0/)
+    #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* apr include path */)
+    #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* curl include path */)
 endif()
+
+# TODO: use curl, apr, apr-util, googletest as submodules
+set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/thridparty/googletest)
 
 set(INCLUDE_FILES
         include/aliyun/auth/AcsURLEncoder.h
@@ -53,7 +58,7 @@ set(INCLUDE_FILES
         include/aliyun/utils/Date.h
         include/aliyun/utils/ParameterHelper.h
         include/aliyun/utils/StringUtils.h
-        )
+)
 
 set(SOURCE_FILES
         ${INCLUDE_FILES}
@@ -90,5 +95,12 @@ set(SOURCE_FILES
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${APR_INCLUDES})
+include_directories(${AOSS_INCLUDES})
+
 add_library(aliyun-opensearch ${SOURCE_FILES})
+
+if (AOSS_BUILD_TEST)
+    add_subdirectory(${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/googletest)
+endif()
+
+add_subdirectory(tests)
