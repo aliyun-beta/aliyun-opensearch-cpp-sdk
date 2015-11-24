@@ -163,6 +163,7 @@ class CloudsearchClient {
     return call(path, params, method, false, debugInfo);
   }
 
+ private:
   string getNonce();
 
   string buildQuery(std::map<string, string>& params);
@@ -171,17 +172,10 @@ class CloudsearchClient {
 
   static string buildHttpParameterString(const std::map<string, string>& params);
 
-  /**
-   * 获取阿里云使用的签名
-   *
-   * @param parameters 参数
-   * @return
-   */
   string getAliyunSign(std::map<string, string>& params, string method);
 
   string doRequest(string url, const std::map<string, string>& requestParams,
                    string method, bool isPB);
- private:
 
   /**
    * 用户的client id。
