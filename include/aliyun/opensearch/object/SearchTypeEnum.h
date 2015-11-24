@@ -39,17 +39,22 @@ class SearchTypeEnum {
 
   SearchTypeEnum(std::string str);
 
-  inline operator int() {
-    return value_;
+#define IMPLEMENT_COMPARE(op) \
+  bool operator op (const SearchTypeEnum& rhs) const { \
+    return this->value_ op rhs.value_; \
   }
 
-  const char* toString();
+  IMPLEMENT_COMPARE(==)
+
+#undef IMPLEMENT_COMPARE
+
+  std::string toString();
 
  private:
   static const char** valueNames() {
     static const char* names[] = {
 #define S(v) #v
-        S(INVALID), S(OPENSEARCH), S(ALIYUN)
+        S(INVALID), S(SEARCH), S(SCROLL)
 #undef S
         };
     return names;

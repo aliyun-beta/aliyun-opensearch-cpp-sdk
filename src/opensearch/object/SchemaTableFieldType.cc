@@ -30,8 +30,8 @@ SchemaTableFieldType::SchemaTableFieldType(int v)
 SchemaTableFieldType::SchemaTableFieldType(std::string type,
                                            std::string bigType) {
   for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (::strncasecmp(type.c_str(), getTypeName(), type.length()) == 0
-        && ::strncasecmp(bigType.c_str(), getBigTypeName(), bigType.length())
+    if (::strncasecmp(type.c_str(), typeNames()[value_], type.length()) == 0
+        && ::strncasecmp(bigType.c_str(), bigTypeNames()[value_], bigType.length())
             == 0) {
       return;
     }
@@ -39,9 +39,8 @@ SchemaTableFieldType::SchemaTableFieldType(std::string type,
   value_ = 0;
 }
 
-const char* SchemaTableFieldType::getTypeName() const {
-  const char** names = typeNames();
-  return names[value_];
+std::string SchemaTableFieldType::getTypeName() const {
+  return typeNames()[value_];
 }
 
 }  // namespace object

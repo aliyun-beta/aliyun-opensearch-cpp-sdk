@@ -7,6 +7,7 @@ set(SDK_LIBRARIES aliyun-opensearch curl apr-1 aprutil-1)
 set(TEST_SOURCE_FILES
         opensearch/object/SingleDocTest.cc
         opensearch/object/DocItemsTest.cc
+        opensearch/object/TypesTest.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})

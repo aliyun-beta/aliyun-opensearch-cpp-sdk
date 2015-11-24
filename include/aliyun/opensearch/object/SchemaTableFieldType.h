@@ -59,20 +59,19 @@ class SchemaTableFieldType {
 
   SchemaTableFieldType(std::string type, std::string bigType);
 
-  const char* getTypeName() const;
+  std::string getTypeName() const;
 
 #define IMPLEMENT_COMPARE(op) \
-  bool operator op(const SchemaTableFieldType& rhs) const { \
-    return value_ op rhs.value_; \
+  bool operator op (const SchemaTableFieldType& rhs) const { \
+    return this->value_ op rhs.value_; \
   }
 
   IMPLEMENT_COMPARE(==)
 
 #undef IMPLEMENT_COMPARE
 
-  const char* getBigTypeName() const {
-    const char** names = bigTypeNames();
-    return names[value_];
+  std::string getBigTypeName() const {
+    return bigTypeNames()[value_];
   }
 
   int getBigType() const {

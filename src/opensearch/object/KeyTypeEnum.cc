@@ -31,16 +31,15 @@ KeyTypeEnum::KeyTypeEnum(int v)
 
 KeyTypeEnum::KeyTypeEnum(std::string str) {
   for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (::strncasecmp(str.c_str(), toString(), str.length()) == 0) {
+    if (::strncasecmp(str.c_str(), valueNames()[value_], str.length()) == 0) {
       return;
     }
   }
   value_ = 0;
 }
 
-const char* KeyTypeEnum::toString() {
-  const char** names = valueNames();
-  return names[value_];
+std::string KeyTypeEnum::toString() {
+  return valueNames()[value_];
 }
 
 }  // namespace object

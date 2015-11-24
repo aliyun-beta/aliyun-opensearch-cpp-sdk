@@ -31,16 +31,15 @@ SearchTypeEnum::SearchTypeEnum(int v)
 
 SearchTypeEnum::SearchTypeEnum(std::string str) {
   for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (::strncasecmp(str.c_str(), toString(), str.length()) == 0) {
+    if (::strncasecmp(str.c_str(), valueNames()[value_], str.length()) == 0) {
       return;
     }
   }
   value_ = 0;
 }
 
-const char* SearchTypeEnum::toString() {
-  const char** names = valueNames();
-  return names[value_];
+std::string SearchTypeEnum::toString() {
+  return valueNames()[value_];
 }
 
 }  // namespace object
