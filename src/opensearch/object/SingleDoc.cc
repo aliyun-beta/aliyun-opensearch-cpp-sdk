@@ -32,12 +32,11 @@ SingleDoc::SingleDoc(string cmd, const std::map<string, string>& fields)
 }
 
 void SingleDoc::addField(string key, string value) {
-  if (value.find(CloudsearchDoc::HA_DOC_MULTI_VALUE_SEPARATOR)) {
-    string::size_type start = 0;
-    string::size_type pos = value.find(
-        CloudsearchDoc::HA_DOC_MULTI_VALUE_SEPARATOR);
+  string jsonArray = "[";
+  string::size_type start = 0;
+  string::size_type pos = value.find(CloudsearchDoc::HA_DOC_MULTI_VALUE_SEPARATOR);
 
-    string jsonArray = "[";
+  if (pos != string::npos) {
     while (pos != string::npos) {
       jsonArray += value.substr(start, pos - start) + ",";
       start = pos + 1;
@@ -73,7 +72,10 @@ std::string SingleDoc::getJsonString() const {
 
   // concat two part
   if (json.length() > 1) {
-    json += ',' + jsonFields + '}';
+    if (jsonFields.length() != 0) {
+      json += ',' + jsonFields;
+    }
+    json +=  '}';
   }
   else {
     json.clear();

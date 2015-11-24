@@ -22,18 +22,42 @@
 
 using aliyun::opensearch::SingleDoc;
 
-TEST(SingleDocTest, Contructor) {
+TEST(SingleDocTest, ctor) {
   SingleDoc doc1;
   EXPECT_EQ("", doc1.getCommand());
   EXPECT_EQ("", doc1.getJsonString());
 
   std::map<std::string, std::string> fields;
-  fields["foo"] = "bar";
-  fields["key"] = "value";
-  fields["key1"] = "value1";
-  fields["key2"] = "value2";
+  SingleDoc doc2("", fields);
+  EXPECT_EQ("", doc2.getCommand());
+  EXPECT_EQ("", doc2.getJsonString());
+}
 
-  SingleDoc doc2("test", fields);
+TEST(SingleDocTest, json) {
+  SingleDoc doc1;
   EXPECT_EQ("", doc1.getCommand());
   EXPECT_EQ("", doc1.getJsonString());
+
+  std::map<std::string, std::string> fields;
+
+  SingleDoc doc2("doc2", fields);
+  EXPECT_EQ("doc2", doc2.getCommand());
+  EXPECT_EQ("{cmd:doc2}", doc2.getJsonString());
+
+  fields["foo"] = "bar";
+  fields["k1"] = "v1";
+  fields["k2"] = "v2";
+  fields["k3"] = "v3";
+
+  SingleDoc doc3("doc3", fields);
+  EXPECT_EQ("doc3", doc3.getCommand());
+  EXPECT_EQ("{cmd:doc3,{foo:bar,k1:v1,k2:v2,k3:v3}}", doc3.getJsonString());
+}
+
+TEST(SingleDocTest, addField) {
+  SingleDoc doc;
+  doc.setCommand("doc");
+  doc.addField("keywords", "food\035sweat");
+  doc.addField("filter", "200g\035express");
+  EXPECT_EQ("{cmd:doc,{filter:[200g,express],keywords:[food,sweat]}}", doc.getJsonString());
 }
