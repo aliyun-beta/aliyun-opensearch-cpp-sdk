@@ -8,6 +8,7 @@ set(TEST_SOURCE_FILES
         opensearch/object/SingleDocTest.cc
         opensearch/object/DocItemsTest.cc
         opensearch/object/TypesTest.cc
+        opensearch/object/SchemaTableTest.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})
