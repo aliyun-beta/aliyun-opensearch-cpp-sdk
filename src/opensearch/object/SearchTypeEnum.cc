@@ -23,6 +23,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 SearchTypeEnum::SearchTypeEnum(int v)
     : value_(0 <= v && v <= kMaxValue ? v : 0) {
@@ -42,5 +43,6 @@ const char* SearchTypeEnum::toString() {
   return names[value_];
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

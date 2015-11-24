@@ -210,5 +210,5 @@ string CloudsearchClient::doRequest(string url, const std::map<string, string>& 
   return result;
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace opensearch
+}  // namespace aliyun

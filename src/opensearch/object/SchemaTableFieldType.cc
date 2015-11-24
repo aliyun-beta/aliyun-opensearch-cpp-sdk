@@ -21,6 +21,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 SchemaTableFieldType::SchemaTableFieldType(int v)
     : value_(0 <= v && v <= kMaxValue ? v : 0) {
@@ -42,5 +43,7 @@ const char* SchemaTableFieldType::getTypeName() const {
   const char** names = typeNames();
   return names[value_];
 }
+
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun

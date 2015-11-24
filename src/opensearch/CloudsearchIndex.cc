@@ -133,5 +133,6 @@ std::string CloudsearchIndex::getErrorMessage(int page, int pageSize) {
                              CloudsearchClient::METHOD_GET,
                              this->debugInfo_);
 }
-} /* namespace opensearch */
-} /* namespace aliyun */
+
+}  // namespace opensearch
+}  // namespace aliyun

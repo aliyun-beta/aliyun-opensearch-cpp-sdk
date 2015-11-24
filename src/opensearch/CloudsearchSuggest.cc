@@ -42,29 +42,37 @@ std::string CloudsearchSuggest::search() {
 
   return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
+
 std::string CloudsearchSuggest::getIndexName() {
   return this->indexName_;
 }
+
 std::string CloudsearchSuggest::getSuggestName() {
   return this->suggestName_;
 }
+
 void CloudsearchSuggest::setHit(int hit) {
   if (hit < 0) {
     hit = 10;
   }
   this->hit_ = hit;
 }
+
 int CloudsearchSuggest::getHit() {
   return this->hit_;
 }
+
 void CloudsearchSuggest::setQuery(std::string query) {
   this->query_ = query;
 }
+
 std::string CloudsearchSuggest::getQuery() {
   return this->query_;
 }
+
 std::string CloudsearchSuggest::getDebugInfo() {
   return this->debugInfo_;
 }
-} /* namespace opensearch */
-} /* namespace aliyun */
+
+}  // namespace opensearch
+}  // namespace aliyun

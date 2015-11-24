@@ -43,6 +43,7 @@ namespace opensearch {
 class CloudsearchClient {
  public:
   typedef std::string string;
+  typedef object::KeyTypeEnum KeyTypeEnum;
 
   /**
    * 指定默认的请求方式；默认为GET.

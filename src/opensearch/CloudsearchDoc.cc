@@ -67,7 +67,7 @@ static bool isNotBlank(string str) {
 }
 
 void CloudsearchDoc::operate(string cmd, const std::map<string, string>& fields) {
-  opensearch::SingleDoc doc(cmd, fields);
+  object::SingleDoc doc(cmd, fields);
   requestArray_.push_back(doc.getJsonString());
 }
 
@@ -129,8 +129,8 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName) {
 string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
                                      int64_t offset) {
 
-  DocItems docItems;
-  SingleDoc singleDoc;
+  object::DocItems docItems;
+  object::SingleDoc singleDoc;
 
   string lastField;
   string lastKey;
@@ -169,10 +169,10 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
           return "last push not OK, line " + utils::StringUtils::ToString(lastLineNumber);
         }
         lastLineNumber = lineNumber;
-        docItems = DocItems();
+        docItems = object::DocItems();
       }
       docItems.addDoc(singleDoc);
-      singleDoc = SingleDoc();
+      singleDoc = object::SingleDoc();
     } else if (separator == HA_DOC_FIELD_SEPARATOR) { // foreach field
       string detail = line.substr(0, line.length() - 1);
       if (isNotBlank(lastField)) {
@@ -221,5 +221,5 @@ void CloudsearchDoc::timeLimitCheck(std::queue<long>& timeLimitQueue) {
   }
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace opensearch
+}  // namespace aliyun

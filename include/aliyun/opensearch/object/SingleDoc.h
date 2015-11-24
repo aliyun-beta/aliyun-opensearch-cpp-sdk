@@ -25,6 +25,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 class SingleDoc {
  public:
@@ -55,6 +56,7 @@ class SingleDoc {
   std::map<string, string> fields_;
 };
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 

@@ -28,6 +28,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 class DocItems {
  public:
@@ -41,6 +42,7 @@ class DocItems {
   std::vector<SingleDoc> docList_;
 };
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 

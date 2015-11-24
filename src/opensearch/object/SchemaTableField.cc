@@ -22,6 +22,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 SchemaTableField::SchemaTableField() {
   this->display_ = true;
@@ -46,5 +47,6 @@ void SchemaTableField::addIndex(std::string indexStr) {
   indexList_.push_back(trim);
 }
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun

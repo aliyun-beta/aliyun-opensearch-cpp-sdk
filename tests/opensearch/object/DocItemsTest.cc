@@ -20,8 +20,8 @@
 #include <gtest/gtest.h>
 #include "aliyun/opensearch/object/DocItems.h"
 
-using aliyun::opensearch::DocItems;
-using aliyun::opensearch::SingleDoc;
+using aliyun::opensearch::object::DocItems;
+using aliyun::opensearch::object::SingleDoc;
 
 TEST(DocItemsTest, add_json) {
   std::map<std::string, std::string> fields;

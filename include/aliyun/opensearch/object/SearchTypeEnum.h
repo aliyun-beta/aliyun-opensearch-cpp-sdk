@@ -24,6 +24,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 class SearchTypeEnum {
  public:
@@ -58,6 +59,7 @@ class SearchTypeEnum {
   int value_;
 };
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 

@@ -21,6 +21,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 std::string DocItems::getJsonString() const {
   std::string json = "{";
@@ -36,5 +37,6 @@ std::string DocItems::getJsonString() const {
   return json;
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

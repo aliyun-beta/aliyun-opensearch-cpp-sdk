@@ -72,6 +72,8 @@ class CloudsearchSearch {
 
   typedef std::map<std::string, SummaryMap> StringSummaryMap;
 
+  typedef object::SearchTypeEnum SearchTypeEnum;
+
   CloudsearchSearch(CloudsearchClient *client);
 
   /**

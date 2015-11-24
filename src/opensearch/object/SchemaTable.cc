@@ -24,6 +24,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 SchemaTable::SchemaTable()
     : masterTable_(false) {
@@ -48,7 +49,7 @@ void SchemaTable::addField(SchemaTableField schemaTableField) {
     if (schemaTableField.getIndexList().size() == 0) {
       schemaTableField.addIndex("default");
     } else {
-      for (auto& indexStr : schemaTableField.getIndexList()) {
+      for (auto &indexStr : schemaTableField.getIndexList()) {
         std::regex pattern("^[_a-zA-Z][a-zA-Z0-9_]*");
         if (!std::regex_match(indexStr, pattern)) {
           return;
@@ -66,7 +67,7 @@ void SchemaTable::addField(SchemaTableField schemaTableField) {
     if (schemaTableField.getIndexList().size() == 0) {
       schemaTableField.addIndex(schemaTableField.getFieldName());
     } else {
-      for (auto& indexStr : schemaTableField.getIndexList()) {
+      for (auto &indexStr : schemaTableField.getIndexList()) {
         std::regex pattern("^[_a-zA-Z][a-zA-Z0-9_]*");
         if (!std::regex_match(indexStr, pattern)) {
           return;
@@ -87,5 +88,7 @@ void SchemaTable::addField(SchemaTableField schemaTableField) {
   }
   this->fieldList_.push_back(schemaTableField);
 }
+
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun

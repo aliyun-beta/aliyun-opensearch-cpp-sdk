@@ -27,6 +27,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 class SchemaTableField {
  public:
@@ -128,6 +129,7 @@ class SchemaTableField {
 
 };
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 

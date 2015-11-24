@@ -605,5 +605,5 @@ std::string CloudsearchSearch::scroll() {
   return this->scroll(emptyMap);
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace opensearch
+}  // namespace aliyun

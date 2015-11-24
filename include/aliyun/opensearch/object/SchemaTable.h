@@ -27,6 +27,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 class SchemaTable {
  public:
@@ -64,6 +65,7 @@ class SchemaTable {
   std::vector<SchemaTableField> fieldList_;  // schema的属性
 };
 
+}  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 

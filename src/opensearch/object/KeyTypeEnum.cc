@@ -23,6 +23,7 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 KeyTypeEnum::KeyTypeEnum(int v)
     : value_(0 <= v && v <= kMaxValue ? v : 0) {
@@ -42,5 +43,6 @@ const char* KeyTypeEnum::toString() {
   return names[value_];
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

@@ -20,7 +20,7 @@
 #include <gtest/gtest.h>
 #include "aliyun/opensearch/object/SingleDoc.h"
 
-using aliyun::opensearch::SingleDoc;
+using aliyun::opensearch::object::SingleDoc;
 
 TEST(SingleDocTest, ctor) {
   SingleDoc doc1;

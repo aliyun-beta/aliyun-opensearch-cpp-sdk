@@ -22,11 +22,12 @@
 
 namespace aliyun {
 namespace opensearch {
+namespace object {
 
 SingleDoc::SingleDoc() {
 }
 
-SingleDoc::SingleDoc(string cmd, const std::map<string, string>& fields)
+SingleDoc::SingleDoc(string cmd, const std::map<string, string> &fields)
     : command_(cmd),
       fields_(fields) {
 }
@@ -61,7 +62,7 @@ std::string SingleDoc::getJsonString() const {
   // build fields
   string jsonFields = "{";
   for (std::map<string, string>::const_iterator it = fields_.begin();
-      it != fields_.end(); ++it) {
+       it != fields_.end(); ++it) {
     jsonFields += it->first + ':' + it->second + ',';
   }
   if (jsonFields.length() > 1) {
@@ -75,7 +76,7 @@ std::string SingleDoc::getJsonString() const {
     if (jsonFields.length() != 0) {
       json += ',' + jsonFields;
     }
-    json +=  '}';
+    json += '}';
   }
   else {
     json.clear();
@@ -83,6 +84,7 @@ std::string SingleDoc::getJsonString() const {
   return json;
 }
 
-} /* namespace opensearch */
-} /* namespace aliyun */
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun
 
