@@ -1,15 +1,12 @@
-add_executable(SingleDocTest opensearch/object/SingleDocTest.cc)
-target_link_libraries(SingleDocTest aliyun-opensearch curl apr-1 aprutil-1 gtest gtest_main)
+include_directories(${GTEST_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
-if(AOSS_BUILD_TEST)
-    if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
-        set(gtest_disable_pthreads ON)
-        set(gtest_force_shared_crt ON)
-    endif()
-    include_directories(${GTEST_INCLUDE_DIR})
+set(TEST_LIBRARIES gtest gtest_main)
+set(SDK_LIBRARIES aliyun-opensearch curl apr-1 aprutil-1)
 
-    set(TEST_LIBRARIES gtest gtest_main)
+set(TEST_SOURCE_FILES
+        opensearch/object/SingleDocTest.cc
+)
 
-
-    target_link_libraries(SingleDocTest ${TEST_LIBRARIES})
-endif()
+add_executable(UnitTestes ${TEST_SOURCE_FILES})
+target_link_libraries(UnitTestes ${SDK_LIBRARIES} ${TEST_LIBRARIES})

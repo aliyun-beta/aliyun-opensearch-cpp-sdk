@@ -16,10 +16,10 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* curl include path */)
 endif()
 
-# TODO: use curl, apr, apr-util, googletest as submodules
-set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/thridparty/googletest)
+# TODO: use curl, apr, apr-util as submodules
 
-set(INCLUDE_FILES
+
+set(HEADER_FILES
         include/aliyun/auth/AcsURLEncoder.h
         include/aliyun/auth/Credential.h
         include/aliyun/auth/HmacSha1.h
@@ -61,7 +61,7 @@ set(INCLUDE_FILES
 )
 
 set(SOURCE_FILES
-        ${INCLUDE_FILES}
+        ${HEADER_FILES}
         src/auth/AcsURLEncoder.cc
         src/auth/HmacSha1.cc
         src/auth/HmacSha256.cc
@@ -100,7 +100,13 @@ include_directories(${AOSS_INCLUDES})
 add_library(aliyun-opensearch ${SOURCE_FILES})
 
 if (AOSS_BUILD_TEST)
-    add_subdirectory(${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/googletest)
-endif()
+    # build googletest firstly
+    if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
+        set(gtest_disable_pthreads ON)
+        set(gtest_force_shared_crt ON)
+    endif()
+    set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/thirdparty/googletest)
+    add_subdirectory(${GTEST_SOURCE_DIR})
 
-add_subdirectory(tests)
+    add_subdirectory(tests)
+endif()
