@@ -15,3 +15,14 @@ set(TEST_SOURCE_FILES
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})
 target_link_libraries(UnitTestes ${SDK_LIBRARIES} ${TEST_LIBRARIES})
+
+set(BASE_TEST_FILES
+        basetest/Base64Test.cc
+        basetest/CredentialTest.cc
+        basetest/HmacTest.cc
+        basetest/HttpTypesTest.cc
+        basetest/ParamterHelperTest.cc
+        )
+
+add_executable(BaseTestes ${BASE_TEST_FILES})
+target_link_libraries(BaseTestes ${SDK_LIBRARIES} ${TEST_LIBRARIES})
