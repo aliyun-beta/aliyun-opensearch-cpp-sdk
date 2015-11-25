@@ -20,6 +20,7 @@
 #include "aliyun/http/HttpRequest.h"
 #include "aliyun/utils/ParameterHelper.h"
 #include "aliyun/utils/StringUtils.h"
+#include "aliyun/utils/details/GlobalInitializer.h"
 
 #include <vector>
 
@@ -247,23 +248,6 @@ std::string HttpRequest::getContentTypeValue(FormatType contentType,
 void HttpRequest::enableGzip(bool enable) {
   // TODO: implement gzip on curl
 }
-
-
-
-
-// don't use it in other place!
-class CurlGlobalWrapper {
- public:
-  CurlGlobalWrapper() {
-    ::printf("%s curl_global_init\n", __FUNCTION__);
-    curl_global_init(CURL_GLOBAL_ALL);
-  }
-  ~CurlGlobalWrapper() {
-    ::printf("%s curl_global_cleanup\n", __FUNCTION__);
-    curl_global_cleanup();
-  }
-};
-static CurlGlobalWrapper gCurlGlobalInitializer;
 
 }  // namespace http
 }  // namespace aliyun

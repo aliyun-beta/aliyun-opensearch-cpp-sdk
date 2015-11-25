@@ -20,6 +20,7 @@
 #include "aliyun/Exception.h"
 #include "aliyun/auth/HmacSha256.h"
 #include "aliyun/utils/Base64Helper.h"
+#include "aliyun/utils/details/GlobalInitializer.h"
 
 #include <apr_errno.h>
 #include <apr_pools.h>

@@ -19,6 +19,7 @@
 
 #include "aliyun/reader/XmlReader.h"
 #include "aliyun/utils/StringUtils.h"
+#include "aliyun/utils/details/GlobalInitializer.h"
 
 namespace aliyun {
 
@@ -211,21 +212,6 @@ void XmlReader::elementsAsList(std::vector<apr_xml_elem*>& elems, string path) {
     read(elems[i], path + "[" + ToString(i) + "]", false);
   }
 }
-
-class AprGlobalWrapper {
- public:
-  AprGlobalWrapper() {
-    if (apr_initialize() != APR_SUCCESS) {
-      ::fprintf(stderr, "apr_initialize fail");
-      ::exit(-1);
-    }
-  }
-  ~AprGlobalWrapper() {
-    apr_terminate();
-  }
-};
-
-static AprGlobalWrapper __aprGlobalWrapper;
 
 }  // namespace reader
 

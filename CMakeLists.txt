@@ -58,6 +58,7 @@ set(HEADER_FILES
         include/aliyun/utils/Date.h
         include/aliyun/utils/ParameterHelper.h
         include/aliyun/utils/StringUtils.h
+        include/aliyun/utils/details/GlobalInitializer.h
 )
 
 set(SOURCE_FILES
@@ -92,6 +93,7 @@ set(SOURCE_FILES
         src/utils/Date.cc
         src/utils/ParameterHelper.cc
         src/utils/StringUtils.cc
+        src/utils/details/GlobalInitializer.cc
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
