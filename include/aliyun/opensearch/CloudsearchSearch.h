@@ -74,7 +74,7 @@ class CloudsearchSearch {
 
   typedef object::SearchTypeEnum SearchTypeEnum;
 
-  CloudsearchSearch(CloudsearchClient *client);
+  CloudsearchSearch(CloudsearchClient& client);
 
   /**
    * 执行搜索请求(1)

@@ -32,11 +32,11 @@ CloudsearchClient::CloudsearchClient(string accesskey, string secret,
                                      string host,
                                      const std::map<string, string>& opts,
                                      KeyTypeEnum keyType) {
+  this->initialize("", "", host, opts);
   this->version_ = "v2";
   this->keyType_ = keyType;
   this->accesskey_ = accesskey;
   this->secret_ = secret;
-  this->initialize("", "", host, opts);
 }
 
 CloudsearchClient::CloudsearchClient(string clientId, string clientSecret,
@@ -133,7 +133,8 @@ string CloudsearchClient::buildQuery(std::map<string, string>& params) {
   string query;
   for (std::map<string, string>::iterator it = params.begin();
        it != params.end(); it++) {
-    query += '&' + it->first + '=' + it->second;
+    query += '&' + auth::AcsURLEncoder::encode(it->first);
+    query += '=' + auth::AcsURLEncoder::encode(it->second);
   }
   return query.substr(1);
 }

@@ -10,6 +10,7 @@ set(TEST_SOURCE_FILES
         opensearch/object/TypesTest.cc
         opensearch/object/SchemaTableTest.cc
         opensearch/CloudsearchClientTest.cc
+        opensearch/CloudsearchSearchTest.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})

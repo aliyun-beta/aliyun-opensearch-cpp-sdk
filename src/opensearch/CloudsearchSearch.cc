@@ -36,13 +36,14 @@ const string CloudsearchSearch::SEARCH_TYPE_SCAN = "scan";
 
 void CloudsearchSearch::initCustomConfigMap() {
   this->configMap_[KEY_FORMAT] = string("xml");
-  this->configMap_[KEY_START] = string("0");
-  this->configMap_[KEY_HITS] = string("20");
-  this->configMap_[KEY_RERANKSIZE] = string("200");
+  this->configMap_[KEY_START] = 0;
+  this->configMap_[KEY_HITS] = 20;
+  this->configMap_[KEY_RERANKSIZE] = 200;
 }
 
-CloudsearchSearch::CloudsearchSearch(CloudsearchClient *client) {
-  this->client_ = client;
+CloudsearchSearch::CloudsearchSearch(CloudsearchClient& client) {
+  this->client_ = &client;
+  this->path_ = "/search";
   this->initCustomConfigMap();
 }
 
@@ -245,10 +246,12 @@ static std::string ToString(
           it->second.begin(); jt != it->second.end(); ++jt) {
         sub += ',' + jt->first + ':' + jt->second.toString();
       }
-      str += ';' + sub.substr(1);
+      if (sub.length() > 1) {
+        str += ';' + sub.substr(1);
+      }
     }
   }
-  return str.substr(1);
+  return str.length() > 1 ? str.substr(1) : str;
 }
 
 std::string CloudsearchSearch::getSummaryString() {
@@ -444,25 +447,19 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
 
   std::string haQuery = "";
   if (type == SearchTypeEnum::SEARCH) {
-    haQuery.append("config=").append(this->clauseConfig()).append("&&").append(
-        "query=").append(isNotBlank(this->getQuery()) ? this->getQuery() : "''")
-        .append(
-        isNotBlank(this->getSortString()) ?
-            "&&sort=" + this->getSortString() : "").append(
-        isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "")
-        .append(
-        isNotBlank(this->getDistinctString()) ?
-            "&&distinct=" + this->getDistinctString() : "").append(
-        isNotBlank(this->getAggregateString()) ?
-            "&&aggregate=" + this->getAggregateString() : "").append(
-        isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "");
+    haQuery += "config=" + this->clauseConfig() + "&&";
+    haQuery += "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
+    haQuery += isNotBlank(this->getSortString()) ? "&&sort=" + this->getSortString() : "";
+    haQuery += isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
+    haQuery += isNotBlank(this->getDistinctString()) ? "&&distinct=" + this->getDistinctString() : "";
+    haQuery += isNotBlank(this->getAggregateString()) ? "&&aggregate=" + this->getAggregateString() : "";
+    haQuery += isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
   } else if (type == SearchTypeEnum::SCROLL) {
-    haQuery.append("config=").append(this->clauseConfig()).append("&&").append(
-        "query=").append(isNotBlank(this->getQuery()) ? this->getQuery() : "''")
-        .append(
-        isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "")
-        .append(
-        isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "");
+    haQuery += "config=" + this->clauseConfig() + "&&";
+    haQuery += "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
+    haQuery += isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
+    haQuery += isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
+
     if (isNotBlank(this->getScrollExpire())) {
       params["scroll"] = this->getScrollExpire();
     }
