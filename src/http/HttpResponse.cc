@@ -64,6 +64,18 @@ struct HttpTransaction {
   }
 };
 
+static void updateTransactionInfo(HttpTransaction* t) {
+#define curl_easy_getinfo_throw(curl, info, ptr) \
+  rc = curl_easy_getinfo(curl, info, ptr);       \
+  if (rc != CURLE_OK) throw CurlException(rc);
+
+  // TODO: get response code, etc.
+  CURLcode rc;
+  long status = 0;
+  curl_easy_getinfo_throw(t->curl_, CURLINFO_RESPONSE_CODE, &status);
+  t->response_->setStatus(status);
+}
+
 static size_t ResponseHeaderHandler(char *ptr, size_t size, size_t nmemb,
                                     void *userdata) {
   HttpTransaction* t = reinterpret_cast<HttpTransaction*>(userdata);
@@ -84,16 +96,6 @@ static size_t ResponseBodyHandler(char *ptr, size_t size, size_t nmemb,
                                   void *userdata) {
   HttpTransaction* t = reinterpret_cast<HttpTransaction*>(userdata);
   size_t length = size * nmemb;
-
-#define curl_easy_getinfo_throw(curl, info, ptr) \
-  rc = curl_easy_getinfo(curl, info, ptr);       \
-  if (rc != CURLE_OK) throw CurlException(rc);
-
-  // TODO: get response code, etc.
-  CURLcode rc;
-  long status;
-  curl_easy_getinfo_throw(t->curl_, CURLINFO_RESPONSE_CODE, &status);
-  t->response_->setStatus(status);
 
   // TODO: handle http bodys.
   t->state_ = HttpTransaction::BODY_IN;
@@ -157,6 +159,7 @@ HttpResponse HttpResponse::getResponse(HttpRequest request) {
   rc = curl_easy_perform(curl);
   if (rc != 0)
     throw CurlException(rc);
+  updateTransactionInfo(&trans);
 
   parseParameters(response);
   return response;
