@@ -14,10 +14,58 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
     #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* apr include path */)
     #set(AOSS_INCLUDES ${AOSS_INCLUDES} /* curl include path */)
-endif()
+endif ()
 
-# TODO: use curl, apr, apr-util as submodules
+# TODO: check dependencies: curl, apr, apr-util
+find_package(CURL)
+if (CURL_FOUND)
+    message(STATUS "curl already installed!")
+else ()
+    message(STATUS "no curl installed!")
+    find_path(CURL_INCLUDE_DIR curl.h HINTS thirdparty/curl-7.45.0)
+    find_library(CURL_LIBRARY curl HINTS thirdparty/curl-7.45.0)
+    if ((NOT CURL_INCLUDE_DIR) OR (NOT CURL_LIBRARY))
+        if (UNIX)
+            execute_process(COMMAND thirdparty/unix_build.sh curl)
+        else ()
+            execute_process(COMMAND thirdparty/win_build.bat curl)
+        endif ()
+    endif ()
+endif ()
 
+find_path(APR_INCLUDE_DIR apr.h)
+find_library(APR_LIBRARY apr-1)
+if (APR_INCLUDE_DIR OR APR_LIBRARY)
+    message(STATUS "apr already installed!")
+else ()
+    message(STATUS "no apr installed!")
+    find_path(APR_INCLUDE_DIR apr.h HINTS thirdparty/apr-1.5.2/include)
+    find_library(APR_LIBRARY apr-1 HINTS thirdparty/apr-1.5.2)
+    if ((NOT APR_INCLUDE_DIR) OR (NOT APR_LIBRARY))
+        if (UNIX)
+            execute_process(COMMAND thirdparty/unix_build.sh apr)
+        else ()
+            execute_process(COMMAND thirdparty/win_build.bat apr)
+        endif ()
+    endif ()
+endif ()
+
+find_path(APU_INCLUDE_DIR apu.h)
+find_library(APU_LIBRARY aprutil-1)
+if (APU_INCLUDE_DIR OR APU_LIBRARY)
+    message(STATUS "apr-util already installed!")
+else ()
+    message(STATUS "no apr-util installed!")
+    find_path(APU_INCLUDE_DIR apu.h HINTS thirdparty/apr-util-1.5.4/include)
+    find_library(APU_LIBRARY aprutil-1 HINTS thirdparty/apr-util-1.5.4)
+    if ((NOT APU_INCLUDE_DIR) OR (NOT APU_LIBRARY))
+        if (UNIX)
+            execute_process(COMMAND thirdparty/unix_build.sh apu)
+        else ()
+            execute_process(COMMAND thirdparty/win_build.bat apu)
+        endif ()
+    endif ()
+endif ()
 
 set(HEADER_FILES
         include/aliyun/auth/AcsURLEncoder.h
@@ -59,7 +107,7 @@ set(HEADER_FILES
         include/aliyun/utils/ParameterHelper.h
         include/aliyun/utils/StringUtils.h
         include/aliyun/utils/details/GlobalInitializer.h
-)
+        )
 
 set(SOURCE_FILES
         ${HEADER_FILES}
@@ -94,7 +142,7 @@ set(SOURCE_FILES
         src/utils/ParameterHelper.cc
         src/utils/StringUtils.cc
         src/utils/details/GlobalInitializer.cc
-)
+        )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${AOSS_INCLUDES})
@@ -106,9 +154,9 @@ if (AOSS_BUILD_TEST)
     if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
         set(gtest_disable_pthreads ON)
         set(gtest_force_shared_crt ON)
-    endif()
+    endif ()
     set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/thirdparty/googletest)
     add_subdirectory(${GTEST_SOURCE_DIR})
 
     add_subdirectory(tests)
-endif()
+endif ()
