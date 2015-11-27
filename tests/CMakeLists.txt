@@ -2,7 +2,7 @@ include_directories(${GTEST_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(TEST_LIBRARIES gtest gtest_main)
-set(SDK_LIBRARIES aliyun-opensearch curl apr-1 aprutil-1)
+set(SDK_LIBRARIES aliyun-opensearch ${CURL_LIBRARY} ${APR_LIBRARY} ${APU_LIBRARY})
 
 set(TEST_SOURCE_FILES
         opensearch/object/SingleDocTest.cc
@@ -26,3 +26,5 @@ set(BASE_TEST_FILES
 
 add_executable(BaseTestes ${BASE_TEST_FILES})
 target_link_libraries(BaseTestes ${SDK_LIBRARIES} ${TEST_LIBRARIES})
+
+add_dependencies(UnitTestes BaseTestes)
