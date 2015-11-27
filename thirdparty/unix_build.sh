@@ -3,7 +3,11 @@
 if [ "$1" == "curl" ]; then
     echo build CURL
     cd ./curl-7.45.0/
-    ./configure
+    if [`uname` == "Linux"]; then
+        ./configure --with-gnutls
+    else
+        ./configure --with-darwinssl
+    fi
     make
     cd ..
 elif [ "$1" == "apr" ]; then
