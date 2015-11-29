@@ -20,7 +20,6 @@
 #ifndef CORE_HTTP_METHODTYPE_H_
 #define CORE_HTTP_METHODTYPE_H_
 
-#include <string.h>
 #include <string>
 
 namespace aliyun {
@@ -48,7 +47,7 @@ class MethodType {
     GET,
     PUT,
     POST,
-    DELETE,
+    Delete,
     HEAD,
     OPTIONS
   };

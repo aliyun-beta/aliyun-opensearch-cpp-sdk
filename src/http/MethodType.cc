@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+#include <apr_general.h>
 #include "aliyun/http/MethodType.h"
 
 namespace aliyun {
@@ -27,7 +27,7 @@ const char *MethodType::toString() const {
   int v = value_;
   const char* NAMES[] = {
 #define S(e) #e
-      S(INVALID), S(GET), S(PUT), S(POST), S(DELETE), S(HEAD), S(OPTIONS)
+      S(INVALID), S(GET), S(PUT), S(POST), S(Delete), S(HEAD), S(OPTIONS)
 #undef S
       };
   return NAMES[(0 <= v && v <= OPTIONS) ? v : INVALID];
@@ -39,7 +39,7 @@ MethodType::MethodType(int v)
 
 MethodType::MethodType(std::string method) {
   for (value_ = GET; value_ <= OPTIONS; value_++) {
-    if (::strncasecmp(method.c_str(), toString(), method.length()) == 0) {
+    if (strncasecmp(method.c_str(), toString(), method.length()) == 0) {
       return;
     }
   }

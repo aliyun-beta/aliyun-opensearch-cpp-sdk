@@ -19,6 +19,7 @@
 
 #include "aliyun/http/FormatType.h"
 
+#include <apr_general.h>
 #include <string.h>
 
 namespace aliyun {
@@ -48,11 +49,11 @@ std::string FormatType::mapFormatToAccept(FormatType format) {
 }
 
 FormatType FormatType::mapAcceptToFormat(std::string accept) {
-  if (::strncasecmp(accept.c_str(), "application/xml",
+  if (strncasecmp(accept.c_str(), "application/xml",
                     sizeof("application/xml")) == 0
-      || ::strncasecmp(accept.c_str(), "text/xml", sizeof("text/xml")) == 0)
+      || strncasecmp(accept.c_str(), "text/xml", sizeof("text/xml")) == 0)
     return FormatType::XML;
-  if (::strncasecmp(accept.c_str(), "application/json",
+  if (strncasecmp(accept.c_str(), "application/json",
                     sizeof("application/json")) == 0)
     return FormatType::JSON;
 

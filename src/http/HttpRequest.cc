@@ -23,6 +23,7 @@
 #include "aliyun/utils/details/GlobalInitializer.h"
 
 #include <vector>
+#include <string.h>
 
 namespace aliyun {
 namespace http {
@@ -190,7 +191,7 @@ CurlHandle HttpRequest::getHttpConnection() {
       curl_easy_setopt_throw(curl, CURLOPT_POST, 1)
       ;
       break;
-    case MethodType::DELETE:
+    case MethodType::Delete:
       curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "DELETE")
       ;
       break;

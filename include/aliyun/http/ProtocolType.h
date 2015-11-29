@@ -20,7 +20,6 @@
 #ifndef CORE_HTTP_PROTOCOLTYPE_H_
 #define CORE_HTTP_PROTOCOLTYPE_H_
 
-#include <strings.h>
 #include <string>
 
 #include "../Exception.h"

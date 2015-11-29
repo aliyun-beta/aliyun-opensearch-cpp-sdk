@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <apr_general.h>
 
 #include "aliyun/http/ProtocolType.h"
 
@@ -24,9 +25,9 @@ namespace aliyun {
 namespace http {
 
 ProtocolType::ProtocolType(std::string protocol) {
-  if (::strncasecmp(protocol.c_str(), "http", sizeof("http")) == 0) {
+  if (strncasecmp(protocol.c_str(), "http", sizeof("http")) == 0) {
     value_ = HTTP;
-  } else if (::strncasecmp(protocol.c_str(), "https", sizeof("https")) == 0) {
+  } else if (strncasecmp(protocol.c_str(), "https", sizeof("https")) == 0) {
     value_ = HTTPS;
   } else
     throw Exception("Unknow ProtocolType Names");

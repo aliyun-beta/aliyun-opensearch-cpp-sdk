@@ -74,8 +74,8 @@ TEST(MethodType, test) {
   EXPECT_TRUE(MethodType(MethodType::POST) == MethodType("post"));
   EXPECT_TRUE(MethodType(MethodType::HEAD) == MethodType("HEAD"));
   EXPECT_TRUE(MethodType(MethodType::HEAD) == MethodType("head"));
-  EXPECT_TRUE(MethodType(MethodType::DELETE) == MethodType("DELETE"));
-  EXPECT_TRUE(MethodType(MethodType::DELETE) == MethodType("delete"));
+  EXPECT_TRUE(MethodType(MethodType::Delete) == MethodType("DELETE"));
+  EXPECT_TRUE(MethodType(MethodType::Delete) == MethodType("delete"));
   EXPECT_TRUE(MethodType(MethodType::OPTIONS) == MethodType("OPTIONS"));
   EXPECT_TRUE(MethodType(MethodType::OPTIONS) == MethodType("options"));
 }

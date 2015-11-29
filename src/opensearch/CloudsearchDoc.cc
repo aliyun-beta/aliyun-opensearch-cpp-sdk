@@ -212,7 +212,7 @@ void CloudsearchDoc::timeLimitCheck(std::queue<long>& timeLimitQueue) {
     long currentTime = ::time(NULL);
     long delta = currentTime - firstTime;
     if (delta < 1000) { // sleep a duration
-#ifdef _MSC_VER_
+#ifdef _MSC_VER
       ::Sleep(delta);
 #else // _MSC_VER
       ::usleep(delta * 1000);

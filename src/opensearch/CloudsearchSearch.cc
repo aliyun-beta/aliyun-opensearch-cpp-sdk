@@ -19,6 +19,77 @@
 
 #include "aliyun/opensearch/CloudsearchSearch.h"
 
+#include <assert.h>
+#include "aliyun/utils/StringUtils.h"
+
+namespace aliyun {
+namespace utils {
+namespace StringUtils {
+
+template <>
+std::string ToString<opensearch::CloudsearchSearch::SummaryMap>(
+	opensearch::CloudsearchSearch::SummaryMap summaryMap) {
+	std::string str;
+	for (opensearch::CloudsearchSearch::SummaryMap::const_iterator it = summaryMap.begin();
+	it != summaryMap.end(); ++it) {
+		str += ',' + it->first + ':' + it->second.toString();
+	}
+	return str.substr(1);
+}
+
+template <>
+std::string ToString<typename opensearch::CloudsearchSearch::StringSummaryMap>(
+	opensearch::CloudsearchSearch::StringSummaryMap stringSummaryMap
+	) {
+	std::string str;
+	if (stringSummaryMap.size() > 0) {
+		for (opensearch::CloudsearchSearch::StringSummaryMap::const_iterator it =
+			stringSummaryMap.begin(); it != stringSummaryMap.end(); ++it) {
+			std::string sub;
+			for (opensearch::CloudsearchSearch::SummaryMap::const_iterator jt =
+				it->second.begin(); jt != it->second.end(); ++jt) {
+				sub += ',' + jt->first + ':' + jt->second.toString();
+			}
+			if (sub.length() > 1) {
+				str += ';' + sub.substr(1);
+			}
+		}
+	}
+	return str.length() > 1 ? str.substr(1) : str;
+}
+
+template <>
+std::string ToString<std::vector<opensearch::CloudsearchSearch::SummaryMap> >(
+	std::vector<opensearch::CloudsearchSearch::SummaryMap> vecSummaryMap) {
+	assert(!"unimplemented ToString");
+	return "";
+}
+
+template <>
+std::string ToString<std::vector<std::string> >(std::vector<std::string> strVector) {
+	assert(!"unimplemented ToString");
+	return "";
+}
+
+template <>
+std::string ToString<std::map<std::string, std::string> >(std::map<std::string, std::string> strStrMap) {
+	assert(!"unimplemented ToString");
+	return "";
+}
+
+//std::map<string, std::vector<string> > &
+template <>
+std::string ToString<std::map<std::string, std::vector<std::string> > >(
+	std::map<std::string, std::vector<std::string> > strVecStrMap) {
+	assert(!"unimplemented ToString");
+	return "";
+}
+
+
+}  // namespace StringUtils
+}  // namespace utils
+}  // namespace aliyun
+
 namespace aliyun {
 namespace opensearch {
 
@@ -222,40 +293,8 @@ CloudsearchSearch::SummaryMap CloudsearchSearch::getSummary(
   return SummaryMap();
 }
 
-static std::string ToString(CloudsearchSearch::SummaryMap &summaryMap) {
-  string str;
-  for (CloudsearchSearch::SummaryMap::const_iterator it = summaryMap.begin();
-      it != summaryMap.end(); ++it) {
-    str += ',' + it->first + ':' + it->second.toString();
-  }
-  return str.substr(1);
-}
-
-static std::string ToString(const CloudsearchSearch::SummaryMap &summaryMap) {
-  return ToString(const_cast<CloudsearchSearch::SummaryMap &>(summaryMap));
-}
-
-static std::string ToString(
-    CloudsearchSearch::StringSummaryMap &stringSummaryMap) {
-  string str;
-  if (stringSummaryMap.size() > 0) {
-    for (CloudsearchSearch::StringSummaryMap::const_iterator it =
-        stringSummaryMap.begin(); it != stringSummaryMap.end(); ++it) {
-      string sub;
-      for (CloudsearchSearch::SummaryMap::const_iterator jt =
-          it->second.begin(); jt != it->second.end(); ++jt) {
-        sub += ',' + jt->first + ':' + jt->second.toString();
-      }
-      if (sub.length() > 1) {
-        str += ';' + sub.substr(1);
-      }
-    }
-  }
-  return str.length() > 1 ? str.substr(1) : str;
-}
-
 std::string CloudsearchSearch::getSummaryString() {
-  return ToString(this->summary_);
+  return utils::StringUtils::ToString(this->summary_);
 }
 
 bool CloudsearchSearch::addAggregate(std::string groupKey, std::string aggFun,
@@ -299,7 +338,7 @@ std::string CloudsearchSearch::getAggregateString() const {
   const std::vector<SummaryMap> &aggs = this->getAggregate();
   if (aggs.size() > 0) {
     for (size_t i = 0; i < aggs.size(); i++) {
-      str += ';' + ToString(aggs[i]);
+      str += ';' + utils::StringUtils::ToString(aggs[i]);
     }
     return str.substr(1);
   }
@@ -394,7 +433,7 @@ bool CloudsearchSearch::addDistinct(std::string key, int distCount,
 
 std::string CloudsearchSearch::getDistinctString() {
   StringSummaryMap &distinct = this->getDistinct();
-  return ToString(distinct);
+  return utils::StringUtils::ToString(distinct);
 }
 
 int CloudsearchSearch::getRerankSize() const {
@@ -528,7 +567,7 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
 }
 
 std::string CloudsearchSearch::clauseConfig() {
-  return ToString(this->configMap_);
+  return utils::StringUtils::ToString(this->configMap_);
 }
 void CloudsearchSearch::disableQp(
     std::map<std::string, std::vector<std::string> >& opts) {

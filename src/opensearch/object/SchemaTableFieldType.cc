@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <apr_general.h>
 
 #include "aliyun/opensearch/object/SchemaTableFieldType.h"
 
@@ -30,8 +31,8 @@ SchemaTableFieldType::SchemaTableFieldType(int v)
 SchemaTableFieldType::SchemaTableFieldType(std::string type,
                                            std::string bigType) {
   for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (::strncasecmp(type.c_str(), typeNames()[value_], type.length()) == 0
-        && ::strncasecmp(bigType.c_str(), bigTypeNames()[value_], bigType.length())
+    if (strncasecmp(type.c_str(), typeNames()[value_], type.length()) == 0
+        && strncasecmp(bigType.c_str(), bigTypeNames()[value_], bigType.length())
             == 0) {
       return;
     }
