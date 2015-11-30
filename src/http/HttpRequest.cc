@@ -36,18 +36,15 @@ CurlHandle::CurlHandle()
       post_(0),
       refs_(new int(1)),  // maybe throw bad_alloc
       curl_(NULL) {
-  ::printf("CurlHandle %p create\n", this);
   curl_ = curl_easy_init();
   if (NULL == curl_) {
     throw CurlException("curl init fail");
   }
-  ::printf("curl_easy_init %p\n", curl_);
 }
 
 CurlHandle::CurlHandle(const CurlHandle& rhs)
     : head_(0),
       post_(0) {
-  ::printf("CurlHandle %p copy from %p\n", this, &rhs);
   if (rhs.refs_) {
     refs_ = rhs.refs_;
     curl_ = rhs.curl_;
@@ -56,9 +53,7 @@ CurlHandle::CurlHandle(const CurlHandle& rhs)
 }
 
 CurlHandle::~CurlHandle() {
-  ::printf("CurlHandle %p destroy\n", this);
   if (refs_ && --(*refs_) == 0) {
-    ::printf("curl_easy_cleanup %p\n", curl_);
     delete refs_;
     curl_easy_cleanup(curl_);
     curl_slist_free_all(head_);

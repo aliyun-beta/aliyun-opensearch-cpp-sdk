@@ -30,7 +30,6 @@ namespace details {
 class AprGlobalWrapper {
  public:
   AprGlobalWrapper() {
-    ::printf("%s apr_initialize\n", __FUNCTION__);
     if (apr_initialize() != APR_SUCCESS) {
       ::fprintf(stderr, "apr_initialize fail");
       ::exit(-1);
@@ -38,7 +37,6 @@ class AprGlobalWrapper {
   }
 
   ~AprGlobalWrapper() {
-    ::printf("%s apr_terminate\n", __FUNCTION__);
     apr_terminate();
   }
 
@@ -52,12 +50,10 @@ class AprGlobalWrapper {
 class CurlGlobalWrapper {
  public:
   CurlGlobalWrapper() {
-    ::printf("%s curl_global_init\n", __FUNCTION__);
     curl_global_init(CURL_GLOBAL_ALL);
   }
 
   ~CurlGlobalWrapper() {
-    ::printf("%s curl_global_cleanup\n", __FUNCTION__);
     curl_global_cleanup();
   }
 
@@ -70,7 +66,6 @@ class CurlGlobalWrapper {
 // other wrapper/initializer add to here.
 
 int GlobalInitializer::initialize() {
-  ::printf("%s\n", __FUNCTION__);
   // singleton like.
   AprGlobalWrapper::instance();
   CurlGlobalWrapper::instance();

@@ -257,9 +257,17 @@ std::map<std::string, std::string> JsonReader::read(string response,
 #ifdef TRACE
   gTraceCounter = 0;
 #endif
+  this->reset();
   s_ = response.c_str();
   readJson(endpoint);
   return map_;
+}
+
+void JsonReader::reset() {
+  this->s_ = NULL;
+  this->map_.clear();
+  this->stringBuffer_.clear();
+  this->token_ = Token::INIT_TOKEN;
 }
 
 }  // namespace reader

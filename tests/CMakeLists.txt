@@ -25,6 +25,7 @@ set(BASE_TEST_FILES
         basetest/Base64Test.cc
         basetest/CredentialTest.cc
         basetest/HmacTest.cc
+        basetest/HttpTest.cc
         basetest/HttpTypesTest.cc
         basetest/ParamterHelperTest.cc
         )

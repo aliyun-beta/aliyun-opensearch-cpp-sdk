@@ -83,6 +83,8 @@ class JsonReader : public Reader {
 
   static string trimFromLast(string str, string stripString);
 
+  void reset();
+
   Token token_;
   const char* s_;
   string stringBuffer_;

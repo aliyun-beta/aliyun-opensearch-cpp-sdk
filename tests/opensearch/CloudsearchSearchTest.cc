@@ -25,20 +25,6 @@ using aliyun::opensearch::object::KeyTypeEnum;
 using aliyun::opensearch::CloudsearchClient;
 using aliyun::opensearch::CloudsearchSearch;
 
-void testHttpStatus(std::string url, long status) {
-  using aliyun::http::HttpRequest;
-  using aliyun::http::HttpResponse;
-
-  HttpRequest request(url);
-  HttpResponse response = HttpResponse::getResponse(request);
-
-  EXPECT_EQ(status, response.getStatus());
-}
-
-TEST(HTTP, status) {
-  testHttpStatus("http://g.cn/generate_204", 204);
-}
-
 TEST(CloudsearchSearch, search) {
   std::map<std::string, std::string> opts;
   CloudsearchClient client("BBQtaPv7l14mNRDs",
