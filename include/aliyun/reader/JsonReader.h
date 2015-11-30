@@ -42,10 +42,7 @@ class JsonReader : public Reader {
   static std::map<char, char> escapes;
 
  public:
-
   typedef std::string string;
-
-  static int staticInitializer();
 
   std::map<string, string> read(string response, string endpoint);
 

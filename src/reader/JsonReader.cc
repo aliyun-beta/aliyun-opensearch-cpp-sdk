@@ -40,11 +40,8 @@ namespace aliyun {
 
 namespace reader {
 
-std::map<char, char> JsonReader::escapes;
-
-static int __init__ = JsonReader::staticInitializer();
-
-int JsonReader::staticInitializer() {
+std::map<char, char> escapesMapping() {
+  std::map<char, char> escapes;
   escapes['\\'] = '\\';
   escapes['/'] = '/';
   escapes['"'] = '"';
@@ -54,8 +51,10 @@ int JsonReader::staticInitializer() {
   escapes['b'] = '\b';
   escapes['f'] = '\f';
   trace("%s\n", __FUNCTION__);
-  return 0xfeeded00;
+  return escapes;
 }
+
+std::map<char, char> JsonReader::escapes = escapesMapping();
 
 JsonReader::Token JsonReader::readJson(string baseKey) {
   TRACE_FUNC;
