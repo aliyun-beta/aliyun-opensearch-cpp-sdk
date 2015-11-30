@@ -3,7 +3,8 @@
 ## Build
 ### Linux/MacOS
 
-* install cmake
+#### install cmake
+
 Linux(Unbuntu):
 ```
 sudo apt-get install cmake
@@ -11,7 +12,7 @@ sudo apt-get install cmake
 MacOS:
 download from https://cmake.org/download/
 
-* download dependencies use cmake
+#### download dependencies
 ```
 cd <opensearch_source_code>/thirdparty
 cmake -P downloadPackages.cmake
@@ -22,7 +23,7 @@ for t in `ls *.tar.gz`; do tar xzvf $t; done
 ```
 if some error reported, likes file corrupted; delete that file and redo download command.
 
-* configure and build
+#### configure and build
 ```
 mkdir build
 cd build
@@ -36,14 +37,14 @@ NOTE: on Linux cmake 2.8, it maybe some pthread_* error, omit it, redo cmake com
 
 ### Windows
 
-* install cmake
+##### install cmake
 download from https://cmake.org/download/
 
-* add cmake bin directory do PATH
+#### add cmake bin directory do PATH
     (refers: http://www.computerhope.com/issues/ch000549.htm)
     open new cmd window, use `cmake --version` command to test.
 
-* download dependencies use cmake
+#### download dependencies use cmake
 ```
 cd <opensearch_source_code>/thirdparty
 cmake -P downloadPackages.cmake
@@ -51,7 +52,7 @@ cmake -P downloadPackages.cmake
 uncompress all of *.zip use right menu "uncompress here".
 if some error reported, likes file corrupted; delete that file and redo download command.
 
-* configure
+#### configure
 ```
 mkdir build
 cd build
@@ -59,12 +60,12 @@ cmake <absolute_path_of_opensearch_source_code>
 ```
 build dependencies script was saved as `thirdparty/win_build.bat`, by default, it will execute by `cmake <absolute_path_of_opensearch_source_code>`.
 you can execute it manually by:`cd thirdparty && ./win_build.bat [curl|apr|apu]`.
+NOTE:
+* on cmake 2.8, it maybe some pthread_* error, omit it, redo cmake command.
+* in win_build.bat, we assume you are using Visual Studio 2015; if not, you need change it manually.
 
-NOTE: 
-  1. on cmake 2.8, it maybe some pthread_* error, omit it, redo cmake command.
-  2. in win_build.bat, we assume you are using Visual Studio 2015; if not, you need change it manually.
+#### build
 
-* build
 after configure, there will have a *.sln gernerated in `build`, you can use Visual Studio 2015 to open and build it.
 
 or, use `msbuild *.sln`(use actual name replace *) command follow configure.
