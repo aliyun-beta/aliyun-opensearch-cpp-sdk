@@ -22,10 +22,8 @@
 #include <string.h>
 
 namespace aliyun {
-
 namespace utils {
 
-// TODO(xu): move to implements file(.cc)
 const char* Date::kMonthName[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
@@ -79,12 +77,12 @@ std::string Date::format(const char* fmt, const struct tm* t) {
 }
 
 std::string Date::toString() const {
-  return format("%Y-%m-%d %H:%M:%S");
+  return invalid() ? "invalid-date" : format("%Y-%m-%d %H:%M:%S");
 }
 
 std::string Date::format(const char* fmt) const {
   return format(fmt, &tm_);
 }
-}  // namespace utils
 
+}  // namespace utils
 }  // namespace aliyun
