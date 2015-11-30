@@ -46,9 +46,9 @@ const string CloudsearchDoc::HA_DOC_FIELD_SEPARATOR = "\x1F";
 const string CloudsearchDoc::HA_DOC_MULTI_VALUE_SEPARATOR = "\x1D";
 const string CloudsearchDoc::HA_DOC_SECTION_WEIGHT = "\x1C";
 
-CloudsearchDoc::CloudsearchDoc(string indexName, CloudsearchClient* client) {
+CloudsearchDoc::CloudsearchDoc(string indexName, CloudsearchClient& client) {
   this->indexName_ = indexName;
-  this->client_ = client;
+  this->client_ = &client;
   this->path_ = "/index/doc/" + this->indexName_;
 }
 
@@ -106,6 +106,7 @@ string CloudsearchDoc::push(string tableName) {
   string result = this->client_->call(this->path_, params,
                                       CloudsearchClient::METHOD_POST,
                                       this->debugInfo_);
+  this->debugInfo_ += params["items"];
   this->requestArray_.clear();
   return result;
 }

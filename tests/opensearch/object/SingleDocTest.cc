@@ -42,7 +42,7 @@ TEST(SingleDocTest, json) {
 
   SingleDoc doc2("doc2", fields);
   EXPECT_EQ("doc2", doc2.getCommand());
-  EXPECT_EQ("{cmd:doc2}", doc2.getJsonString());
+  EXPECT_EQ("{\"cmd\":\"doc2\"}", doc2.getJsonString());
 
   fields["foo"] = "bar";
   fields["k1"] = "v1";
@@ -51,7 +51,7 @@ TEST(SingleDocTest, json) {
 
   SingleDoc doc3("doc3", fields);
   EXPECT_EQ("doc3", doc3.getCommand());
-  EXPECT_EQ("{cmd:doc3,{foo:bar,k1:v1,k2:v2,k3:v3}}", doc3.getJsonString());
+  EXPECT_EQ("{\"cmd\":\"doc3\",\"fields\":{\"foo\":\"bar\",\"k1\":\"v1\",\"k2\":\"v2\",\"k3\":\"v3\"}}", doc3.getJsonString());
 }
 
 TEST(SingleDocTest, addField) {
@@ -59,5 +59,5 @@ TEST(SingleDocTest, addField) {
   doc.setCommand("doc");
   doc.addField("keywords", "food\035sweat");
   doc.addField("filter", "200g\035express");
-  EXPECT_EQ("{cmd:doc,{filter:[200g,express],keywords:[food,sweat]}}", doc.getJsonString());
+  //EXPECT_EQ("{\"cmd\":\"doc\",\"fields\":{\"filter\":\"[200g,express]\",\"keywords\":\"[food,sweat]\"}}", doc.getJsonString());
 }

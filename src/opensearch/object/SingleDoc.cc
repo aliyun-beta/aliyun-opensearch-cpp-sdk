@@ -56,14 +56,14 @@ std::string SingleDoc::getJsonString() const {
 
   // build command
   if (command_.length() > 0) {
-    json += "cmd:" + command_;
+    json += "\"cmd\":\"" + command_ + "\"";
   }
 
   // build fields
   string jsonFields = "{";
   for (std::map<string, string>::const_iterator it = fields_.begin();
        it != fields_.end(); ++it) {
-    jsonFields += it->first + ':' + it->second + ',';
+    jsonFields += "\"" + it->first + "\":\"" + it->second + "\",";
   }
   if (jsonFields.length() > 1) {
     jsonFields[jsonFields.length() - 1] = '}';
@@ -74,7 +74,7 @@ std::string SingleDoc::getJsonString() const {
   // concat two part
   if (json.length() > 1) {
     if (jsonFields.length() != 0) {
-      json += ',' + jsonFields;
+      json += ",\"fields\":" + jsonFields;
     }
     json += '}';
   }

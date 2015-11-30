@@ -93,7 +93,7 @@ class CloudsearchDoc {
    * @param indexName 指定操作的索引名称。
    * @param client CloudsearchClient实例。
    */
-  CloudsearchDoc(string indexName, CloudsearchClient* client);
+  CloudsearchDoc(string indexName, CloudsearchClient& client);
 
   /**
    * 查看文档详情

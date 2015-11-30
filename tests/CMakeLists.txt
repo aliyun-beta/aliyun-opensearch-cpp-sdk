@@ -15,6 +15,7 @@ set(TEST_SOURCE_FILES
         opensearch/object/SchemaTableTest.cc
         opensearch/CloudsearchClientTest.cc
         opensearch/CloudsearchSearchTest.cc
+        opensearch/CloudsearchDocTest.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})

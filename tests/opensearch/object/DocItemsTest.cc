@@ -35,5 +35,7 @@ TEST(DocItemsTest, add_json) {
   docItems.addDoc(doc1);
   docItems.addDoc(doc2);
 
-  EXPECT_EQ("{{cmd:doc1,{foo:bar}},{cmd:doc2,{foo:bar,have:fun}}}", docItems.getJsonString());
+  EXPECT_EQ(
+      "{{\"cmd\":\"doc1\",\"fields\":{\"foo\":\"bar\"}},{\"cmd\":\"doc2\",\"fields\":{\"foo\":\"bar\",\"have\":\"fun\"}}}",
+      docItems.getJsonString());
 }
