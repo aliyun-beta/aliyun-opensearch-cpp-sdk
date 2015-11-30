@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ ! -f googletest ]; then
+    ln -s googletest-release-1.7.0 googletest
+fi
+
 if [ "$1" == "curl" ]; then
     echo build CURL
     cd ./curl-7.45.0/

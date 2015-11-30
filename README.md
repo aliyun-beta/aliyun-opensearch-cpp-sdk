@@ -32,7 +32,8 @@ make
 ```
 build dependencies script was saved as `thirdparty/unix_build.sh`, by default, it will execute by `cmake <absolute_path_of_opensearch_source_code>`.
 you can execute it manually by:`cd thirdparty && ./unix_build.sh [curl|apr|apu]`.
-NOTE: on Linux cmake 2.8, it maybe some pthread_* error, omit it, redo cmake command.
+NOTE:
+* on Linux cmake 2.8, it maybe some pthread_* error, omit it, redo cmake command.
 
 
 ### Windows
