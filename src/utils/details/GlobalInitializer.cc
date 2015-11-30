@@ -26,34 +26,54 @@ namespace aliyun {
 namespace utils {
 namespace details {
 
-AprGlobalWrapper::AprGlobalWrapper() {
-  ::printf("%s apr_initialize\n", __FUNCTION__);
-  if (apr_initialize() != APR_SUCCESS) {
-    ::fprintf(stderr, "apr_initialize fail");
-    ::exit(-1);
+// for apr global init/cleanup
+class AprGlobalWrapper {
+ public:
+  AprGlobalWrapper() {
+    ::printf("%s apr_initialize\n", __FUNCTION__);
+    if (apr_initialize() != APR_SUCCESS) {
+      ::fprintf(stderr, "apr_initialize fail");
+      ::exit(-1);
+    }
   }
-}
 
-AprGlobalWrapper::~AprGlobalWrapper() {
-  ::printf("%s apr_terminate\n", __FUNCTION__);
-  apr_terminate();
-}
+  ~AprGlobalWrapper() {
+    ::printf("%s apr_terminate\n", __FUNCTION__);
+    apr_terminate();
+  }
 
-CurlGlobalWrapper::CurlGlobalWrapper() {
-  ::printf("%s curl_global_init\n", __FUNCTION__);
-  curl_global_init(CURL_GLOBAL_ALL);
-}
+  static AprGlobalWrapper* instance() {
+    static AprGlobalWrapper stub;
+    return &stub;
+  }
+};
 
-CurlGlobalWrapper::~CurlGlobalWrapper() {
-  ::printf("%s curl_global_cleanup\n", __FUNCTION__);
-  curl_global_cleanup();
-}
+// for curl global init/cleanup
+class CurlGlobalWrapper {
+ public:
+  CurlGlobalWrapper() {
+    ::printf("%s curl_global_init\n", __FUNCTION__);
+    curl_global_init(CURL_GLOBAL_ALL);
+  }
+
+  ~CurlGlobalWrapper() {
+    ::printf("%s curl_global_cleanup\n", __FUNCTION__);
+    curl_global_cleanup();
+  }
+
+  static CurlGlobalWrapper* instance() {
+    static CurlGlobalWrapper stub;
+    return &stub;
+  }
+};
+
+// other wrapper/initializer add to here.
 
 int GlobalInitializer::initialize() {
   ::printf("%s\n", __FUNCTION__);
   // singleton like.
-  static AprGlobalWrapper aprGlobalWrapperStub;
-  static CurlGlobalWrapper curlGlobalWrapperStub;
+  AprGlobalWrapper::instance();
+  CurlGlobalWrapper::instance();
   return 0x900dfee1;
 }
 

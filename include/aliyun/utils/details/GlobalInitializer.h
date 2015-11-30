@@ -26,23 +26,6 @@ namespace aliyun {
 namespace utils {
 namespace details {
 
-// don't use it directly!
-class AprGlobalWrapper {
- public:
-  AprGlobalWrapper();
-  ~AprGlobalWrapper();
-};
-
-// don't use it directly!
-class CurlGlobalWrapper {
- public:
-  CurlGlobalWrapper();
-  ~CurlGlobalWrapper();
-};
-
-// other wrapper/initializer add to here.
-
-
 class GlobalInitializer {
  public:
   static int initialize();
