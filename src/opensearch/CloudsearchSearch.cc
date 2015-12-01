@@ -26,65 +26,64 @@ namespace aliyun {
 namespace utils {
 namespace StringUtils {
 
-template <>
+template<>
 std::string ToString<opensearch::CloudsearchSearch::SummaryMap>(
-	opensearch::CloudsearchSearch::SummaryMap summaryMap) {
-	std::string str;
-	for (opensearch::CloudsearchSearch::SummaryMap::const_iterator it = summaryMap.begin();
-	it != summaryMap.end(); ++it) {
-		str += ',' + it->first + ':' + it->second.toString();
-	}
-	return str.substr(1);
+    opensearch::CloudsearchSearch::SummaryMap summaryMap) {
+  std::string str;
+  for (opensearch::CloudsearchSearch::SummaryMap::const_iterator
+       it = summaryMap.begin(); it != summaryMap.end(); ++it) {
+    str += ',' + it->first + ':' + it->second.toString();
+  }
+  return str.substr(1);
 }
 
-template <>
+template<>
 std::string ToString<typename opensearch::CloudsearchSearch::StringSummaryMap>(
-	opensearch::CloudsearchSearch::StringSummaryMap stringSummaryMap
-	) {
-	std::string str;
-	if (stringSummaryMap.size() > 0) {
-		for (opensearch::CloudsearchSearch::StringSummaryMap::const_iterator it =
-			stringSummaryMap.begin(); it != stringSummaryMap.end(); ++it) {
-			std::string sub;
-			for (opensearch::CloudsearchSearch::SummaryMap::const_iterator jt =
-				it->second.begin(); jt != it->second.end(); ++jt) {
-				sub += ',' + jt->first + ':' + jt->second.toString();
-			}
-			if (sub.length() > 1) {
-				str += ';' + sub.substr(1);
-			}
-		}
-	}
-	return str.length() > 1 ? str.substr(1) : str;
+    opensearch::CloudsearchSearch::StringSummaryMap stringSummaryMap) {
+  std::string str;
+  if (stringSummaryMap.size() > 0) {
+    for (opensearch::CloudsearchSearch::StringSummaryMap::const_iterator
+         it = stringSummaryMap.begin(); it != stringSummaryMap.end(); ++it) {
+      std::string sub;
+      for (opensearch::CloudsearchSearch::SummaryMap::const_iterator
+          jt = it->second.begin(); jt != it->second.end(); ++jt) {
+        sub += ',' + jt->first + ':' + jt->second.toString();
+      }
+      if (sub.length() > 1) {
+        str += ';' + sub.substr(1);
+      }
+    }
+  }
+  return str.length() > 1 ? str.substr(1) : str;
 }
 
-template <>
+template<>
 std::string ToString<std::vector<opensearch::CloudsearchSearch::SummaryMap> >(
-	std::vector<opensearch::CloudsearchSearch::SummaryMap> vecSummaryMap) {
-	assert(!"unimplemented ToString");
-	return "";
+    std::vector<opensearch::CloudsearchSearch::SummaryMap> vecSummaryMap) {
+  assert(!"unimplemented ToString");
+  return "";
 }
 
-template <>
-std::string ToString<std::vector<std::string> >(std::vector<std::string> strVector) {
-	assert(!"unimplemented ToString");
-	return "";
+template<>
+std::string ToString<std::vector<std::string> >(
+    std::vector<std::string> strVector) {
+  assert(!"unimplemented ToString");
+  return "";
 }
 
-template <>
-std::string ToString<std::map<std::string, std::string> >(std::map<std::string, std::string> strStrMap) {
-	assert(!"unimplemented ToString");
-	return "";
+template<>
+std::string ToString<std::map<std::string, std::string> >(
+    std::map<std::string, std::string> strStrMap) {
+  assert(!"unimplemented ToString");
+  return "";
 }
 
-//std::map<string, std::vector<string> > &
-template <>
+template<>
 std::string ToString<std::map<std::string, std::vector<std::string> > >(
-	std::map<std::string, std::vector<std::string> > strVecStrMap) {
-	assert(!"unimplemented ToString");
-	return "";
+    std::map<std::string, std::vector<std::string> > strVecStrMap) {
+  assert(!"unimplemented ToString");
+  return "";
 }
-
 
 }  // namespace StringUtils
 }  // namespace utils

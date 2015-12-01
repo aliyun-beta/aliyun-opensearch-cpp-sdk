@@ -31,7 +31,7 @@ using aliyun::http::HttpResponse;
 using aliyun::http::X509TrustAll;
 
 void printHttpResponse(HttpResponse response) {
-#if 1
+#if 0
   std::cout << "RESPONSE STATUS:" << response.getStatus() << std::endl;
   std::cout << "RESPONSE HEADER:" << std::endl;
   for (std::map<std::string, std::string>::const_iterator it = response
@@ -42,20 +42,11 @@ void printHttpResponse(HttpResponse response) {
 #endif
 }
 
-void testHttpStatus(std::string url, long status) {
-  using aliyun::http::HttpRequest;
-  using aliyun::http::HttpResponse;
-
-  HttpRequest request(url);
-  HttpResponse response = HttpResponse::getResponse(request);
-
-  EXPECT_EQ(status, response.getStatus());
-}
-
 HttpResponse doHttpRequest(HttpRequest request) {
   HttpResponse response;
   try {
     response = HttpResponse::getResponse(request);
+    printHttpResponse(response);
   } catch (Exception& e) {
     std::cout << "\nException: " << e.what() << std::endl;
     std::cout << e.stackTrace() << std::endl;
@@ -135,6 +126,13 @@ TEST(HTTPS, test) {
     EXPECT_TRUE(response.getStatus() == 400);
     EXPECT_TRUE(response.getContent().length() > 0);
   }
+}
+
+void testHttpStatus(std::string url, long status) {
+  HttpRequest request(url);
+  HttpResponse response = doHttpRequest(request);
+
+  EXPECT_EQ(status, response.getStatus());
 }
 
 TEST(HTTP, status) {
