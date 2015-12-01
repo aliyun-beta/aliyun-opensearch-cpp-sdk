@@ -20,8 +20,7 @@
 #include <gtest/gtest.h>
 #include "aliyun/utils/Date.h"
 #include "aliyun/reader/JsonReader.h"
-#include "aliyun/opensearch/CloudsearchDoc.h"
-#include "aliyun/opensearch/CloudsearchClient.h"
+#include "aliyun/opensearch.h"
 
 using std::string;
 using aliyun::utils::Date;
@@ -65,6 +64,7 @@ TEST(CloudsearchDoc, add) {
   JsonReader reader;
   std::map<string, string> result = reader.read(response, "response");
 
+  printf("result: %s\n", response.c_str());
   EXPECT_TRUE(result.find("response.status") != result.end());
   EXPECT_TRUE(result["response.status"] == "OK");
 }
@@ -88,6 +88,7 @@ TEST(CloudsearchDoc, remove) {
   JsonReader reader;
   std::map<string, string> result = reader.read(response, "response");
 
+  printf("result: %s\n", response.c_str());
   EXPECT_TRUE(result.find("response.status") != result.end());
   EXPECT_TRUE(result["response.status"] == "OK");
 }
@@ -113,6 +114,7 @@ TEST(CloudsearchDoc, update) {
   JsonReader reader;
   std::map<string, string> result = reader.read(response, "response");
 
+  printf("result: %s\n", response.c_str());
   EXPECT_TRUE(result.find("response.status") != result.end());
   EXPECT_TRUE(result["response.status"] == "OK");
 
@@ -123,6 +125,7 @@ TEST(CloudsearchDoc, update) {
 
   result = reader.read(response, "response");
 
+  printf("result: %s\n", response.c_str());
   EXPECT_TRUE(result.find("response.status") != result.end());
   EXPECT_TRUE(result["response.status"] == "OK");
 }

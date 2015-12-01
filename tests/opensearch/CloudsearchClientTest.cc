@@ -18,7 +18,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "aliyun/opensearch/CloudsearchClient.h"
+#include "aliyun/opensearch.h"
 
 using aliyun::opensearch::object::KeyTypeEnum;
 using aliyun::opensearch::CloudsearchClient;

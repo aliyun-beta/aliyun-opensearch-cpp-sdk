@@ -16,6 +16,8 @@ set(TEST_SOURCE_FILES
         opensearch/CloudsearchClientTest.cc
         opensearch/CloudsearchSearchTest.cc
         opensearch/CloudsearchDocTest.cc
+        opensearch/CloudsearchIndexTest.cc
+        opensearch/CloudsearchSuggestTest.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})

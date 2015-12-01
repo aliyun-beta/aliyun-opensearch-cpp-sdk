@@ -17,26 +17,13 @@
  * under the License.
  */
 
-#include <iostream>
-#include <gtest/gtest.h>
-#include "aliyun/opensearch.h"
+#ifndef ALIYUN_OPENSEARCH_H
+#define ALIYUN_OPENSEARCH_H
 
-using aliyun::opensearch::object::KeyTypeEnum;
-using aliyun::opensearch::CloudsearchClient;
-using aliyun::opensearch::CloudsearchSearch;
+#include "opensearch/CloudsearchClient.h"
+#include "opensearch/CloudsearchDoc.h"
+#include "opensearch/CloudsearchIndex.h"
+#include "opensearch/CloudsearchSearch.h"
+#include "opensearch/CloudsearchSuggest.h"
 
-TEST(CloudsearchSearch, search) {
-  std::map<std::string, std::string> opts;
-  CloudsearchClient client("BBQtaPv7l14mNRDs",
-                           "ebwFrJ0f72ttx53rNm6Tlviie0prGK",
-                           "http://opensearch-cn-hangzhou.aliyuncs.com",
-                           opts,
-                           KeyTypeEnum::ALIYUN);
-
-  CloudsearchSearch search(client);
-  search.addIndex("sagent");
-
-  std::string result = search.search();
-  std::cout << "result lenth:" << result.length() << std::endl;
-  EXPECT_TRUE(result.length() != 0);
-}
+#endif  // ALIYUN_OPENSEARCH_H

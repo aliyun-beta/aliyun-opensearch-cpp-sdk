@@ -29,7 +29,7 @@ namespace opensearch {
 
 class CloudsearchSuggest {
  public:
-  CloudsearchSuggest(std::string indexName, std::string suggestName, CloudsearchClient *client);
+  CloudsearchSuggest(std::string indexName, std::string suggestName, CloudsearchClient &client);
 
   /**
    * 获取应用名称

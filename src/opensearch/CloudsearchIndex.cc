@@ -25,9 +25,9 @@ namespace opensearch {
 using std::map;
 using std::string;
 
-CloudsearchIndex::CloudsearchIndex(std::string indexName, CloudsearchClient *client) {
+CloudsearchIndex::CloudsearchIndex(std::string indexName, CloudsearchClient &client) {
   this->indexName_ = indexName;
-  this->client_ = client;
+  this->client_ = &client;
   this->path_ = "/index/" + this->indexName_;
 }
 

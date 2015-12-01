@@ -34,7 +34,7 @@ class CloudsearchIndex {
    * @param indexName 索引的名称
    * @param client 提交请求的client
    */
-  CloudsearchIndex(std::string indexName, CloudsearchClient *client);
+  CloudsearchIndex(std::string indexName, CloudsearchClient &client);
 
   /**
    * 根据模板名称创建应用(1)

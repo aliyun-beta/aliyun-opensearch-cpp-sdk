@@ -25,8 +25,8 @@ namespace opensearch {
 using std::string;
 
 CloudsearchSuggest::CloudsearchSuggest(string indexName, string suggestName,
-                                       CloudsearchClient* client) {
-  client_ = client;
+                                       CloudsearchClient &client) {
+  client_ = &client;
   indexName_ = indexName;
   suggestName_ = suggestName;
   hit_ = 10;
