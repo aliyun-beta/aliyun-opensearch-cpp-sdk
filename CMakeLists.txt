@@ -134,6 +134,7 @@ message(APU_INCLUDE_DIR: ${APU_INCLUDE_DIR})
 message(APU_LIBRARY: ${APU_LIBRARY})
 
 set(HEADER_FILES
+        include/aliyun/opensearch.h
         include/aliyun/auth/AcsURLEncoder.h
         include/aliyun/auth/Credential.h
         include/aliyun/auth/HmacSha1.h
