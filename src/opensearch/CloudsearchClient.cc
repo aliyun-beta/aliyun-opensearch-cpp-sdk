@@ -112,7 +112,7 @@ string CloudsearchClient::call(string path, const std::map<string, string>& para
     parameters["Signature"] = getAliyunSign(parameters, method);
   }
   if (method.length() == 0) {
-    method == DEFAULT_METHOD;
+    method = DEFAULT_METHOD;
   }
 
   debugInfo.resize(0);
