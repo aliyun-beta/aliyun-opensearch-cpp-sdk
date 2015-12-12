@@ -140,11 +140,7 @@ set(HEADER_FILES
         include/aliyun/auth/HmacSha1.h
         include/aliyun/auth/HmacSha256.h
         include/aliyun/auth/ICredentialProvider.h
-        include/aliyun/auth/ISignatureComposer.h
         include/aliyun/auth/ISigner.h
-        include/aliyun/auth/OssSignatureComposer.h
-        include/aliyun/auth/RoaSignatureComposer.h
-        include/aliyun/auth/RpcSignatureComposer.h
         include/aliyun/Exception.h
         include/aliyun/http/FormatType.h
         include/aliyun/http/HttpRequest.h
@@ -181,10 +177,6 @@ set(SOURCE_FILES
         src/auth/AcsURLEncoder.cc
         src/auth/HmacSha1.cc
         src/auth/HmacSha256.cc
-        src/auth/ISignatureComposer.cc
-        src/auth/OssSignatureComposer.cc
-        src/auth/RoaSignatureComposer.cc
-        src/auth/RpcSignatureComposer.cc
         src/http/FormatType.cc
         src/http/HttpRequest.cc
         src/http/HttpResponse.cc
