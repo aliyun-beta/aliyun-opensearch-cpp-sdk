@@ -1,0 +1,51 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+env:
+  matrix:
+    - CONF=debug   ARCH=x86_64
+    - CONF=release ARCH=x86_64
+
+before_install:
+  - cd thirdparty
+  - cmake -P downloadPackages.cmake
+  - for t in `ls *.tar.gz`; do tar xvf $t; done
+  - ./unix_build.sh
+  - cd ..
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      if [ "$ARCH" == "x86" ]; then
+        sudo apt-get install -qq libcurl4-openssl-dev:i386 libapr1-dev:i386 libapr1-dbg:i386 libaprutil1-dev:i386 libaprutil1-dbg:i386;
+      else
+        sudo apt-get install -qq libcurl4-openssl-dev libapr1-dev libapr1-dbg libaprutil1-dev libaprutil1-dbg;
+      fi
+    fi
+
+install: true
+
+before_script:
+  - mkdir build
+  - echo ${ARCH}
+  - if [ "${ARCH}" == "x86" ]; then ARCH_FLAGS=-m32; else ARCH_FLAGS=-m64; fi
+  - (cd build &&
+     cmake -DCMAKE_VERBOSE_MAKEFILE=ON
+     -DCMAKE_BUILD_TYPE=$CONF
+     -DCMAKE_CXX_FLAGS="$ARCH_FLAGS"
+     ..)
+
+script:
+  - cd build
+  - make
+
+after_success:
+  - echo build success
+
+after_failure:
+  - echo build failure
+
