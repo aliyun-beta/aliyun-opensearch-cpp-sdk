@@ -1,4 +1,10 @@
 #opensearch
+| [Linux & Mac OS][travis-ci] | Windows          |
+|-----------------------------|------------------|
+| ![unix-build-status]        | win-build-status |
+
+[travis-ci]: https://travis-ci.org/xusiwei/aocs
+[unix-build-status]: https://travis-ci.org/xusiwei/aliyun-opensearch-cpp-sdk.svg?branch=master
 
 ## Build
 ### Linux/MacOS
