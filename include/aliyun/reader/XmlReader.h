@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_READER_XMLREADER_H_
-#define CORE_READER_XMLREADER_H_
+#ifndef ALIYUN_READER_XMLREADER_H_
+#define ALIYUN_READER_XMLREADER_H_
 
 #include <apr_xml.h>
 #include <map>
@@ -29,20 +29,17 @@
 #include "Reader.h"
 
 namespace aliyun {
-
 namespace reader {
 
 class XmlException : public aliyun::Exception {
  public:
-  XmlException(std::string msg)
+  explicit XmlException(std::string msg)
       : aliyun::Exception(msg) {
   }
 };
 
 class XmlReader : public Reader {
-
  public:
-
   typedef std::string string;
   typedef apr_xml_doc document;
   typedef apr_xml_elem node;
@@ -71,17 +68,17 @@ class XmlReader : public Reader {
                                                      string tagName);
 
  private:
-
   static void dumpElements(apr_xml_elem* e, int depth);
 
   void prepareParser();
 
   void read(apr_xml_elem* element, string path, bool appendPath);
 
-  string buildPath(apr_xml_elem* element, string& path, bool appendPath);
+  string buildPath(apr_xml_elem* element, const string& path, bool appendPath);
 
-  void elementsAsList(std::vector<apr_xml_elem*>& elems, string path);
+  void elementsAsList(std::vector<apr_xml_elem*>* elems, string path);
 
+ private:
   std::map<string, string> map_;
   apr_pool_t* pool_;
   apr_xml_doc* pdoc_;
@@ -89,7 +86,6 @@ class XmlReader : public Reader {
 };
 
 }  // namespace reader
-
 }  // namespace aliyun
 
-#endif  // CORE_READER_XMLREADER_H_
+#endif  // ALIYUN_READER_XMLREADER_H_

@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_UTILS_ANY_H_
-#define CORE_UTILS_ANY_H_
+#ifndef ALIYUN_UTILS_ANY_H_
+#define ALIYUN_UTILS_ANY_H_
 
 #include <algorithm>
 #include <typeinfo>
@@ -36,7 +36,7 @@ class Any {
 
   // ValueType must copyable
   template<typename ValueType>
-  Any(const ValueType& value)
+  explicit Any(const ValueType& value)
       : content_(new Holder<ValueType>(value)) {
   }
 
@@ -55,12 +55,14 @@ class Any {
 
   template<typename ValueType>
   Any& operator=(const ValueType& rhs) {
-    Any(rhs).swap(*this);
+    Any tmp(rhs);
+    tmp.swap(*this);
     return *this;
   }
 
-  Any& operator=(Any& rhs) {
-    Any(rhs).swap(*this);
+  Any& operator=(const Any& rhs) {
+    Any tmp(rhs);
+    tmp.swap(*this);
     return *this;
   }
 
@@ -90,10 +92,9 @@ class Any {
 
   template<typename ValueType>
   struct Holder : public PlaceHolder {
-
     ValueType held_;
 
-    Holder(const ValueType& value)
+    explicit Holder(const ValueType& value)
         : held_(value) {
     }
 
@@ -113,14 +114,13 @@ class Any {
     Holder& operator=(const Holder& rhs);
   };
 
+  template<typename ValueType>
+  friend ValueType* AnyCast(Any* operand);
+
+  template<typename ValueType>
+  friend ValueType* UnsafeAnyCast(Any* operand);
+
  private:
-
-  template<typename ValueType>
-  friend ValueType* AnyCast(Any*);
-
-  template<typename ValueType>
-  friend ValueType* UnsafeAnyCast(Any*);
-
   PlaceHolder* content_;
 };
 
@@ -130,16 +130,15 @@ inline void swap(Any& lhs, Any& rhs) {
 
 class BadAnyCast : public std::bad_cast {
  public:
-  virtual const char * what() const throw () {
+  virtual const char * what() const throw() {
     return "aliyun::Any: failed conversion using aliyun::AnyCast";
   }
 };
 
 template<typename ValueType>
 ValueType* AnyCast(Any* operand) {
-  return
-      operand && operand->type() == typeid(ValueType) ?
-          &static_cast<Any::Holder<ValueType>*>(operand->content_)->held_ : 0;
+  return operand && operand->type() == typeid(ValueType) ?
+          &(static_cast<Any::Holder<ValueType>*>(operand->content_)->held_) : 0;
 }
 
 template<typename ValueType>
@@ -168,9 +167,10 @@ struct TypeTraits<const T&> {
 };
 
 template<typename ValueType>
-inline ValueType AnyCast(Any& operand) {
+inline ValueType AnyCast(const Any& operand) {
+  Any& nonconst = const_cast<Any&>(operand);
   typedef typename TypeTraits<ValueType>::Type NonRef;
-  NonRef* result = AnyCast<NonRef>(&operand);
+  NonRef* result = AnyCast<NonRef>(&nonconst);
   if (!result) {
     throw BadAnyCast();
   }
@@ -178,13 +178,8 @@ inline ValueType AnyCast(Any& operand) {
 }
 
 template<typename ValueType>
-inline ValueType AnyCast(const Any& operand) {
-  return AnyCast<ValueType>(const_cast<Any&>(operand));
-}
-
-template<typename ValueType>
 inline ValueType* UnsafeAnyCast(Any* operand) {
-  return &static_cast<Any::Holder<ValueType>*>(operand->content_)->held_;
+  return &(static_cast<Any::Holder<ValueType>*>(operand->content_)->held_);
 }
 
 template<typename ValueType>
@@ -195,4 +190,4 @@ inline const ValueType* UnsafeAnyCast(const Any* operand) {
 }  // namespace utils
 }  // namespace aliyun
 
-#endif  // CORE_UTILS_ANY_H_
+#endif  // ALIYUN_UTILS_ANY_H_

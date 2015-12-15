@@ -56,7 +56,8 @@ TEST(CloudsearchDoc, add) {
   std::map<string, string> fields;
   fields["id"] = "5";
   fields["title"] = "this is the title";
-  fields["body"] = "this is the body! modified on " + Date::currentLocalDate().toString();
+  fields["body"] =
+      "this is the body! modified on " + Date::currentLocalDate().toString();
   doc.add(fields);
 
   string response = doc.push("main");
@@ -65,8 +66,8 @@ TEST(CloudsearchDoc, add) {
   std::map<string, string> result = reader.read(response, "response");
 
   printf("result: %s\n", response.c_str());
-  EXPECT_TRUE(result.find("response.status") != result.end());
-  EXPECT_TRUE(result["response.status"] == "OK");
+  EXPECT_NE(result.find("response.status"), result.end());
+  EXPECT_EQ("OK", result["response.status"]);
 }
 
 TEST(CloudsearchDoc, remove) {
@@ -89,8 +90,8 @@ TEST(CloudsearchDoc, remove) {
   std::map<string, string> result = reader.read(response, "response");
 
   printf("result: %s\n", response.c_str());
-  EXPECT_TRUE(result.find("response.status") != result.end());
-  EXPECT_TRUE(result["response.status"] == "OK");
+  EXPECT_NE(result.find("response.status"), result.end());
+  EXPECT_EQ("OK", result["response.status"]);
 }
 
 TEST(CloudsearchDoc, update) {
@@ -106,7 +107,8 @@ TEST(CloudsearchDoc, update) {
   std::map<string, string> fields;
   fields["id"] = "5";
   fields["title"] = "this is the title";
-  fields["body"] = "this is the body! modified on " + Date::currentLocalDate().toString();
+  fields["body"] = "this is the body! modified on "
+      + Date::currentLocalDate().toString();
   doc.add(fields);
 
   string response = doc.push("main");
@@ -115,10 +117,11 @@ TEST(CloudsearchDoc, update) {
   std::map<string, string> result = reader.read(response, "response");
 
   printf("result: %s\n", response.c_str());
-  EXPECT_TRUE(result.find("response.status") != result.end());
-  EXPECT_TRUE(result["response.status"] == "OK");
+  EXPECT_NE(result.find("response.status"), result.end());
+  EXPECT_EQ("OK", result["response.status"]);
 
-  fields["body"] = "this is the body! modified on " + Date::currentLocalDate().toString();
+  fields["body"] = "this is the body! modified on "
+      + Date::currentLocalDate().toString();
   doc.update(fields);
 
   response = doc.push("main");
@@ -126,6 +129,6 @@ TEST(CloudsearchDoc, update) {
   result = reader.read(response, "response");
 
   printf("result: %s\n", response.c_str());
-  EXPECT_TRUE(result.find("response.status") != result.end());
-  EXPECT_TRUE(result["response.status"] == "OK");
+  EXPECT_NE(result.find("response.status"), result.end());
+  EXPECT_EQ("OK", result["response.status"]);
 }

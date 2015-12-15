@@ -41,8 +41,12 @@ XmlReader::~XmlReader() {
 apr_xml_doc* XmlReader::getDocument(string xml) {
   apr_status_t rc;
   char emsg[256];
+
 #define apr_check_throw(rc) \
-        if (APR_SUCCESS != rc) throw XmlException(apr_strerror(rc, emsg, sizeof(emsg)));
+  do { \
+    if (APR_SUCCESS != rc)  \
+      throw XmlException(apr_strerror(rc, emsg, sizeof(emsg))); \
+  } while (0)
 
   // feed input to parser
   rc = apr_xml_parser_feed(parser_, xml.c_str(), xml.length());
@@ -187,11 +191,11 @@ void XmlReader::read(apr_xml_elem* element, string path, bool appendPath) {
   if (sameName.size() > 1 && children.size() == sameName.size()) {
     // more than one child has same name as children[0]
     // likes, <parent><child>xx</child>...<child>yy</child></parent>
-    elementsAsList(children, path);
+    elementsAsList(&children, path);
   } else if (sameName.size() == 1 && children.size() == 1) {
     // only one child under current element
     // likes, <parent><child>...</child></parent>
-    elementsAsList(children, path);
+    elementsAsList(&children, path);
     read(children[0], path, true);
   } else {
     for (size_t i = 0; i < children.size(); i++) {
@@ -200,16 +204,16 @@ void XmlReader::read(apr_xml_elem* element, string path, bool appendPath) {
   }
 }
 
-std::string XmlReader::buildPath(apr_xml_elem* element, string& path,
+std::string XmlReader::buildPath(apr_xml_elem* element, const string& path,
                                  bool appendPath) {
   return appendPath ? path + "." + element->name : path;
 }
 
-void XmlReader::elementsAsList(std::vector<apr_xml_elem*>& elems, string path) {
-  using namespace aliyun::utils::StringUtils;
-  map_[path + ".Length"] = ToString(elems.size());
-  for (size_t i = 0; i < elems.size(); i++) {
-    read(elems[i], path + "[" + ToString(i) + "]", false);
+void XmlReader::elementsAsList(std::vector<apr_xml_elem*>* elems, string path) {
+  using aliyun::utils::StringUtils::ToString;
+  map_[path + ".Length"] = ToString(elems->size());
+  for (size_t i = 0; i < elems->size(); i++) {
+    read((*elems)[i], path + "[" + ToString(i) + "]", false);
   }
 }
 

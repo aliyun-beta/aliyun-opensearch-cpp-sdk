@@ -24,15 +24,16 @@ namespace opensearch {
 
 using std::map;
 using std::string;
+using utils::StringUtils::ToString;
 
-CloudsearchIndex::CloudsearchIndex(std::string indexName, CloudsearchClient &client) {
+CloudsearchIndex::CloudsearchIndex(std::string indexName, ClientRef client) {
   this->indexName_ = indexName;
   this->client_ = &client;
   this->path_ = "/index/" + this->indexName_;
 }
 
-std::string CloudsearchIndex::createByTemplateName(std::string templateName,
-                                                   const std::map<std::string, std::string> &opts) {
+std::string CloudsearchIndex::createByTemplateName(
+    std::string templateName, const std::map<std::string, std::string> &opts) {
   map<string, string> params;
   params["action"] = "create";
   params["template"] = templateName;
@@ -47,7 +48,8 @@ std::string CloudsearchIndex::createByTemplateName(std::string templateName,
     params["package_id"] = pos->second;
   }
 
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
 
@@ -56,7 +58,8 @@ std::string CloudsearchIndex::createByTemplateName(std::string templateName) {
   return createByTemplateName(templateName, emptyMap);
 }
 
-std::string CloudsearchIndex::rename(std::string toIndexName, const std::map<std::string, std::string> &opts) {
+std::string CloudsearchIndex::rename(
+    std::string toIndexName, const std::map<std::string, std::string> &opts) {
   map<string, string> params;
 
   params["action"] = "update";
@@ -67,7 +70,10 @@ std::string CloudsearchIndex::rename(std::string toIndexName, const std::map<std
     params["description"] = pos->second;
   }
 
-  string result = this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  string result = this->client_->call(this->path_,
+                                      params,
+                                      CloudsearchClient::METHOD_GET,
+                                      this->debugInfo_);
 
   // TODO(xu): update this.indexName and this.path
   if (result.size() != 0 && result.find("status:OK") != string::npos) {
@@ -81,26 +87,31 @@ std::string CloudsearchIndex::rename(std::string toIndexName, const std::map<std
 std::string CloudsearchIndex::remove() {
   std::map<std::string, std::string> params;
   params["action"] = "delete";
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
 std::string CloudsearchIndex::status() {
   std::map<string, string> params;
   params["action"] = "status";
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
 
 std::string CloudsearchIndex::listIndexes(int page, int pageSize) {
   std::map<string, string> params;
 
-  params["page"] = page == 0 ? "1" : utils::StringUtils::ToString(page);
-  params["page_size"] = pageSize == 0 ? "10" : utils::StringUtils::ToString(pageSize);
+  params["page"] = page == 0 ? "1" : ToString(page);
+  params["page_size"] = pageSize == 0 ? "10" : ToString(pageSize);
 
-  return this->client_->call("/index", params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call("/index", params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
-std::string CloudsearchIndex::createTask(std::string operate, std::string tableName, bool needBuild) {
+std::string CloudsearchIndex::createTask(std::string operate,
+                                         std::string tableName,
+                                         bool needBuild) {
   std::map<string, string> params;
   params["action"] = "createTask";
   params["operate"] = operate;
@@ -111,22 +122,24 @@ std::string CloudsearchIndex::createTask(std::string operate, std::string tableN
   }
   params["need_build"] = needBuild ? "1" : "0";
 
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
 std::string CloudsearchIndex::createBuildTask() {
   return createTask("build", "", false);
 }
 
-std::string CloudsearchIndex::createImportTask(std::string tableName, bool needBuild) {
+std::string CloudsearchIndex::createImportTask(std::string tableName,
+                                               bool needBuild) {
   return createTask("import", tableName, needBuild);
 }
 
 std::string CloudsearchIndex::getErrorMessage(int page, int pageSize) {
   std::map<string, string> params;
 
-  params["page"] = utils::StringUtils::ToString(page);
-  params["page_size"] = utils::StringUtils::ToString(pageSize);
+  params["page"] = ToString(page);
+  params["page_size"] = ToString(pageSize);
 
   return this->client_->call("/index/error" + this->indexName_,
                              params,

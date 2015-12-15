@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_SCHEMATABLE_H_
-#define OPENSEARCH_OBJECT_SCHEMATABLE_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLE_H_
+#define ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLE_H_
 
 #include <string>
 #include <vector>
@@ -69,4 +69,4 @@ class SchemaTable {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_OBJECT_SCHEMATABLE_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLE_H_

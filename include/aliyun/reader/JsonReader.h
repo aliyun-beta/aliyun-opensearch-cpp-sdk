@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_READER_JSONREADER_H_
-#define CORE_READER_JSONREADER_H_
+#ifndef ALIYUN_READER_JSONREADER_H_
+#define ALIYUN_READER_JSONREADER_H_
 
 #include <map>
 #include <string>
@@ -27,18 +27,16 @@
 #include "Reader.h"
 
 namespace aliyun {
-
 namespace reader {
 
 class JsonException : public Exception {
  public:
-  JsonException(std::string msg)
+  explicit JsonException(std::string msg)
       : Exception(msg) {
   }
 };
 
 class JsonReader : public Reader {
-
   static std::map<char, char> escapes;
 
  public:
@@ -47,7 +45,6 @@ class JsonReader : public Reader {
   std::map<string, string> read(string response, string endpoint);
 
  private:
-
   enum Token {
     INIT_TOKEN,
     ARRAY_BEGIN_TOKEN,
@@ -85,6 +82,7 @@ class JsonReader : public Reader {
 
   void reset();
 
+ private:
   Token token_;
   const char* s_;
   string stringBuffer_;
@@ -92,7 +90,6 @@ class JsonReader : public Reader {
 };
 
 }  // namespace reader
-
 }  // namespace aliyun
 
-#endif  // CORE_READER_JSONREADER_H_
+#endif  // ALIYUN_READER_JSONREADER_H_

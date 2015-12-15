@@ -17,7 +17,6 @@
  * under the License.
  */
 
-#include <iostream>
 #include <gtest/gtest.h>
 #include "aliyun/auth/Credential.h"
 

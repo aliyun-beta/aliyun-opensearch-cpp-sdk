@@ -59,5 +59,5 @@ TEST(SingleDocTest, addField) {
   doc.setCommand("doc");
   doc.addField("keywords", "food\035sweat");
   doc.addField("filter", "200g\035express");
-  //EXPECT_EQ("{\"cmd\":\"doc\",\"fields\":{\"filter\":\"[200g,express]\",\"keywords\":\"[food,sweat]\"}}", doc.getJsonString());
+  // EXPECT_EQ("{\"cmd\":\"doc\",\"fields\":{\"filter\":\"[200g,express]\",\"keywords\":\"[food,sweat]\"}}", doc.getJsonString());
 }

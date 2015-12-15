@@ -17,12 +17,12 @@
  * under the License.
  */
 
+#include <stddef.h>
+#include <string.h>
+
 #include "aliyun/http/MethodType.h"
 #include "aliyun/http/HttpResponse.h"
 #include "aliyun/utils/StringUtils.h"
-
-#include <stddef.h>
-#include <cstring>
 
 namespace aliyun {
 namespace http {
@@ -69,9 +69,9 @@ static void updateTransactionInfo(HttpTransaction* t) {
   rc = curl_easy_getinfo(curl, info, ptr);       \
   if (rc != CURLE_OK) throw CurlException(rc);
 
-  // TODO: get response code, etc.
+  // DONE: get response code, etc.
   CURLcode rc;
-  long status = 0;
+  long status = 0;  // follow libcurl API
   curl_easy_getinfo_throw(t->curl_, CURLINFO_RESPONSE_CODE, &status);
   t->response_->setStatus(status);
 }
@@ -97,7 +97,7 @@ static size_t ResponseBodyHandler(char *ptr, size_t size, size_t nmemb,
   HttpTransaction* t = reinterpret_cast<HttpTransaction*>(userdata);
   size_t length = size * nmemb;
 
-  // TODO: handle http bodys.
+  // DONE: handle http bodys.
   t->state_ = HttpTransaction::BODY_IN;
   t->response_->content().append(ptr, ptr + length);
   t->bodyReceives_ += length;
@@ -107,9 +107,9 @@ static size_t ResponseBodyHandler(char *ptr, size_t size, size_t nmemb,
 static size_t RequestBodyHandler(char *ptr, size_t size, size_t nmemb,
                                  void *userdata) {
   HttpTransaction* t = reinterpret_cast<HttpTransaction*>(userdata);
-  long buffLen = size * nmemb;  // internal body buffer length.
-  long contLen = t->request_->getContent().length();
-  long bodyLeft = contLen - t->bodySends_;
+  size_t buffLen = size * nmemb;  // internal body buffer length.
+  size_t contLen = t->request_->getContent().length();
+  size_t bodyLeft = contLen - t->bodySends_;
 
   t->state_ = HttpTransaction::BODY_OUT;
   if (bodyLeft > 0) {
@@ -161,26 +161,26 @@ HttpResponse HttpResponse::getResponse(HttpRequest request) {
     throw CurlException(rc);
   updateTransactionInfo(&trans);
 
-  parseParameters(response);
+  parseParameters(&response);
   return response;
 }
 
-void HttpResponse::parseParameters(HttpResponse& response) {
+void HttpResponse::parseParameters(HttpResponse* response) {
   using aliyun::utils::StringUtils::ToUpperCase;
-  string type = response.getHeaderValue("Content-Type");
+  string type = response->getHeaderValue("Content-Type");
   if (type.length() > 0) {
-    response.setEncoding("UTF-8");
+    response->setEncoding("UTF-8");
 
     // application/xml
     // text/xml;charset=UTF-8
     string::size_type pos = type.find(';');
     FormatType format = FormatType::mapAcceptToFormat(type.substr(0, pos));
-    response.setContentType(format);
+    response->setContentType(format);
     if (type.find('=') != string::npos) {
       pos = type.find('=');
       if (pos != string::npos) {
         string enc = type.substr(pos + 1);
-        response.setEncoding(ToUpperCase(enc));
+        response->setEncoding(ToUpperCase(enc));
       }
     }
   }

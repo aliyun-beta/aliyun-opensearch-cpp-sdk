@@ -88,7 +88,8 @@ void CloudsearchClient::setMaxConnections(int maxConns) {
   }
 }
 
-string CloudsearchClient::call(string path, const std::map<string, string>& params,
+string CloudsearchClient::call(string path,
+                               const std::map<string, string>& params,
                                string method, bool isPB, string& debugInfo) {
   string uri;
   if (this->keyType_ == KeyTypeEnum::OPENSEARCH) {
@@ -100,7 +101,7 @@ string CloudsearchClient::call(string path, const std::map<string, string>& para
   if (this->keyType_ == KeyTypeEnum::OPENSEARCH) {
     parameters["client_id"] = this->clientId_;
     parameters["nonce"] = getNonce();
-    parameters["sign"] = doSign(parameters);
+    parameters["sign"] = doSign(&parameters);
   } else if (this->keyType_ == KeyTypeEnum::ALIYUN) {
     parameters["Version"] = "v2";
     parameters["AccessKeyId"] = this->accesskey_;
@@ -109,7 +110,7 @@ string CloudsearchClient::call(string path, const std::map<string, string>& para
     parameters["SignatureMethod"] = "HMAC-SHA1";
     parameters["SignatureVersion"] = "1.0";
     parameters["SignatureNonce"] = utils::ParameterHelper::getUUID();
-    parameters["Signature"] = getAliyunSign(parameters, method);
+    parameters["Signature"] = getAliyunSign(&parameters, method);
   }
   if (method.length() == 0) {
     method = DEFAULT_METHOD;
@@ -129,9 +130,9 @@ string CloudsearchClient::getNonce() {
   return utils::ParameterHelper::md5hex(encoded) + "." + timeStr;
 }
 
-string CloudsearchClient::buildQuery(std::map<string, string>& params) {
+string CloudsearchClient::buildQuery(const std::map<string, string>& params) {
   string query;
-  for (std::map<string, string>::iterator it = params.begin();
+  for (std::map<string, string>::const_iterator it = params.begin();
        it != params.end(); it++) {
     query += '&' + auth::AcsURLEncoder::encode(it->first);
     query += '=' + auth::AcsURLEncoder::encode(it->second);
@@ -139,27 +140,28 @@ string CloudsearchClient::buildQuery(std::map<string, string>& params) {
   return query.substr(1);
 }
 
-string CloudsearchClient::doSign(std::map<string, string>& params) {
+string CloudsearchClient::doSign(std::map<string, string>* params) {
   bool hasSignMode = false;
   string itemsValue;
-  std::map<string, string>::iterator sign = params.find("sign_mode");
-  std::map<string, string>::iterator items = params.find("items");
-  if (sign != params.end() && sign->second == "1" && items != params.end()) {
+  std::map<string, string>::iterator sign = params->find("sign_mode");
+  std::map<string, string>::iterator items = params->find("items");
+  if (sign != params->end() && sign->second == "1" && items != params->end()) {
     hasSignMode = true;
     itemsValue = items->second;
-    params.erase(items);
+    params->erase(items);
   }
 
-  string query = buildQuery(params) + this->clientSecret_;
+  string query = buildQuery(*params) + this->clientSecret_;
   string enc = utils::StringUtils::ToEncoding(query, "UTF-8");
   string md5 = utils::ParameterHelper::md5hex(enc);
   if (hasSignMode) {
-    params["items"] = itemsValue;
+    (*params)["items"] = itemsValue;
   }
   return md5;
 }
 
-string CloudsearchClient::buildHttpParameterString(const std::map<string, string>& params) {
+string CloudsearchClient::buildHttpParameterString(
+    const std::map<string, string>& params) {
   if (params.size() == 0) {
     return "";
   }
@@ -173,32 +175,34 @@ string CloudsearchClient::buildHttpParameterString(const std::map<string, string
   return "?" + str.substr(1);
 }
 
-string CloudsearchClient::getAliyunSign(std::map<string, string>& params, string method) {
+string CloudsearchClient::getAliyunSign(std::map<string, string>* params,
+                                        string method) {
   bool hasSignMode = false;
   string itemsValue;
-  std::map<string, string>::iterator sign = params.find("sign_mode");
-  std::map<string, string>::iterator items = params.find("items");
-  if (sign != params.end() && sign->second == "1" && items != params.end()) {
+  std::map<string, string>::iterator sign = params->find("sign_mode");
+  std::map<string, string>::iterator items = params->find("items");
+  if (sign != params->end() && sign->second == "1" && items != params->end()) {
     hasSignMode = true;
     itemsValue = items->second;
-    params.erase(items);
+    params->erase(items);
   }
 
-  string strToSign = buildQuery(params);
+  string strToSign = buildQuery(*params);
   strToSign = method + "&%2F&"
       + auth::AcsURLEncoder::percentEncode(strToSign);
   string signature = auth::HmacSha1::getInstance()->signString(
       strToSign, this->secret_ + "&");
 
   if (hasSignMode) {
-    params["items"] = itemsValue;
+    (*params)["items"] = itemsValue;
   }
   return signature;
 }
 
-string CloudsearchClient::doRequest(string url, const std::map<string, string>& requestParams,
+string CloudsearchClient::doRequest(string url,
+                                    const std::map<string, string>& params,
                                     string method, bool isPB) {
-  url = url + buildHttpParameterString(requestParams);
+  url = url + buildHttpParameterString(params);
   http::HttpRequest request(url);
   request.setMethod(method);
 

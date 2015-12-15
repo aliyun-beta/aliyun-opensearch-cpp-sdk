@@ -17,29 +17,32 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_FORMATTYPE_H_
-#define CORE_HTTP_FORMATTYPE_H_
+#ifndef ALIYUN_HTTP_FORMATTYPE_H_
+#define ALIYUN_HTTP_FORMATTYPE_H_
 
 #include <string>
 
 namespace aliyun {
-
 namespace http {
 
 class FormatType {
  public:
-  enum {
+  enum Value {
     INVALID,
     XML,
     JSON,
     RAW
   };
 
-  FormatType(int v = 0);
+  // implicit for convenience:
+  //   cast from Value(Value => FormatType),   explicit can not
+  //   assign from Value(FormatType <= Value), explicit need DIY
+  FormatType(Value v = INVALID);
 
   const char* toString() const;
 
-  inline operator int() {
+  // for compare
+  inline operator int() const {
     return value_;
   }
 
@@ -48,11 +51,10 @@ class FormatType {
   static FormatType mapAcceptToFormat(std::string accept);
 
  private:
-  int value_;
+  Value value_;
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif // CORE_HTTP_FORMATTYPE_H_
+#endif  // ALIYUN_HTTP_FORMATTYPE_H_

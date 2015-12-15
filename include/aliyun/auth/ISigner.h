@@ -17,15 +17,14 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_ISIGNER_H_
-#define CORE_AUTH_ISIGNER_H_
+#ifndef ALIYUN_AUTH_ISIGNER_H_
+#define ALIYUN_AUTH_ISIGNER_H_
 
 #include <string>
 
 #include "../Exception.h"
 
 namespace aliyun {
-
 namespace auth {
 
 class ISigner {
@@ -38,11 +37,10 @@ class ISigner {
   virtual std::string getSignerVersion() = 0;
 
   virtual std::string signString(std::string source, std::string accessSecret)
-                                     throw (aliyun::Exception) = 0;
+                                     throw(aliyun::Exception) = 0;
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_ISIGNER_H_
+#endif  // ALIYUN_AUTH_ISIGNER_H_

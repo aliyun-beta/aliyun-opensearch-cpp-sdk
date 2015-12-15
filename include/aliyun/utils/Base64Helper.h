@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_UTILS_BASE64HELPER_H_
-#define CORE_UTILS_BASE64HELPER_H_
+#ifndef ALIYUN_UTILS_BASE64HELPER_H_
+#define ALIYUN_UTILS_BASE64HELPER_H_
 
 #include <string>
 #include <vector>
@@ -26,15 +26,13 @@
 #include "StringUtils.h"
 
 namespace aliyun {
-
 namespace utils {
 
 class Base64Helper {
  public:
-
   typedef unsigned char byte;
 
-  static std::string encode(std::vector<byte>& buffer);
+  static std::string encode(const std::vector<byte>& buffer);
 
   static std::string encode(const byte* buffer, int length);
 
@@ -44,12 +42,10 @@ class Base64Helper {
 
  private:
   static const char BASE64_CODE[];
-
   static const int BASE64_DECODE[];
 };
 
 }  // namespace utils
-
 }  // namespace aliyun
 
-#endif  // CORE_UTILS_BASE64HELPER_H_
+#endif  // ALIYUN_UTILS_BASE64HELPER_H_

@@ -24,20 +24,21 @@ namespace aliyun {
 namespace opensearch {
 namespace object {
 
-SchemaTableFieldType::SchemaTableFieldType(int v)
-    : value_(0 <= v && v <= kMaxValue ? v : 0) {
+SchemaTableFieldType::SchemaTableFieldType(Value v)
+    : value_(v) {
 }
 
 SchemaTableFieldType::SchemaTableFieldType(std::string type,
                                            std::string bigType) {
-  for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (strncasecmp(type.c_str(), typeNames()[value_], type.length()) == 0
-        && strncasecmp(bigType.c_str(), bigTypeNames()[value_], bigType.length())
+  for (int i = 1; i <= kMaxValue; i++) {
+    if (strncasecmp(type.c_str(), typeNames()[i], type.length()) == 0
+        && strncasecmp(bigType.c_str(), bigTypeNames()[i], bigType.length())
             == 0) {
+      value_ = Value(i);
       return;
     }
   }
-  value_ = 0;
+  value_ = INVALID;
 }
 
 std::string SchemaTableFieldType::getTypeName() const {

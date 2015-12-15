@@ -17,8 +17,11 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_CLOUDSEARCHINDEX_H_
-#define OPENSEARCH_CLOUDSEARCHINDEX_H_
+#ifndef ALIYUN_OPENSEARCH_CLOUDSEARCHINDEX_H_
+#define ALIYUN_OPENSEARCH_CLOUDSEARCHINDEX_H_
+
+#include <map>
+#include <string>
 
 #include "CloudsearchClient.h"
 
@@ -27,6 +30,7 @@ namespace opensearch {
 
 class CloudsearchIndex {
  public:
+  typedef CloudsearchClient& ClientRef;
 
   /**
    * 构造函数
@@ -34,7 +38,7 @@ class CloudsearchIndex {
    * @param indexName 索引的名称
    * @param client 提交请求的client
    */
-  CloudsearchIndex(std::string indexName, CloudsearchClient &client);
+  CloudsearchIndex(std::string indexName, ClientRef client);
 
   /**
    * 根据模板名称创建应用(1)
@@ -46,7 +50,8 @@ class CloudsearchIndex {
    * @throws ClientProtocolException
    */
   std::string createByTemplateName(std::string templateName,
-                                   const std::map<std::string, std::string> &opts);
+                                   const std::map<std::string,
+                                                  std::string> &opts);
 
   /**
    * 根据模板名称创建应用(2)
@@ -69,7 +74,8 @@ class CloudsearchIndex {
    * @throws IOException
    * @throws ClientProtocolException
    */
-  std::string rename(std::string toIndexName, const std::map<std::string, std::string> &opts);
+  std::string rename(std::string toIndexName,
+                     const std::map<std::string, std::string> &opts);
 
 
   /**
@@ -105,7 +111,8 @@ class CloudsearchIndex {
   /**
    * 创建一条导入数据或重建索引的任务
    *
-   * 如果operate为import，则需要指定tableName，反之如果operate为build，则不需指定。 例如： 如果想全量导入某个表的数据且导入完毕后重建索引，则可以调用如下：
+   * 如果operate为import，则需要指定tableName，反之如果operate为build，则不需指定。
+   * 例如： 如果想全量导入某个表的数据且导入完毕后重建索引，则可以调用如下：
    * <code>
    * createTask("import", "my_table", true);
    * </code>
@@ -132,7 +139,8 @@ class CloudsearchIndex {
    * @throws IOException
    * @donotgenetatedoc
    */
-  std::string createTask(std::string operate, std::string tableName, bool needBuild);
+  std::string createTask(std::string operate, std::string tableName,
+                         bool needBuild);
 
   /**
    * 创建一条重建索引的任务
@@ -184,4 +192,4 @@ class CloudsearchIndex {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_CLOUDSEARCHINDEX_H_
+#endif  // ALIYUN_OPENSEARCH_CLOUDSEARCHINDEX_H_

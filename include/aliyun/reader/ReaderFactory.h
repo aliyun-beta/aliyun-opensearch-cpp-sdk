@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_READER_READERFACTORY_H_
-#define CORE_READER_READERFACTORY_H_
+#ifndef ALIYUN_READER_READERFACTORY_H_
+#define ALIYUN_READER_READERFACTORY_H_
 
 #include <stddef.h>
 
@@ -27,7 +27,6 @@
 #include "XmlReader.h"
 
 namespace aliyun {
-
 namespace reader {
 
 class ReaderFactory {
@@ -47,7 +46,6 @@ class ReaderFactory {
 
 
 }  // namespace reader
-
 }  // namespace aliyun
 
-#endif  // CORE_READER_READERFACTORY_H_
+#endif  // ALIYUN_READER_READERFACTORY_H_

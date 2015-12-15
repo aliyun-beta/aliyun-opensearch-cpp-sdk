@@ -17,14 +17,13 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_ACSURLENCODER_H_
-#define CORE_AUTH_ACSURLENCODER_H_
+#ifndef ALIYUN_AUTH_ACSURLENCODER_H_
+#define ALIYUN_AUTH_ACSURLENCODER_H_
 
 #include <curl/curl.h>
 #include <string>
 
 namespace aliyun {
-
 namespace auth {
 
 class AcsURLEncoder {
@@ -46,17 +45,18 @@ class AcsURLEncoder {
 
   static string percentEncode(string in) {
     string basis = encode(in);
-    replace(basis, "+", "%20");
-    replace(basis, "*", "%2A");
-    replace(basis, "%7E", "~");  // swap it ?
+    replace(&basis, "+", "%20");
+    replace(&basis, "*", "%2A");
+    replace(&basis, "%7E", "~");  // swap it ?
     return basis;
   }
 
  private:
-  static void replace(string& operand, string source, string target) {
-    string::size_type pos = operand.find(source);
+  static void replace(string* operand, const string& source,
+                      const string& target) {
+    string::size_type pos = operand->find(source);
     if (pos != string::npos) {
-      operand.replace(pos, source.length(), target);
+      operand->replace(pos, source.length(), target);
     }
   }
 
@@ -70,7 +70,6 @@ class AcsURLEncoder {
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_ACSURLENCODER_H_
+#endif  // ALIYUN_AUTH_ACSURLENCODER_H_

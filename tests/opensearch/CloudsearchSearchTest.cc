@@ -17,7 +17,6 @@
  * under the License.
  */
 
-#include <iostream>
 #include <gtest/gtest.h>
 #include "aliyun/opensearch.h"
 
@@ -38,5 +37,5 @@ TEST(CloudsearchSearch, search) {
 
   std::string result = search.search();
   std::cout << "result lenth:" << result.length() << std::endl;
-  EXPECT_TRUE(result.length() != 0);
+  EXPECT_NE(0, result.length());
 }

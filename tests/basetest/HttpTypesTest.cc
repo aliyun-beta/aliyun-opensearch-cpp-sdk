@@ -24,27 +24,33 @@
 #include "aliyun/http/MethodType.h"
 #include "aliyun/http/ProtocolType.h"
 
-using namespace aliyun;
-using namespace aliyun::http;
+using aliyun::Exception;
+using aliyun::http::FormatType;
+using aliyun::http::MethodType;
+using aliyun::http::ProtocolType;
 
 TEST(FormatType, test) {
   enum FooEnum { UNKNOW };
   EXPECT_EQ(sizeof(FooEnum), sizeof(int));
 
-  std::string testNames[] = { "application/xml", "application/json",
-      "application/octet-stream", "application/unknow-type" };
-  int testValues[] = { FormatType::XML, FormatType::JSON, FormatType::RAW, FormatType::RAW };
+  std::string testNames[] = {"application/xml", "application/json",
+                             "application/octet-stream"};
+  FormatType::Value testValues[] = {FormatType::XML, FormatType::JSON,
+                                    FormatType::RAW};
 
   FormatType format;
   // construct from string, cover mapAcceptToFormat & mapFormatToAccept
-  for (int i = 0; i < sizeof(testNames) / sizeof(testNames[0]); i++) {
-    try {
-      format = FormatType::mapAcceptToFormat(testNames[i]);
-      EXPECT_EQ(FormatType::mapFormatToAccept(testValues[i]), FormatType::mapFormatToAccept(format));
-    } catch (Exception& e) {
-      std::cout << "## Exception ##\n what: " << e.what() << std::endl;
-      std::cout << "stack:\n" << e.stackTrace() << std::endl;
+
+  try {
+    for (int i = 0; i < sizeof(testNames)/sizeof(testNames[0]); i++) {
+      EXPECT_EQ(testNames[i],
+                FormatType::mapFormatToAccept(FormatType(testValues[i])));
+      EXPECT_EQ(FormatType(testValues[i]),
+                FormatType::mapAcceptToFormat(testNames[i]));
     }
+  } catch (Exception &e) {
+    std::cout << "## Exception ##\n what: " << e.what() << std::endl;
+    std::cout << "stack:\n" << e.stackTrace() << std::endl;
   }
 }
 
@@ -52,7 +58,8 @@ TEST(ProtocolType, test) {
   ProtocolType protocol;
 
   std::string testNames[] = { "http", "https", "unknow" };
-  int testValues[] = {ProtocolType::HTTP, ProtocolType::HTTPS, ProtocolType::INVALID};
+  int testValues[] =
+      {ProtocolType::HTTP, ProtocolType::HTTPS, ProtocolType::INVALID};
 
   for (int i = 0; i < sizeof(testNames) / sizeof(testNames[0]); i++) {
     try {

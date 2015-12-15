@@ -20,7 +20,6 @@
 #include "aliyun/http/MethodType.h"
 
 namespace aliyun {
-
 namespace http {
 
 const char *MethodType::toString() const {
@@ -33,19 +32,27 @@ const char *MethodType::toString() const {
   return NAMES[(0 <= v && v <= OPTIONS) ? v : INVALID];
 }
 
-MethodType::MethodType(int v)
+MethodType::MethodType(Value v)
     : value_(v) {
 }
 
 MethodType::MethodType(std::string method) {
-  for (value_ = GET; value_ <= OPTIONS; value_++) {
-    if (strncasecmp(method.c_str(), toString(), method.length()) == 0) {
+  for (int i = GET; i <= OPTIONS; i++) {
+    if (::strncasecmp(method.c_str(), valueNames()[i], method.length()) == 0) {
+      value_ = Value(i);
       return;
     }
   }
   value_ = INVALID;
 }
-}  // namespace http
 
+#if 0
+MethodType &MethodType::operator=(MethodType::Value v) {
+  this->value_ = v;
+  return *this;
+}
+#endif
+
+}  // namespace http
 }  // namespace aliyun
 

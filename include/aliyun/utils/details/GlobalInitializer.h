@@ -16,8 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#ifndef ALIYUN_DETAILS_GLOBALINITIALIZER_H
-#define ALIYUN_DETAILS_GLOBALINITIALIZER_H
+#ifndef ALIYUN_UTILS_DETAILS_GLOBALINITIALIZER_H_
+#define ALIYUN_UTILS_DETAILS_GLOBALINITIALIZER_H_
 
 // NOTE: include this header(.h) to source(.cc/.cpp) if needed.
 //       DO NOT USE FLOW CLASSES DIRECTLY!
@@ -39,4 +39,4 @@ static int __globalInitializer__ = GlobalInitializer::initialize();
 }  // namespace details
 }  // namespace utils
 }  // namespace aliyun
-#endif  // ALIYUN_DETAILS_GLOBALINITIALIZER_H
+#endif  // ALIYUN_UTILS_DETAILS_GLOBALINITIALIZER_H_

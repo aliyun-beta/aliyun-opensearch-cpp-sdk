@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_
-#define OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_
+#define ALIYUN_OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_
 
 #include <string>
 
@@ -28,16 +28,19 @@ namespace object {
 
 class SearchTypeEnum {
  public:
-  enum {
+  enum Value {
     INVALID,
     SEARCH,
     SCROLL
   };
-  const static int kMaxValue = SCROLL;
+  static const int kMaxValue = SCROLL;
 
-  SearchTypeEnum(int v = 0);
+  // implicit for convenience:
+  //   cast from Value(Value => KeyTypeEnum),   explicit can not
+  //   assign from Value(KeyTypeEnum <= Value), explicit need DIY
+  SearchTypeEnum(Value v = INVALID);
 
-  SearchTypeEnum(std::string str);
+  explicit SearchTypeEnum(std::string str);
 
 #define IMPLEMENT_COMPARE(op) \
   bool operator op (const SearchTypeEnum& rhs) const { \
@@ -61,11 +64,11 @@ class SearchTypeEnum {
   }
 
  private:
-  int value_;
+  Value value_;
 };
 
 }  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif // OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_SEARCHTYPEENUM_H_

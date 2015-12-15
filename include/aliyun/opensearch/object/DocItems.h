@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_DOCITEMS_H_
-#define OPENSEARCH_OBJECT_DOCITEMS_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_DOCITEMS_H_
+#define ALIYUN_OPENSEARCH_OBJECT_DOCITEMS_H_
 
 #include <map>
 #include <string>
@@ -46,4 +46,4 @@ class DocItems {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif // OPENSEARCH_OBJECT_DOCITEMS_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_DOCITEMS_H_

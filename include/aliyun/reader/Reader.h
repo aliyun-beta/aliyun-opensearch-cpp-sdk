@@ -17,14 +17,13 @@
  * under the License.
  */
 
-#ifndef CORE_READER_READER_H_
-#define CORE_READER_READER_H_
+#ifndef ALIYUN_READER_READER_H_
+#define ALIYUN_READER_READER_H_
 
 #include <map>
 #include <string>
 
 namespace aliyun {
-
 namespace reader {
 
 class Reader {
@@ -37,7 +36,6 @@ class Reader {
 };
 
 }  // namespace reader
-
 }  // namespace aliyun
 
-#endif  // CORE_READER_READER_H_
+#endif  // ALIYUN_READER_READER_H_

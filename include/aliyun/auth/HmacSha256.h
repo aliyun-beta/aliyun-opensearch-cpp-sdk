@@ -17,24 +17,23 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_HMACSHA256_H_
-#define CORE_AUTH_HMACSHA256_H_
+#ifndef ALIYUN_AUTH_HMACSHA256_H_
+#define ALIYUN_AUTH_HMACSHA256_H_
 
 #include <string>
 
 #include "ISigner.h"
 
+// forward declarations
+struct apr_pool_t;
 struct apr_crypto_hash_t;
 
-struct apr_pool_t;
-
 namespace aliyun {
-
 namespace auth {
 
 class HmacSha256 : public ISigner {
  public:
-  const static int DIGEST_LENTH = 32;  // 256/8
+  static const int DIGEST_LENTH = 32;  // 256/8
 
   HmacSha256();
 
@@ -48,7 +47,8 @@ class HmacSha256 : public ISigner {
     return "1.0";
   }
 
-  std::string signString(std::string source, std::string accessSecret) throw (aliyun::Exception);
+  std::string signString(std::string source, std::string accessSecret)
+      throw(aliyun::Exception);
 
   void HMAC_SHA256(unsigned char hmac[32], const unsigned char *key,
                    int key_len, const unsigned char *message, int message_len);
@@ -63,7 +63,6 @@ class HmacSha256 : public ISigner {
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_HMACSHA256_H_
+#endif  // ALIYUN_AUTH_HMACSHA256_H_

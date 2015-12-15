@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_SINGLEDOC_H_
-#define OPENSEARCH_OBJECT_SINGLEDOC_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_SINGLEDOC_H_
+#define ALIYUN_OPENSEARCH_OBJECT_SINGLEDOC_H_
 
 #include <map>
 #include <string>
@@ -60,4 +60,4 @@ class SingleDoc {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_OBJECT_SINGLEDOC_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_SINGLEDOC_H_

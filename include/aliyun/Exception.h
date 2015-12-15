@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_EXCEPTION_H_
-#define CORE_EXCEPTION_H_
+#ifndef ALIYUN_EXCEPTION_H_
+#define ALIYUN_EXCEPTION_H_
 
 #include <stdlib.h>
 
@@ -74,4 +74,4 @@ class Exception : public std::exception {
 
 }  // namespace aliyun
 
-#endif  // CORE_EXCEPTION_H_
+#endif  // ALIYUN_EXCEPTION_H_

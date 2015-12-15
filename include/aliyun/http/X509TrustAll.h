@@ -17,27 +17,27 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_X509TRUSTALL_H_
-#define CORE_HTTP_X509TRUSTALL_H_
+#ifndef ALIYUN_HTTP_X509TRUSTALL_H_
+#define ALIYUN_HTTP_X509TRUSTALL_H_
 
 #include "HttpRequest.h"
 
 namespace aliyun {
-
 namespace http {
 
 // scope based HTTPS trust all.
 // using RAII store/resume HTTPS verify flag.
+// FIXME(xu): ScopedTrust maybe better ?
 class X509TrustAll {
-  long hostOptionCache_;
-  long peerOptionCache_;
+  int hostOptionCache_;
+  int peerOptionCache_;
 
  public:
   X509TrustAll() {
     hostOptionCache_ = HttpRequest::getSslVerifyHost();
     peerOptionCache_ = HttpRequest::getSslVerifyPeer();
-    HttpRequest::setSSLVerifyHost(0); // trust any host
-    HttpRequest::setSSLVerifyPeer(0); // trust any peer
+    HttpRequest::setSSLVerifyHost(0);  // trust any host
+    HttpRequest::setSSLVerifyPeer(0);  // trust any peer
   }
 
   ~X509TrustAll() {
@@ -47,7 +47,6 @@ class X509TrustAll {
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif  // CORE_HTTP_X509TRUSTALL_H_
+#endif  // ALIYUN_HTTP_X509TRUSTALL_H_

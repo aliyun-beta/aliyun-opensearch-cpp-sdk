@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_KEYTYPEENUM_H_
-#define OPENSEARCH_OBJECT_KEYTYPEENUM_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_KEYTYPEENUM_H_
+#define ALIYUN_OPENSEARCH_OBJECT_KEYTYPEENUM_H_
 
 #include <string>
 
@@ -28,16 +28,19 @@ namespace object {
 
 class KeyTypeEnum {
  public:
-  enum {
+  enum Value {
     INVALID,
     OPENSEARCH,
     ALIYUN
   };
-  const static int kMaxValue = ALIYUN;
+  static const int kMaxValue = ALIYUN;
 
-  KeyTypeEnum(int v = 0);
+  // implicit for convenience:
+  //   cast from Value(Value => KeyTypeEnum),   explicit can not
+  //   assign from Value(KeyTypeEnum <= Value), explicit need DIY
+  KeyTypeEnum(Value v = INVALID);
 
-  KeyTypeEnum(std::string str);
+  explicit KeyTypeEnum(std::string str);
 
 #define IMPLEMENT_COMPARE(op) \
   bool operator op (const KeyTypeEnum& rhs) const { \
@@ -61,11 +64,11 @@ class KeyTypeEnum {
   }
 
  private:
-  int value_;
+  Value value_;
 };
 
 }  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_OBJECT_KEYTYPEENUM_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_KEYTYPEENUM_H_

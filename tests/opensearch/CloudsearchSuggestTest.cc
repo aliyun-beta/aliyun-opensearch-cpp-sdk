@@ -31,11 +31,12 @@ class CloudsearchSuggestTest: public ::testing::Test {
  public:
   virtual void SetUp() {
     std::map<string, string> opts;
-    client_ = new CloudsearchClient("BBQtaPv7l14mNRDs",
-                                    "ebwFrJ0f72ttx53rNm6Tlviie0prGK",
-                                    "http://opensearch-cn-hangzhou.aliyuncs.com",
-                                    opts,
-                                    KeyTypeEnum::ALIYUN);
+    client_ = new CloudsearchClient(
+        "BBQtaPv7l14mNRDs",
+        "ebwFrJ0f72ttx53rNm6Tlviie0prGK",
+        "http://opensearch-cn-hangzhou.aliyuncs.com",
+        opts,
+        KeyTypeEnum::ALIYUN);
   }
 
   CloudsearchClient &client() {
@@ -58,6 +59,6 @@ TEST_F(CloudsearchSuggestTest, test) {
   suggest.setQuery("ss");
   string result = suggest.search();
   printf("result: %s\n", result.c_str());
-  EXPECT_TRUE(result.length() > 0);
+  EXPECT_GT(result.length(), 0);
 }
 

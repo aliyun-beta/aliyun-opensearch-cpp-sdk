@@ -29,8 +29,9 @@ ProtocolType::ProtocolType(std::string protocol) {
     value_ = HTTP;
   } else if (strncasecmp(protocol.c_str(), "https", sizeof("https")) == 0) {
     value_ = HTTPS;
-  } else
+  } else {
     throw Exception("Unknow ProtocolType Names");
+  }
 }
 
 std::string ProtocolType::toString() {
@@ -39,9 +40,6 @@ std::string ProtocolType::toString() {
   return enumNames[INVALID <= v && v <= HTTPS ? v : 0];
 }
 
-ProtocolType::operator std::string() {
-  return toString();
-}
 }  // namespace http
 
 }  // namespace aliyun

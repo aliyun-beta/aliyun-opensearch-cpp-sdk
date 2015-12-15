@@ -17,28 +17,26 @@
  * under the License.
  */
 
-#ifndef CORE_UTILS_DATE_H_
-#define CORE_UTILS_DATE_H_
+#ifndef ALIYUN_UTILS_DATE_H_
+#define ALIYUN_UTILS_DATE_H_
 
 #include <time.h>
 #include <string>
 
 namespace aliyun {
-
 namespace utils {
 
 // depends on time.h, no guarantee to ensure thread safety
 class Date {
  public:
-
-  const static int kNumMonth = 12;
+  static const int kNumMonth = 12;
   static const char* kMonthName[];
 
   Date();
 
-  Date(time_t t);
+  explicit Date(time_t t);
 
-  Date(struct tm* tm);
+  explicit Date(struct tm* tm);
 
   Date(int year, int mon, int day, int hour, int min, int sec);
 
@@ -59,8 +57,8 @@ class Date {
   IMPLEMENT_COMPARE(!=)
   IMPLEMENT_COMPARE(<=)
   IMPLEMENT_COMPARE(>=)
-  IMPLEMENT_COMPARE(<)
-  IMPLEMENT_COMPARE(>)
+  IMPLEMENT_COMPARE(< )
+  IMPLEMENT_COMPARE(> )
 
 #undef IMPLEMENT_COMPARE
 
@@ -74,7 +72,6 @@ class Date {
   }
 
  private:
-
   static std::string format(const char* fmt, const struct tm* t);
 
   time_t time_;
@@ -82,7 +79,6 @@ class Date {
 };
 
 }  // namespace utils
-
 }  // namespace aliyun
 
-#endif  // CORE_UTILS_DATE_H_
+#endif  // ALIYUN_UTILS_DATE_H_

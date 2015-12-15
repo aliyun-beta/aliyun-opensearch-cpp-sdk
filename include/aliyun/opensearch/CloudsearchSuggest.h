@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_CLOUDSEARCHSUGGEST_H_
-#define OPENSEARCH_CLOUDSEARCHSUGGEST_H_
+#ifndef ALIYUN_OPENSEARCH_CLOUDSEARCHSUGGEST_H_
+#define ALIYUN_OPENSEARCH_CLOUDSEARCHSUGGEST_H_
 
 #include <string>
 
@@ -29,7 +29,10 @@ namespace opensearch {
 
 class CloudsearchSuggest {
  public:
-  CloudsearchSuggest(std::string indexName, std::string suggestName, CloudsearchClient &client);
+  typedef CloudsearchClient& ClientRef;
+
+  CloudsearchSuggest(std::string indexName, std::string suggestName,
+                     ClientRef client);
 
   /**
    * 获取应用名称
@@ -131,4 +134,4 @@ class CloudsearchSuggest {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_CLOUDSEARCHSUGGEST_H_
+#endif  // ALIYUN_OPENSEARCH_CLOUDSEARCHSUGGEST_H_

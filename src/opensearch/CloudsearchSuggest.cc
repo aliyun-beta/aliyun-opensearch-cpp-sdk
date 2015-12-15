@@ -25,7 +25,7 @@ namespace opensearch {
 using std::string;
 
 CloudsearchSuggest::CloudsearchSuggest(string indexName, string suggestName,
-                                       CloudsearchClient &client) {
+                                       ClientRef client) {
   client_ = &client;
   indexName_ = indexName;
   suggestName_ = suggestName;
@@ -40,7 +40,8 @@ std::string CloudsearchSuggest::search() {
   params["hit"] = utils::StringUtils::ToString(this->hit_);
   params["query"] = this->query_;
 
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET, this->debugInfo_);
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET, this->debugInfo_);
 }
 
 std::string CloudsearchSuggest::getIndexName() {

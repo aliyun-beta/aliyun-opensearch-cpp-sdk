@@ -17,17 +17,18 @@
  * under the License.
  */
 
+#include <string.h>
+#include <vector>
+
 #include "aliyun/http/HttpRequest.h"
 #include "aliyun/utils/ParameterHelper.h"
 #include "aliyun/utils/StringUtils.h"
 #include "aliyun/utils/details/GlobalInitializer.h"
 
-#include <vector>
-#include <string.h>
-
 namespace aliyun {
 namespace http {
 
+// long: follow libcurl API
 long HttpRequest::sSSLVerifyHost = HttpRequest::DEFALT_VERIFYHOST_OPT;
 long HttpRequest::sSSLVerifyPeer = HttpRequest::DEFALT_VERIFYPEER_OPT;
 
@@ -73,7 +74,7 @@ HttpRequest::HttpRequest(std::string url) {
 }
 
 HttpRequest::HttpRequest(std::string url,
-                         std::map<std::string, std::string>& headers) {
+                         const std::map<std::string, std::string>& headers) {
   url_ = url;
   headers_ = headers;
   method_ = MethodType::INVALID;
@@ -135,7 +136,6 @@ void HttpRequest::setContent(std::string content, std::string encoding,
   headers_["Content-MD5"] = aliyun::utils::ParameterHelper::md5Sum(content_);
   headers_["Content-Length"] = aliyun::utils::StringUtils::ToString(
       content_.length());
-  ;
   headers_["Content-Type"] = getContentTypeValue(contentType_, encoding_);
 }
 
@@ -160,39 +160,33 @@ CurlHandle HttpRequest::getHttpConnection() {
     throw Exception("bad URL");
   }
 
-#define curl_easy_setopt_throw(curl, opt, val) \
+#define curl_easy_setopt_throw(curl, opt, val) do { \
       rc = curl_easy_setopt(curl, opt, (val));      \
-      if (rc != CURLE_OK) throw CurlException(rc);
+      if (rc != CURLE_OK) throw CurlException(rc);  \
+  } while (0)
 
   CURLcode rc;
   curl_easy_setopt_throw(curl, CURLOPT_URL, url.c_str());
 
   switch (method_) {
     case MethodType::GET:
-      curl_easy_setopt_throw(curl, CURLOPT_HTTPGET, 1)
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_HTTPGET, 1);
       break;
     case MethodType::PUT:
-      curl_easy_setopt_throw(curl, CURLOPT_UPLOAD, 1)
-      ;
-      curl_easy_setopt_throw(curl, CURLOPT_PUT, 1)
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_UPLOAD, 1);
+      curl_easy_setopt_throw(curl, CURLOPT_PUT, 1);
       break;
     case MethodType::HEAD:
-      curl_easy_setopt_throw(curl, CURLOPT_NOBODY, 1)
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_NOBODY, 1);
       break;
     case MethodType::POST:
-      curl_easy_setopt_throw(curl, CURLOPT_POST, 1)
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_POST, 1);
       break;
     case MethodType::Delete:
-      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "DELETE")
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
       break;
     case MethodType::OPTIONS:
-      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "OPTIONS")
-      ;
+      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "OPTIONS");
       break;
     default:
       break;
@@ -242,7 +236,7 @@ std::string HttpRequest::getContentTypeValue(FormatType contentType,
 }
 
 void HttpRequest::enableGzip(bool enable) {
-  // TODO: implement gzip on curl
+  // TODO(xu): implement gzip on curl
 }
 
 }  // namespace http

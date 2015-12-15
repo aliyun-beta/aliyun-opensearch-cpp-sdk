@@ -17,18 +17,15 @@
  * under the License.
  */
 
-#ifndef CORE_UTILS_STRINGUTILS_H_
-#define CORE_UTILS_STRINGUTILS_H_
+#ifndef ALIYUN_UTILS_STRINGUTILS_H_
+#define ALIYUN_UTILS_STRINGUTILS_H_
 
 #include <sstream>
 #include <string>
 
 namespace aliyun {
-
 namespace utils {
-
-// string utility functions
-namespace StringUtils {
+namespace StringUtils {  // string utility functions
 
 std::string ToLowerCase(std::string str);
 
@@ -41,7 +38,7 @@ std::string ToString(T t) {
   return ss.str();
 }
 
-// TODO: string encoding convert
+// TODO(xu): string encoding convert
 std::string ToEncoding(std::string src, std::string encoding);
 
 std::string hexString(std::string src, bool caps = true);
@@ -51,9 +48,7 @@ std::string hexDump(void* ptr, int len, bool caps = true);
 std::string trim(std::string src);
 
 }  // namespace StringUtils
-
 }  // namespace utils
-
 }  // namespace aliyun
 
-#endif  // CORE_UTILS_STRINGUTILS_H_
+#endif  // ALIYUN_UTILS_STRINGUTILS_H_

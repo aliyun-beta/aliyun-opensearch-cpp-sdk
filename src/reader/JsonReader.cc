@@ -21,16 +21,15 @@
 #include "aliyun/utils/StringUtils.h"
 
 #ifdef TRACE
-#include <stdio.h> // for debug
+// for debug
+#include <stdio.h>
 #include <stdlib.h>
 int gTraceCounter = 0;
 #define trace printf
 #define TRACE_FUNC do { \
-  if(++gTraceCounter > 800) exit(-1); \
-  else { \
-    ::printf("%2d %s\n", gTraceCounter, __FUNCTION__); \
-  } \
-} while(0)
+  if (++gTraceCounter > 800) exit(-1); \
+  else::printf("%2d %s\n", gTraceCounter, __FUNCTION__); \
+} while (0)
 #else
 #define TRACE_FUNC
 #define trace(...)

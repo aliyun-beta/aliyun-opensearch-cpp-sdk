@@ -102,10 +102,12 @@ TEST(SchemaTableFieldType, basic) {
 }
 
 TEST(SchemaTableFieldType, advance) {
-//  INT8("INT8", "INT"), UINT8("UINT8", "INT"), INT16("INT16", "INT"), UINT16("UINT16", "INT"), INT32(
-//      "INT32", "INT"), UINT32("INT32", "INT"), INT64("INT64", "INT"), UINT64("INT64", "INT"), TEXT(
-//      "TEXT", "TEXT"), STRING("STRING", "TEXT"), FLOAT("FLOAT", "FLOAT"), DOUBLE("DOUBLE",
-//      "FLOAT");
+// INT8("INT8", "INT"), UINT8("UINT8", "INT"),
+// INT16("INT16", "INT"), UINT16("UINT16", "INT"),
+// INT32("INT32", "INT"), UINT32("INT32", "INT"),
+// INT64("INT64", "INT"), UINT64("INT64", "INT"),
+// TEXT("TEXT", "TEXT"), STRING("STRING", "TEXT"),
+// FLOAT("FLOAT", "FLOAT"), DOUBLE("DOUBLE","FLOAT");
   SchemaTableFieldType e;
   SchemaTableFieldType e1("INT8", "INT");
   SchemaTableFieldType e2("UINT8", "INT");

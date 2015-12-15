@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_CLOUDSEARCHCLIENT_H_
-#define OPENSEARCH_CLOUDSEARCHCLIENT_H_
+#ifndef ALIYUN_OPENSEARCH_CLOUDSEARCHCLIENT_H_
+#define ALIYUN_OPENSEARCH_CLOUDSEARCHCLIENT_H_
 
 #include <time.h>
 #include <map>
@@ -43,6 +43,7 @@ namespace opensearch {
 class CloudsearchClient {
  public:
   typedef std::string string;
+  typedef string& stringref;
   typedef object::KeyTypeEnum KeyTypeEnum;
 
   /**
@@ -98,7 +99,7 @@ class CloudsearchClient {
    * @return string 返回获取的结果。
    */
   string call(string path, const std::map<string, string>& params,
-              string method, bool isPB) throw (aliyun::Exception) {
+              string method, bool isPB) throw(aliyun::Exception) {
     string debugInfo;
     return call(path, params, method, isPB, debugInfo);
   }
@@ -115,7 +116,7 @@ class CloudsearchClient {
    * @donotgenetatedoc
    */
   string call(string path, const std::map<string, string>& params, bool isPB)
-                  throw (aliyun::Exception) {
+                  throw(aliyun::Exception) {
     return call(path, params, DEFAULT_METHOD, isPB);
   }
 
@@ -131,8 +132,7 @@ class CloudsearchClient {
    * @throws IOException
    */
   string call(string path, const std::map<string, string>& params,
-              string method, bool isPB, string& debugInfo);
-
+              string method, bool isPB, stringref debugInfo);
   /**
    * 向服务器发出请求并获得返回结果
    *
@@ -145,7 +145,7 @@ class CloudsearchClient {
    * @donotgenetatedoc
    */
   string call(string path, const std::map<string, string>& params,
-              string method) throw (aliyun::Exception) {
+              string method) throw(aliyun::Exception) {
     return call(path, params, method, false);
   }
 
@@ -159,20 +159,20 @@ class CloudsearchClient {
    * @return string 返回获取的结果。
    */
   string call(string path, const std::map<string, string>& params,
-              string method, string& debugInfo) throw (aliyun::Exception) {
+              string method, stringref debugInfo) throw(aliyun::Exception) {
     return call(path, params, method, false, debugInfo);
   }
 
  private:
   string getNonce();
 
-  string buildQuery(std::map<string, string>& params);
+  string buildQuery(const std::map<string, string>& params);
 
-  string doSign(std::map<string, string>& params);
+  string doSign(std::map<string, string>* params);
 
-  static string buildHttpParameterString(const std::map<string, string>& params);
+  static string buildHttpParameterString(const std::map<string, string>& param);
 
-  string getAliyunSign(std::map<string, string>& params, string method);
+  string getAliyunSign(std::map<string, string>* params, string method);
 
   string doRequest(string url, const std::map<string, string>& requestParams,
                    string method, bool isPB);
@@ -228,4 +228,4 @@ class CloudsearchClient {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_CLOUDSEARCHCLIENT_H_
+#endif  // ALIYUN_OPENSEARCH_CLOUDSEARCHCLIENT_H_

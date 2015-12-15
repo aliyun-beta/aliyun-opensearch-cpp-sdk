@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_HTTPREQUEST_H_
-#define CORE_HTTP_HTTPREQUEST_H_
+#ifndef ALIYUN_HTTP_HTTPREQUEST_H_
+#define ALIYUN_HTTP_HTTPREQUEST_H_
 
 #include <curl/curl.h>
 #include <map>
@@ -29,16 +29,15 @@
 #include "MethodType.h"
 
 namespace aliyun {
-
 namespace http {
 
 class CurlException : public Exception {
  public:
-  CurlException(CURLcode rc)
+  explicit CurlException(CURLcode rc)
       : Exception(curl_easy_strerror(rc)) {
   }
 
-  CurlException(std::string what)
+  explicit CurlException(std::string what)
       : Exception(what) {
   }
 };
@@ -70,12 +69,12 @@ class CurlHandle {
 
 class HttpRequest {
  public:
-
   HttpRequest();
 
-  HttpRequest(std::string url);
+  explicit HttpRequest(std::string url);
 
-  HttpRequest(std::string url, std::map<std::string, std::string>& headers);
+  HttpRequest(std::string url,
+              const std::map<std::string, std::string>& headers);
 
   // getters and setters
   std::string getUrl() const {
@@ -108,6 +107,10 @@ class HttpRequest {
     method_ = method;
   }
 
+  void setMethod(std::string method) {
+    method_ = MethodType(method);
+  }
+
   std::string getContent() const {
     return content_;
   }
@@ -133,11 +136,11 @@ class HttpRequest {
 
   std::string getContentTypeValue(FormatType contentType, std::string encoding);
 
-  static void setSSLVerifyHost(long option) {
+  static void setSSLVerifyHost(int option) {
     sSSLVerifyHost = option;
   }
 
-  static void setSSLVerifyPeer(long option) {
+  static void setSSLVerifyPeer(int option) {
     sSSLVerifyPeer = option;
   }
 
@@ -160,21 +163,20 @@ class HttpRequest {
   std::map<std::string, std::string> headers_;
 
  private:
-  // determines whether curl verifies the authenticity of the peer's certificate.
-  static long sSSLVerifyPeer;
+  // determines whether verifies the authenticity of the peer's certificate.
+  static long sSSLVerifyPeer;  // long: follow libcurl
 
-  // determines whether libcurl verifies that the server cert is for the server it is known as.
-  static long sSSLVerifyHost;
+  // determines whether verifies that the server cert is known.
+  static long sSSLVerifyHost;  // long: follow libcurl
 
   // default CURLOPT_SSL_VERIFYHOST is 2
-  const static long DEFALT_VERIFYHOST_OPT = 2;
+  static const long DEFALT_VERIFYHOST_OPT = 2;  // long: follow libcurl
 
   // default CURLOPT_SSL_VERIFYPEER is 1
-  const static long DEFALT_VERIFYPEER_OPT = 1;
+  static const long DEFALT_VERIFYPEER_OPT = 1;  // long: follow libcurl
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif  // CORE_HTTP_HTTPREQUEST_H_
+#endif  // ALIYUN_HTTP_HTTPREQUEST_H_

@@ -17,26 +17,28 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_PROTOCOLTYPE_H_
-#define CORE_HTTP_PROTOCOLTYPE_H_
+#ifndef ALIYUN_HTTP_PROTOCOLTYPE_H_
+#define ALIYUN_HTTP_PROTOCOLTYPE_H_
 
 #include <string>
 
 #include "../Exception.h"
 
 namespace aliyun {
-
 namespace http {
 
 class ProtocolType {
  public:
-  enum {
+  enum Value {
     INVALID,
     HTTP,
     HTTPS
   };
 
-  ProtocolType(int v = 0)
+  // implicit for convenience:
+  //   cast from Value(Value => ProtocolType),   explicit can not
+  //   assign from Value(ProtocolType <= Value), explicit need DIY
+  ProtocolType(Value v = INVALID)
       : value_(v) {
   }
 
@@ -44,18 +46,15 @@ class ProtocolType {
     return value_;
   }
 
-  ProtocolType(std::string protocol);
-
-  operator std::string();
+  explicit ProtocolType(std::string protocol);
 
   std::string toString();
 
  private:
-  int value_;
+  Value value_;
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif  // CORE_HTTP_PROTOCOLTYPE_H_
+#endif  // ALIYUN_HTTP_PROTOCOLTYPE_H_

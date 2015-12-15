@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_CLOUDSEARCHDOC_H_
-#define OPENSEARCH_CLOUDSEARCHDOC_H_
+#ifndef ALIYUN_OPENSEARCH_CLOUDSEARCHDOC_H_
+#define ALIYUN_OPENSEARCH_CLOUDSEARCHDOC_H_
 
 #include <stdint.h>
 
@@ -39,6 +39,7 @@ namespace opensearch {
 class CloudsearchDoc {
  public:
   typedef std::string string;
+  typedef CloudsearchClient& ClientRef;
 
   static const string DOC_ADD;
   static const string DOC_REMOVE;
@@ -93,7 +94,7 @@ class CloudsearchDoc {
    * @param indexName 指定操作的索引名称。
    * @param client CloudsearchClient实例。
    */
-  CloudsearchDoc(string indexName, CloudsearchClient& client);
+  CloudsearchDoc(string indexName, ClientRef client);
 
   /**
    * 查看文档详情
@@ -217,7 +218,7 @@ class CloudsearchDoc {
    *
    * @param Queue<Long> timeLimitQueue
    */
-  void timeLimitCheck(std::queue<long>& timeLimitQueue);
+  void timeLimitCheck(std::queue<time_t>* timeLimitQueue);
 
   /**
    * 获取上次请求的信息
@@ -227,6 +228,7 @@ class CloudsearchDoc {
   string getDebugInfo() const {
     return this->debugInfo_;
   }
+
  private:
   void operate(string cmd, const std::map<string, string>& fields);
 
@@ -259,4 +261,4 @@ class CloudsearchDoc {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif // OPENSEARCH_CLOUDSEARCHDOC_H_
+#endif  // ALIYUN_OPENSEARCH_CLOUDSEARCHDOC_H_

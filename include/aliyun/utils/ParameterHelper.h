@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_UTILS_PARAMETERHELPER_H_
-#define CORE_UTILS_PARAMETERHELPER_H_
+#ifndef ALIYUN_UTILS_PARAMETERHELPER_H_
+#define ALIYUN_UTILS_PARAMETERHELPER_H_
 
 #include <stddef.h>
 #include <string>
@@ -27,12 +27,11 @@
 #include "Date.h"
 
 namespace aliyun {
-
 namespace utils {
 
 class ParseDateException : public Exception {
  public:
-  ParseDateException(std::string msg)
+  explicit ParseDateException(std::string msg)
       : Exception(msg) {
   }
 };
@@ -59,11 +58,9 @@ class ParameterHelper {
   static Date parseISO8601(string strDate);
 
   static Date parseRFC2616(string strDate);
-
 };
 
 }  // namespace utils
-
 }  // namespace aliyun
 
-#endif  // CORE_UTILS_PARAMETERHELPER_H_
+#endif  // ALIYUN_UTILS_PARAMETERHELPER_H_

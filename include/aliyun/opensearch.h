@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H
-#define ALIYUN_OPENSEARCH_H
+#ifndef ALIYUN_OPENSEARCH_H_
+#define ALIYUN_OPENSEARCH_H_
 
 #include "opensearch/CloudsearchClient.h"
 #include "opensearch/CloudsearchDoc.h"
@@ -26,4 +26,4 @@
 #include "opensearch/CloudsearchSearch.h"
 #include "opensearch/CloudsearchSuggest.h"
 
-#endif  // ALIYUN_OPENSEARCH_H
+#endif  // ALIYUN_OPENSEARCH_H_

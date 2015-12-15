@@ -62,11 +62,11 @@ TEST(HTTP, GET) {
   request.putHeaderParameter("Accept", "*/*");
   request.putHeaderParameter(
       "User-Agent",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
+      "Mozilla/5.0 (X11; Linux x86_64)");
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getStatus() == 400);
-  EXPECT_TRUE(response.getContent().length() > 0);
+  EXPECT_EQ(400, response.getStatus());
+  EXPECT_GT(response.getContent().length(), 0);
 }
 
 TEST(HTTP, PUT) {
@@ -76,19 +76,20 @@ TEST(HTTP, PUT) {
   request.setMethod(MethodType::PUT);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getStatus() == 400);
-  EXPECT_TRUE(response.getContent().length() > 0);
+  EXPECT_EQ(400, response.getStatus());
+  EXPECT_GT(response.getContent().length(), 0);
 }
 
 // DONE: add unit test for POST, etc
 TEST(HTTP, POST) {
   // set up a web server on localhost
-  HttpRequest request("http://203.88.161.174:8080/servlet/service?user=name&pass=word");
+  HttpRequest request(
+      "http://203.88.161.174:8080/servlet/service?user=name&pass=word");
   request.setMethod(MethodType::POST);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getHeaderValue("Request-Method") == "POST");  // servlet
-  EXPECT_TRUE(response.getContent().length() > 0);
+  EXPECT_EQ("POST", response.getHeaderValue("Request-Method"));  // servlet
+  EXPECT_GT(response.getContent().length(), 0);
 }
 
 TEST(HTTP, HEAD) {
@@ -96,8 +97,8 @@ TEST(HTTP, HEAD) {
   request.setMethod(MethodType::HEAD);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getHeaderValue("Request-Method") == "HEAD");  // servlet
-  EXPECT_TRUE(response.getContent().length() == 0);
+  EXPECT_EQ("HEAD", response.getHeaderValue("Request-Method"));  // servlet
+  EXPECT_EQ(0, response.getContent().length());
 }
 
 TEST(HTTP, DeleteTest) {
@@ -105,7 +106,7 @@ TEST(HTTP, DeleteTest) {
   request.setMethod(MethodType::Delete);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getHeaderValue("Request-Method") == "DELETE");  // servlet
+  EXPECT_EQ("DELETE", response.getHeaderValue("Request-Method"));  // servlet
 }
 
 TEST(HTTP, OPTIONS) {
@@ -113,22 +114,21 @@ TEST(HTTP, OPTIONS) {
   request.setMethod(MethodType::OPTIONS);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_TRUE(response.getContent().length() == 0);
+  EXPECT_EQ(0, response.getContent().length());
 }
 
 TEST(HTTPS, test) {
-  HttpRequest request("https://acs.aliyun-inc.com/");
-
   {
-    X509TrustAll trustAll;  // SSL peer certificate or SSH remote key was not OK
+    HttpRequest request("https://acs.aliyun-inc.com/");
+    X509TrustAll trustAll;  // scoped trust
     HttpResponse response = doHttpRequest(request);
 
-    EXPECT_TRUE(response.getStatus() == 400);
-    EXPECT_TRUE(response.getContent().length() > 0);
+    EXPECT_EQ(400, response.getStatus());
+    EXPECT_GT(response.getContent().length(), 0);
   }
 }
 
-void testHttpStatus(std::string url, long status) {
+void testHttpStatus(std::string url, int status) {
   HttpRequest request(url);
   HttpResponse response = doHttpRequest(request);
 

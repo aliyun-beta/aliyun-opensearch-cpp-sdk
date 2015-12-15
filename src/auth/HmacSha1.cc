@@ -17,10 +17,10 @@
  * under the License.
  */
 
+#include <apr_sha1.h>
+
 #include "aliyun/auth/HmacSha1.h"
 #include "aliyun/utils/Base64Helper.h"
-
-#include <apr_sha1.h>
 
 namespace aliyun {
 

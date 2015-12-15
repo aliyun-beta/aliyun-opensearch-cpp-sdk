@@ -33,7 +33,7 @@ std::string ToLowerCase(std::string str) {
   std::string lowered(str);
   for (size_t i = 0; i < str.length(); i++) {
     if (::isalpha(lowered[i]))
-      lowered[i] = (char) ::tolower((int) str[i]);
+      lowered[i] = ::tolower(str[i]);
   }
   return lowered;
 }
@@ -42,12 +42,12 @@ std::string ToUpperCase(std::string str) {
   std::string lowered(str);
   for (size_t i = 0; i < str.length(); i++) {
     if (::isalpha(lowered[i]))
-      lowered[i] = (char) ::toupper((int) str[i]);
+      lowered[i] = ::toupper(str[i]);
   }
   return lowered;
 }
 
-// TODO: string encoding convert
+// TODO(xu): string encoding convert
 std::string ToEncoding(std::string src, std::string encoding) {
   return src;
 }
@@ -78,14 +78,14 @@ std::string trim(std::string src) {
   std::string dst = src;
   for (size_t i = 0; i < dst.length(); i++) {
     if (!::isspace(dst[i])) {
-      dst = dst.substr(i); // trim head spaces.
+      dst = dst.substr(i);  // trim head spaces.
       break;
     }
   }
 
   for (int i = dst.length() - 1; i >= 0; i--) {
     if (!::isspace(dst[i])) {
-      dst.resize(i + 1); // trim tail spaces.
+      dst.resize(i + 1);  // trim tail spaces.
       break;
     }
   }

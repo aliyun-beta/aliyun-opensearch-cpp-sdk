@@ -17,23 +17,25 @@
  * under the License.
  */
 
+#include <fstream>
+#ifdef _MSC_VER
+#include <windows.h>
+#else  //  _MSC_VER
+#include <unistd.h>
+#endif  //  _MSC_VER
+
 #include "aliyun/utils/StringUtils.h"
 #include "aliyun/opensearch/CloudsearchDoc.h"
 #include "aliyun/opensearch/CloudsearchClient.h"
 #include "aliyun/opensearch/object/SingleDoc.h"
 #include "aliyun/opensearch/object/DocItems.h"
 
-#include <fstream>
-#ifdef _MSC_VER
-#include <windows.h>
-#else //  _MSC_VER
-#include <unistd.h>
-#endif //  _MSC_VER
-
 namespace aliyun {
 namespace opensearch {
 
 using std::string;
+using aliyun::auth::AcsURLEncoder;
+using utils::StringUtils::ToString;
 
 const string CloudsearchDoc::DOC_ADD = "add";
 const string CloudsearchDoc::DOC_REMOVE = "delete";
@@ -46,7 +48,7 @@ const string CloudsearchDoc::HA_DOC_FIELD_SEPARATOR = "\x1F";
 const string CloudsearchDoc::HA_DOC_MULTI_VALUE_SEPARATOR = "\x1D";
 const string CloudsearchDoc::HA_DOC_SECTION_WEIGHT = "\x1C";
 
-CloudsearchDoc::CloudsearchDoc(string indexName, CloudsearchClient& client) {
+CloudsearchDoc::CloudsearchDoc(string indexName, ClientRef client) {
   this->indexName_ = indexName;
   this->client_ = &client;
   this->path_ = "/index/doc/" + this->indexName_;
@@ -66,7 +68,8 @@ static bool isNotBlank(string str) {
   return false;
 }
 
-void CloudsearchDoc::operate(string cmd, const std::map<string, string>& fields) {
+void CloudsearchDoc::operate(string cmd,
+                             const std::map<string, string>& fields) {
   object::SingleDoc doc(cmd, fields);
   requestArray_.push_back(doc.getJsonString());
 }
@@ -129,7 +132,6 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName) {
 
 string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
                                      int64_t offset) {
-
   object::DocItems docItems;
   object::SingleDoc singleDoc;
 
@@ -137,15 +139,15 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
   string lastKey;
   uint64_t totalSize = 0;
 
-  std::queue<long> timeLimitQueue;
+  std::queue<time_t> timeLimitQueue;
   timeLimitQueue.push(::time(NULL));
 
   string result;
 
   std::ifstream input(filePath);
   string line;
-  int64_t lineNumber = 1; // line number
-  int lastLineNumber = 0; // last successfully pushed line number
+  int64_t lineNumber = 1;  // line number
+  int lastLineNumber = 0;  // last successfully pushed line number
 
   while (input >> line) {
     if (lineNumber < offset) {
@@ -155,26 +157,28 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
 
     string separator = line.substr(line.length() - 1);
 
-    if (separator == HA_DOC_ITEM_SEPARATOR) { // foreach doc
+    if (separator == HA_DOC_ITEM_SEPARATOR) {  // foreach doc
       lastField = "";
       string jstr = singleDoc.getJsonString();
       int currentSize = auth::AcsURLEncoder::encode(jstr).length();
       // FIXME(xu): why not += ?
-      totalSize = auth::AcsURLEncoder::encode(docItems.getJsonString()).length();
+      totalSize = AcsURLEncoder::encode(docItems.getJsonString()).length();
       if (currentSize + totalSize >= PUSH_MAX_SIZE) {
-        timeLimitCheck(timeLimitQueue);
+        timeLimitCheck(&timeLimitQueue);
         result = this->push(docItems.getJsonString(), tableName);
         string status = "status";
         string::size_type pos = result.find(status);
-        if (pos != string::npos && result.substr(pos + status.length() + 1).find("OK") != 0) {
-          return "last push not OK, line " + utils::StringUtils::ToString(lastLineNumber);
+        if (pos != string::npos
+            && result.substr(pos + status.length() + 1).find("OK") != 0) {
+          return "last push not OK, line "
+              + utils::StringUtils::ToString(lastLineNumber);
         }
         lastLineNumber = lineNumber;
         docItems = object::DocItems();
       }
       docItems.addDoc(singleDoc);
       singleDoc = object::SingleDoc();
-    } else if (separator == HA_DOC_FIELD_SEPARATOR) { // foreach field
+    } else if (separator == HA_DOC_FIELD_SEPARATOR) {  // foreach field
       string detail = line.substr(0, line.length() - 1);
       if (isNotBlank(lastField)) {
         singleDoc.addField(lastKey, lastField + detail);
@@ -204,20 +208,20 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
   return result;
 }
 
-void CloudsearchDoc::timeLimitCheck(std::queue<long>& timeLimitQueue) {
-  if (timeLimitQueue.size() < PUSH_FREQUENCE) {
-    timeLimitQueue.push(::time(NULL));
+void CloudsearchDoc::timeLimitCheck(std::queue<time_t>* timeLimitQueue) {
+  if (timeLimitQueue->size() < PUSH_FREQUENCE) {
+    timeLimitQueue->push(::time(NULL));
   } else {
-    long firstTime = timeLimitQueue.front();
-    timeLimitQueue.pop();
-    long currentTime = ::time(NULL);
-    long delta = currentTime - firstTime;
-    if (delta < 1000) { // sleep a duration
+    time_t firstTime = timeLimitQueue->front();
+    timeLimitQueue->pop();
+    time_t currentTime = ::time(NULL);
+    time_t delta = currentTime - firstTime;
+    if (delta < 1000) {  // sleep a duration
 #ifdef _MSC_VER
       ::Sleep(delta);
-#else // _MSC_VER
+#else  // _MSC_VER
       ::usleep(delta * 1000);
-#endif // _MSC_VER
+#endif  // _MSC_VER
     }
   }
 }

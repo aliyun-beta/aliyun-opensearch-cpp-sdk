@@ -17,7 +17,6 @@
  * under the License.
  */
 
-#include <iostream>
 #include <gtest/gtest.h>
 
 #include "aliyun/auth/HmacSha1.h"
@@ -28,7 +27,7 @@ using std::string;
 using aliyun::auth::ISigner;
 using aliyun::auth::HmacSha1;
 using aliyun::auth::HmacSha256;
-using namespace aliyun::utils;
+using aliyun::utils::StringUtils::hexDump;
 
 TEST(HmacSha1, test) {
   HmacSha1 hs;
@@ -43,14 +42,15 @@ TEST(HmacSha1, test) {
                msg.length());
 
   EXPECT_EQ("47ff824f95bba3569f6bc8a91023b74b26230fad",
-            StringUtils::hexDump(hmac, sizeof hmac, false));
+            hexDump(hmac, sizeof hmac, false));
 
   EXPECT_EQ("R/+CT5W7o1afa8ipECO3SyYjD60=", hs.signString(msg, key));
 
   EXPECT_EQ("axE3FUHgDyfm9/+Iep0HpZXrRwE=", HmacSha1::getInstance()->signString(
-      "GET&%2F&AccessKeyId%3Dtestid%26Action%3DDescribeRegions%26Format%3DXML"
-          "%26RegionId%3Dregion1%26SignatureMethod%3DHMAC-SHA1%26SignatureNonce%3DNwDAxvLU6tFE0DVb%26Sign"
-          "atureVersion%3D1.0%26TimeStamp%3D2012-12-26T10%253A33%253A56Z%26Version%3D2013-01-10",
+      "GET&%2F&AccessKeyId%3Dtestid%26Action%3DDescribeRegions%26"
+          "Format%3DXML%26RegionId%3Dregion1%26SignatureMethod%3DHMAC-SHA1%26"
+          "SignatureNonce%3DNwDAxvLU6tFE0DVb%26SignatureVersion%3D1.0%26"
+          "TimeStamp%3D2012-12-26T10%253A33%253A56Z%26Version%3D2013-01-10",
       "testsecret&"));
 }
 
@@ -62,11 +62,12 @@ TEST(HmacSha256, test) {
 
   unsigned char hmac[32];
   hs.HMAC_SHA256(hmac, reinterpret_cast<const unsigned char *>(key.c_str()),
-                 key.length(), reinterpret_cast<const unsigned char *>(msg.c_str()),
+                 key.length(),
+                 reinterpret_cast<const unsigned char *>(msg.c_str()),
                  msg.length());
 
   EXPECT_EQ("3f4307077c25b5aff804e29ae71b7e3e28bd5a70cce92fa38026d0e36a742848",
-            StringUtils::hexDump(hmac, sizeof hmac, false));
+            hexDump(hmac, sizeof hmac, false));
 
   EXPECT_EQ("P0MHB3wlta/4BOKa5xt+Pii9WnDM6S+jgCbQ42p0KEg=",
             hs.signString("this is a ShaHmac256 test.", "AccessSecret"));

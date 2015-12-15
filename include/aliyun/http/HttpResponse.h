@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_HTTPRESPONSE_H_
-#define CORE_HTTP_HTTPRESPONSE_H_
+#ifndef ALIYUN_HTTP_HTTPRESPONSE_H_
+#define ALIYUN_HTTP_HTTPRESPONSE_H_
 
 #include <string>
 
@@ -26,11 +26,9 @@
 #include "HttpRequest.h"
 
 namespace aliyun {
-
 namespace http {
 
 class HttpResponse : public HttpRequest {
-
  public:
   typedef std::string string;
   typedef http::FormatType FormatType;
@@ -39,7 +37,7 @@ class HttpResponse : public HttpRequest {
     status_ = 0;
   }
 
-  HttpResponse(std::string url)
+  explicit HttpResponse(std::string url)
       : HttpRequest(url) {
     status_ = 0;
   }
@@ -70,14 +68,13 @@ class HttpResponse : public HttpRequest {
   }
 
  private:
-  static void parseParameters(HttpResponse& response);
+  static void parseParameters(HttpResponse* response);
 
  private:
   int status_;
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif  // CORE_HTTP_HTTPRESPONSE_H_
+#endif  // ALIYUN_HTTP_HTTPRESPONSE_H_

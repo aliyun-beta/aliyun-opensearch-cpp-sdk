@@ -17,14 +17,14 @@
  * under the License.
  */
 
+#include <apr_errno.h>
+#include <apr_pools.h>
+#include <apr_random.h>
+
 #include "aliyun/Exception.h"
 #include "aliyun/auth/HmacSha256.h"
 #include "aliyun/utils/Base64Helper.h"
 #include "aliyun/utils/details/GlobalInitializer.h"
-
-#include <apr_errno.h>
-#include <apr_pools.h>
-#include <apr_random.h>
 
 namespace aliyun {
 
@@ -54,7 +54,7 @@ HmacSha256::~HmacSha256() {
 }
 
 std::string HmacSha256::signString(std::string source, std::string accessSecret)
-                                       throw (aliyun::Exception) {
+                                       throw(aliyun::Exception) {
   unsigned char hmac[DIGEST_LENTH];
   HMAC_SHA256(hmac,
               reinterpret_cast<const unsigned char*>(accessSecret.c_str()),

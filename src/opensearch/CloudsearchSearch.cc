@@ -111,7 +111,7 @@ void CloudsearchSearch::initCustomConfigMap() {
   this->configMap_[KEY_RERANKSIZE] = 200;
 }
 
-CloudsearchSearch::CloudsearchSearch(CloudsearchClient& client) {
+CloudsearchSearch::CloudsearchSearch(ClientRef client) {
   this->client_ = &client;
   this->path_ = "/search";
   this->initCustomConfigMap();
@@ -444,7 +444,7 @@ int CloudsearchSearch::getRerankSize() const {
   } catch (utils::BadAnyCast &e) {
     // ignore
   }
-  return 200;  //默认200
+  return 200;  // 默认200
 }
 
 std::string CloudsearchSearch::getDisableFunctions() {
@@ -486,17 +486,27 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
   std::string haQuery = "";
   if (type == SearchTypeEnum::SEARCH) {
     haQuery += "config=" + this->clauseConfig() + "&&";
-    haQuery += "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
-    haQuery += isNotBlank(this->getSortString()) ? "&&sort=" + this->getSortString() : "";
-    haQuery += isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
-    haQuery += isNotBlank(this->getDistinctString()) ? "&&distinct=" + this->getDistinctString() : "";
-    haQuery += isNotBlank(this->getAggregateString()) ? "&&aggregate=" + this->getAggregateString() : "";
-    haQuery += isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
+    haQuery +=
+        "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
+    haQuery +=
+        isNotBlank(this->getSortString()) ? "&&sort=" + this->getSortString()
+                                          : "";
+    haQuery +=
+        isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
+    haQuery += isNotBlank(this->getDistinctString()) ? "&&distinct="
+        + this->getDistinctString() : "";
+    haQuery += isNotBlank(this->getAggregateString()) ? "&&aggregate="
+        + this->getAggregateString() : "";
+    haQuery +=
+        isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
   } else if (type == SearchTypeEnum::SCROLL) {
     haQuery += "config=" + this->clauseConfig() + "&&";
-    haQuery += "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
-    haQuery += isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
-    haQuery += isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
+    haQuery +=
+        "query=" + (isNotBlank(this->getQuery()) ? this->getQuery() : "''");
+    haQuery +=
+        isNotBlank(this->getFilter()) ? "&&filter=" + this->getFilter() : "";
+    haQuery +=
+        isNotBlank(this->getPair()) ? "&&kvpairs=" + this->getPair() : "";
 
     if (isNotBlank(this->getScrollExpire())) {
       params["scroll"] = this->getScrollExpire();
@@ -555,13 +565,14 @@ std::string CloudsearchSearch::call(SearchTypeEnum type) {
   }
 
   if (this->customParams_.size() > 0) {
-    for (std::map<std::string, std::string>::iterator it = this->customParams_
-        .begin(); it != this->customParams_.end(); ++it) {
+    for (std::map<std::string, std::string>::iterator it =
+        this->customParams_.begin(); it != this->customParams_.end(); ++it) {
       params[it->first] = it->second;
     }
   }
   bool isPB = "protobuf" == getFormat();
-  return this->client_->call(this->path_, params, CloudsearchClient::METHOD_GET,
+  return this->client_->call(this->path_, params,
+                             CloudsearchClient::METHOD_GET,
                              isPB, this->debugInfo_);
 }
 
@@ -569,13 +580,13 @@ std::string CloudsearchSearch::clauseConfig() {
   return utils::StringUtils::ToString(this->configMap_);
 }
 void CloudsearchSearch::disableQp(
-    std::map<std::string, std::vector<std::string> >& opts) {
-  std::string processorConfig = "";  //整个qp需要关闭的子项配置
+    const std::map<std::string, std::vector<std::string> >& opts) {
+  std::string processorConfig = "";  // 整个qp需要关闭的子项配置
   std::string processor = "";
   std::string indexNames = "";
 
-  for (std::map<std::string, std::vector<std::string> >::iterator it = opts
-      .begin(); it != opts.end(); ++it) {
+  for (std::map<std::string, std::vector<std::string> >::const_iterator it =
+      opts.begin(); it != opts.end(); ++it) {
     processor = it->first;
     indexNames = "";
     if (!it->second.empty()) {

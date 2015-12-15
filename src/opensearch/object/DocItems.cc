@@ -30,8 +30,7 @@ std::string DocItems::getJsonString() const {
   }
   if (json.length() > 1) {
     json[json.length() - 1] = '}';
-  }
-  else {
+  } else {
     json.resize(0);
   }
   return json;

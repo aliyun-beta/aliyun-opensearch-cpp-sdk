@@ -17,13 +17,12 @@
  * under the License.
  */
 
-#ifndef CORE_HTTP_METHODTYPE_H_
-#define CORE_HTTP_METHODTYPE_H_
+#ifndef ALIYUN_HTTP_METHODTYPE_H_
+#define ALIYUN_HTTP_METHODTYPE_H_
 
 #include <string>
 
 namespace aliyun {
-
 namespace http {
 
 /**
@@ -42,7 +41,7 @@ namespace http {
  * */
 class MethodType {
  public:
-  enum {
+  enum Value {
     INVALID,
     GET,
     PUT,
@@ -52,24 +51,33 @@ class MethodType {
     OPTIONS
   };
 
-  static const int kNumNames;
-
   const char * toString() const;
 
-  MethodType(int v = 0);
+  // implicit for convenience:
+  //   cast from Value(Value => MethodType),   explicit can not
+  //   assign from Value(MethodType <= Value), explicit need DIY
+  MethodType(Value v = INVALID);
 
-  MethodType(std::string method);
+  explicit MethodType(std::string method);
 
   inline operator int() {
     return value_;
   }
 
  private:
-  int value_;
+  static const char** valueNames() {
+    static const char *names[] = {
+#define S(e) #e
+      S(INVALID), S(GET), S(PUT), S(POST), S(Delete), S(HEAD), S(OPTIONS)
+#undef S
+    };
+    return names;
+  }
+
+  Value value_;
 };
 
 }  // namespace http
-
 }  // namespace aliyun
 
-#endif  // CORE_HTTP_METHODTYPE_H_
+#endif  // ALIYUN_HTTP_METHODTYPE_H_

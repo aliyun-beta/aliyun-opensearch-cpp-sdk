@@ -23,11 +23,10 @@
 #include <string.h>
 
 namespace aliyun {
-
 namespace http {
 
 
-FormatType::FormatType(int v)
+FormatType::FormatType(Value v)
     : value_(v) {
 }
 
@@ -52,14 +51,21 @@ FormatType FormatType::mapAcceptToFormat(std::string accept) {
   if (strncasecmp(accept.c_str(), "application/xml",
                     sizeof("application/xml")) == 0
       || strncasecmp(accept.c_str(), "text/xml", sizeof("text/xml")) == 0)
-    return FormatType::XML;
+    return FormatType(XML);
   if (strncasecmp(accept.c_str(), "application/json",
                     sizeof("application/json")) == 0)
-    return FormatType::JSON;
+    return FormatType(JSON);
 
-  return FormatType::RAW;
+  return FormatType(RAW);
 }
-}  // namespace http
 
+#if 0
+FormatType &FormatType::operator=(FormatType::Value v) {
+  this->value_ = v;
+  return *this;
+}
+#endif
+
+}  // namespace http
 }  // namespace aliyun
 

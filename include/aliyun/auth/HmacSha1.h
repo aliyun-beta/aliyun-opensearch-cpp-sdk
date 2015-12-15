@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_HMACSHA1_H_
-#define CORE_AUTH_HMACSHA1_H_
+#ifndef ALIYUN_AUTH_HMACSHA1_H_
+#define ALIYUN_AUTH_HMACSHA1_H_
 
 #include <string>
 
@@ -29,12 +29,11 @@ class Exception;
 }  // namespace aliyun
 
 namespace aliyun {
-
 namespace auth {
 
 class HmacSha1 : public ISigner {
  public:
-  const static int DIGEST_LENTH = 20;
+  static const int DIGEST_LENTH = 20;  // 160/8
 
   std::string signString(std::string source, std::string accessSecret)
                              throw(aliyun::Exception);
@@ -58,7 +57,6 @@ class HmacSha1 : public ISigner {
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_HMACSHA1_H_
+#endif  // ALIYUN_AUTH_HMACSHA1_H_

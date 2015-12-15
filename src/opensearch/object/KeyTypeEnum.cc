@@ -26,17 +26,18 @@ namespace aliyun {
 namespace opensearch {
 namespace object {
 
-KeyTypeEnum::KeyTypeEnum(int v)
-    : value_(0 <= v && v <= kMaxValue ? v : 0) {
+KeyTypeEnum::KeyTypeEnum(Value v)
+    : value_(v) {
 }
 
 KeyTypeEnum::KeyTypeEnum(std::string str) {
-  for (value_ = 1; value_ <= kMaxValue; value_++) {
-    if (strncasecmp(str.c_str(), valueNames()[value_], str.length()) == 0) {
+  for (int i = 1; i <= kMaxValue; i++) {
+    if (strncasecmp(str.c_str(), valueNames()[i], str.length()) == 0) {
+      value_ = Value(i);
       return;
     }
   }
-  value_ = 0;
+  value_ = INVALID;
 }
 
 std::string KeyTypeEnum::toString() {

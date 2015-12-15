@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_CREDENTIAL_H_
-#define CORE_AUTH_CREDENTIAL_H_
+#ifndef ALIYUN_AUTH_CREDENTIAL_H_
+#define ALIYUN_AUTH_CREDENTIAL_H_
 
 #include <ctime>
 #include <string>
@@ -26,7 +26,6 @@
 #include "../utils/Date.h"
 
 namespace aliyun {
-
 namespace auth {
 
 class Credential {
@@ -117,7 +116,6 @@ class Credential {
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_CREDENTIAL_H_
+#endif  // ALIYUN_AUTH_CREDENTIAL_H_

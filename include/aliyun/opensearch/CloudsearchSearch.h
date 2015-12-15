@@ -17,11 +17,13 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_CLOUDSEARCHSEARCH_H_
-#define OPENSEARCH_CLOUDSEARCHSEARCH_H_
+#ifndef ALIYUN_OPENSEARCH_CLOUDSEARCHSEARCH_H_
+#define ALIYUN_OPENSEARCH_CLOUDSEARCHSEARCH_H_
 
-#include <string>
+#include <map>
 #include <vector>
+#include <string>
+
 #include "CloudsearchClient.h"
 #include "object/SearchTypeEnum.h"
 #include "../utils/Any.h"
@@ -51,30 +53,34 @@ namespace opensearch {
  */
 class CloudsearchSearch {
  public:
+  typedef CloudsearchClient& ClientRef;
+
   /**
    * 设定搜索结果集升降排序的标志。
    *
    * 根据sort的子句来设定搜索结果集的排序，"+"为升序，"-"为降序。
    *
    */
-  static const std::string SORT_INCREASE; // = "+";
-  static const std::string SORT_DECREASE; // = "-";
+  static const std::string SORT_INCREASE;  // = "+";
+  static const std::string SORT_DECREASE;  // = "-";
 
-  static const std::string KEY_FORMAT; // = "format";
-  static const std::string KEY_START; // = "start";
-  static const std::string KEY_HITS; // = "hit";
-  static const std::string KEY_RERANKSIZE; // = "rerank_size";
-  static const std::string SEARCH_TYPE_SCAN; // = "scan";
+  static const std::string KEY_FORMAT;  // = "format";
+  static const std::string KEY_START;  // = "start";
+  static const std::string KEY_HITS;  // = "hit";
+  static const std::string KEY_RERANKSIZE;  // = "rerank_size";
+  static const std::string SEARCH_TYPE_SCAN;  // = "scan";
 
   typedef utils::Any SummaryValue;
 
   typedef std::map<std::string, utils::Any> SummaryMap;
 
+  typedef SummaryMap& SummaryMapRef;
+
   typedef std::map<std::string, SummaryMap> StringSummaryMap;
 
   typedef object::SearchTypeEnum SearchTypeEnum;
 
-  CloudsearchSearch(CloudsearchClient& client);
+  explicit CloudsearchSearch(ClientRef client);
 
   /**
    * 执行搜索请求(1)
@@ -102,7 +108,7 @@ class CloudsearchSearch {
    * @throws ClientProtocolException
    *
    */
-  std::string search(SummaryMap& opts);
+  std::string search(SummaryMapRef opts);
 
   /**
    * 执行搜索请求(2)
@@ -135,7 +141,7 @@ class CloudsearchSearch {
    * @throws ClientProtocolException
    *
    */
-  std::string scroll(SummaryMap& opts);
+  std::string scroll(SummaryMapRef opts);
 
 
   /**
@@ -264,7 +270,8 @@ class CloudsearchSearch {
    * @return boolean 返回是否添加成功。
    */
   bool addSummary(std::string fieldName, int len, std::string ellipsis,
-                  int snippet, std::string elementPrefix, std::string elementPostfix);
+                  int snippet, std::string elementPrefix,
+                  std::string elementPostfix);
 
   /**
    * 获取当前所有设定的摘要信息(summary)
@@ -458,7 +465,8 @@ class CloudsearchSearch {
    * @return boolean 返回添加成功或失败。
    */
   bool addAggregate(std::string groupKey, std::string aggFun, std::string range,
-                    std::string maxGroup, std::string aggFilter, std::string aggSamplerThresHold,
+                    std::string maxGroup, std::string aggFilter,
+                    std::string aggSamplerThresHold,
                     std::string aggSamplerStep);
 
   /**
@@ -512,7 +520,8 @@ class CloudsearchSearch {
    * @return 返回是否添加成功。
    */
   bool addDistinct(std::string key, int distCount, int distTimes,
-                   std::string reserved, std::string distFilter, std::string updateTotalHit,
+                   std::string reserved, std::string distFilter,
+                   std::string updateTotalHit,
                    double grade);
 
   /**
@@ -578,7 +587,8 @@ class CloudsearchSearch {
    */
   bool addDistinct(std::string key, int distCount, int distTimes,
                    std::string reserved, std::string distFilter) {
-    return this->addDistinct(key, distCount, distTimes, reserved, distFilter, "", 0);
+    return this->addDistinct(key, distCount, distTimes, reserved, distFilter,
+                             "", 0);
   }
 
   /**
@@ -593,8 +603,10 @@ class CloudsearchSearch {
    * @return 返回是否添加成功。
    */
   bool addDistinct(std::string key, int distCount, int distTimes,
-                   std::string reserved, std::string distFilter, std::string updateTotalHit) {
-    return this->addDistinct(key, distCount, distTimes, reserved, distFilter, updateTotalHit, 0);
+                   std::string reserved, std::string distFilter,
+                   std::string updateTotalHit) {
+    return this->addDistinct(key, distCount, distTimes, reserved, distFilter,
+                             updateTotalHit, 0);
   }
 
   /**
@@ -701,7 +713,7 @@ class CloudsearchSearch {
    *
    * @param field 指定的字段名称。
    */
- void addFetchField(std::string field) {
+  void addFetchField(std::string field) {
     fetches_.push_back(field);
   }
 
@@ -792,7 +804,7 @@ class CloudsearchSearch {
    *
    * @param opts 关闭qp的细节配置参数
    */
-  void disableQp(std::map<std::string, std::vector<std::string> >& opts);
+  void disableQp(const std::map<std::string, std::vector<std::string> > &opts);
 
   /**
    * 获取禁用查询分析的processor的字段配置
@@ -868,7 +880,7 @@ class CloudsearchSearch {
    *
    * @return 设置的scroll请求起始id
    */
- std::string getScrollId() {
+  std::string getScrollId() {
     return this->scrollId_;
   }
 
@@ -933,7 +945,7 @@ class CloudsearchSearch {
  private:
   void initCustomConfigMap();
 
-  void extract(SummaryMap &opts, SearchTypeEnum type);
+  void extract(SummaryMapRef opts, SearchTypeEnum type);
 
   CloudsearchClient *client_;
 
@@ -1030,4 +1042,4 @@ class CloudsearchSearch {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_CLOUDSEARCHSEARCH_H_
+#endif  // ALIYUN_OPENSEARCH_CLOUDSEARCHSEARCH_H_

@@ -17,19 +17,14 @@
  * under the License.
  */
 
-#ifndef CORE_AUTH_ICREDENTIALPROVIDER_H_
-#define CORE_AUTH_ICREDENTIALPROVIDER_H_
+#ifndef ALIYUN_AUTH_ICREDENTIALPROVIDER_H_
+#define ALIYUN_AUTH_ICREDENTIALPROVIDER_H_
+
+namespace aliyun {
+namespace auth {
 
 // forward declaration
-namespace aliyun {
-namespace auth {
 class Credential;
-}  // namespace auth
-}  // namespace aliyun
-
-namespace aliyun {
-
-namespace auth {
 
 class ICredentialProvider {
  public:
@@ -40,7 +35,6 @@ class ICredentialProvider {
 };
 
 }  // namespace auth
-
 }  // namespace aliyun
 
-#endif  // CORE_AUTH_ICREDENTIALPROVIDER_H_
+#endif  // ALIYUN_AUTH_ICREDENTIALPROVIDER_H_

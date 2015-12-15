@@ -17,12 +17,13 @@
  * under the License.
  */
 
-#include "aliyun/utils/Base64Helper.h"
 #include "aliyun/utils/ParameterHelper.h"
 
 #include <apr_md5.h>
 #include <apr_uuid.h>
 #include <cstring>
+
+#include "aliyun/utils/Base64Helper.h"
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) sizeof(a)/sizeof(a[0])
@@ -32,21 +33,27 @@ namespace aliyun {
 
 namespace utils {
 
-static const char* FORMAT_ISO8601 = "%Y-%m-%dT%H:%M:%SZ";  // "2014-12-22T10:33:40Z"
-static const char* FORMAT_RFC2616 = "%a, %d %b %Y %H:%M:%S GMT";  // "Wed, 16 Jan 2013 19:01:18 GMT"
+// "2014-12-22T10:33:40Z"
+static const char* FORMAT_ISO8601 = "%Y-%m-%dT%H:%M:%SZ";
+
+// "Wed, 16 Jan 2013 19:01:18 GMT"
+static const char* FORMAT_RFC2616 = "%a, %d %b %Y %H:%M:%S GMT";
 
 std::string ParameterHelper::md5hex(std::string str) {
   byte md[APR_MD5_DIGESTSIZE] = { 0 };
-  char buf[80];
+  string result;
 
   const byte* data = reinterpret_cast<const byte*>(str.c_str());
   size_t len = static_cast<size_t>(str.length());
 
   apr_md5(md, data, len);
 
-  for (int i = 0; i < APR_MD5_DIGESTSIZE; i++)
-    ::sprintf(&(buf[i * 2]), "%02x", md[i]);
-  return buf;
+  for (int i = 0; i < APR_MD5_DIGESTSIZE; i++) {
+    char tmp[4];
+    ::snprintf(tmp, sizeof(tmp), "%02x", md[i]);
+    result += tmp;
+  }
+  return result;
 }
 
 std::string ParameterHelper::md5Sum(std::string str) {

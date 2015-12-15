@@ -119,7 +119,7 @@ std::string Base64Helper::decode(std::string str, std::string encoding) {
   return std::string(buffer.begin(), buffer.end());
 }
 
-std::string Base64Helper::encode(std::vector<byte>& buffer) {
+std::string Base64Helper::encode(const std::vector<byte>& buffer) {
   return encode(&buffer[0], buffer.size());
 }
 

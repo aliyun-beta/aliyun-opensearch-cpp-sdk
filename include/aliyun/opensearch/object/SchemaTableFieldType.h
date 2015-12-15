@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_
-#define OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_
+#define ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_
 
 #include <string.h>
 #include <string>
@@ -29,10 +29,12 @@ namespace object {
 
 class SchemaTableFieldType {
  public:
-//  INT8("INT8", "INT"), UINT8("UINT8", "INT"), INT16("INT16", "INT"), UINT16("UINT16", "INT"), INT32(
-//      "INT32", "INT"), UINT32("INT32", "INT"), INT64("INT64", "INT"), UINT64("INT64", "INT"), TEXT(
-//      "TEXT", "TEXT"), STRING("STRING", "TEXT"), FLOAT("FLOAT", "FLOAT"), DOUBLE("DOUBLE",
-//      "FLOAT");
+// INT8("INT8", "INT"), UINT8("UINT8", "INT"),
+// INT16("INT16", "INT"), UINT16("UINT16", "INT"),
+// INT32("INT32", "INT"), UINT32("INT32", "INT"),
+// INT64("INT64", "INT"), UINT64("INT64", "INT"),
+// TEXT("TEXT", "TEXT"), STRING("STRING", "TEXT"),
+// FLOAT("FLOAT", "FLOAT"), DOUBLE("DOUBLE","FLOAT");
 
 // a bit of tricks to implement above mapping
 #define COLUMNS(selector) \
@@ -49,13 +51,13 @@ class SchemaTableFieldType {
 #define string1st(e1, e2) #e1
 #define string2nd(e1, e2) #e2
 
-  enum {
+  enum Value {
     COLUMNS(select1st),
     INT  // dummy
   };
   static const int kMaxValue = DOUBLE;
 
-  SchemaTableFieldType(int v = 0);
+  SchemaTableFieldType(Value v = INVALID);
 
   SchemaTableFieldType(std::string type, std::string bigType);
 
@@ -90,7 +92,7 @@ class SchemaTableFieldType {
     return names;
   }
 
-  int value_;
+  Value value_;
 };
 
 #undef COLUMNS
@@ -103,4 +105,4 @@ class SchemaTableFieldType {
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELDTYPE_H_

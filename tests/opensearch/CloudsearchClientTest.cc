@@ -34,6 +34,6 @@ TEST(CloudsearchClient, ctor) {
   try {
     CloudsearchClient client1("", "", "", opts, KeyTypeEnum::ALIYUN);
   } catch (aliyun::Exception& e) {
-    EXPECT_TRUE(std::string(e.what()) == "UnknownHostException");
+    EXPECT_EQ("UnknownHostException", std::string(e.what()));
   }
 }

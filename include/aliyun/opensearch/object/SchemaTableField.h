@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
-#define OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
+#define ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
 
 #include <string>
 #include <vector>
@@ -124,13 +124,17 @@ class SchemaTableField {
   bool search_;  // 是否可以搜索
   bool display_;  // = true;  // 是否可以展示，默认可展示
   bool aggregate_;  // 是否可以聚合
-  std::string outerTable_;  // 如果定义了此值，则这个字段会和指定的表的primary key字段关联
-  std::vector<std::string> indexList_;  // 指定字段索引字段名称，如果未指定，TEXT类型默认为default，其他默认为字段名称。可以为单值或者数组。
 
+  // 如果定义了此值，则这个字段会和指定的表的primary key关联
+  std::string outerTable_;
+
+  // 指定字段索引字段名称，如果未指定，TEXT类型默认为default，
+  // 其他默认为字段名称。可以为单值或者数组。
+  std::vector<std::string> indexList_;
 };
 
 }  // namespace object
 }  // namespace opensearch
 }  // namespace aliyun
 
-#endif  // OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
+#endif  // ALIYUN_OPENSEARCH_OBJECT_SCHEMATABLEFIELD_H_
