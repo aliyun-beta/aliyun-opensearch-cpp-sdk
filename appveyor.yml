@@ -1,0 +1,23 @@
+version: 1.0.{build}
+
+configuration:
+- Release
+
+environment:
+  matrix:
+  - VS_VERSION: 14
+    VS_PLATFORM: win32
+
+before_build:
+- cd thirdparty
+- cmake -P downloadPackages.cmake
+- for %%i in (*.zip) do 7z x %%i
+- cmd /c "win_build curl"
+- cmd /c "win_build apr"
+- cmd /c "win_build apu"
+- cd ..
+- cmake -H. -BBuild -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -DCMAKE_BUILD_TYPE=%configuration% -Dgtest_force_shared_crt=ON
+
+build:
+  project: Build\AliyunOpenSearchSDK.sln
+
