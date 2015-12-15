@@ -1,0 +1,12 @@
+# specical files
+.*
+!.git*
+!.*.yml
+
+build/
+
+thirdparty/
+!thirdparty/*.cmake
+!thirdparty/*.bat
+!thirdparty/*.sh
+

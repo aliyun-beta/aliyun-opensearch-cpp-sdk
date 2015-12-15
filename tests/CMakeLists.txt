@@ -30,6 +30,8 @@ set(BASE_TEST_FILES
         basetest/HttpTest.cc
         basetest/HttpTypesTest.cc
         basetest/ParamterHelperTest.cc
+        basetest/JsonReaderTest.cc
+        basetest/XmlReaderTest.cc
         )
 
 add_executable(BaseTestes ${BASE_TEST_FILES})
