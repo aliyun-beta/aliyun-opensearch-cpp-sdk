@@ -18,5 +18,5 @@ checkAndDownload(https://github.com/google/googletest/archive/release-1.7.0.zip 
 checkAndDownload(https://github.com/bagder/curl/releases/download/curl-7_45_0/curl-7.45.0.zip curl-7.45.0.zip)
 checkAndDownload(https://github.com/apache/apr/archive/1.5.2.zip apr-1.5.2-win32-src.zip)
 checkAndDownload(https://github.com/apache/apr-util/archive/1.5.4.zip apr-util-1.5.4-win32-src.zip)
-checkAndDownload(https://github.com/apache/apr-iconv/archive/1.2.1.zip apr-iconv-1.2.1-win32-src-r2.zip)
+checkAndDownload(http://www.us.apache.org/dist/apr/apr-iconv-1.2.1-win32-src-r2.zip apr-iconv-1.2.1-win32-src-r2.zip)
 endif ()

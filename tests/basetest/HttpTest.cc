@@ -100,7 +100,7 @@ TEST(HTTP, HEAD) {
   EXPECT_TRUE(response.getContent().length() == 0);
 }
 
-TEST(HTTP, DELETE) {
+TEST(HTTP, DeleteTest) {
   HttpRequest request("http://203.88.161.174:8080/servlet/service");
   request.setMethod(MethodType::Delete);
 
