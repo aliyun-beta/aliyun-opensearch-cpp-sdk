@@ -16,14 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <apr_general.h>
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include "aliyun/opensearch/object/schema_table_field_type.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+namespace aliyun {
+namespace opensearch {
+namespace object {
 
-#endif  // ALIYUN_OPENSEARCH_H_
+SchemaTableFieldType::SchemaTableFieldType(Value v)
+    : value_(v) {
+}
+
+SchemaTableFieldType::SchemaTableFieldType(std::string type,
+                                           std::string bigType) {
+  for (int i = 1; i <= kMaxValue; i++) {
+    if (strncasecmp(type.c_str(), typeNames()[i], type.length()) == 0
+        && strncasecmp(bigType.c_str(), bigTypeNames()[i], bigType.length())
+            == 0) {
+      value_ = Value(i);
+      return;
+    }
+  }
+  value_ = INVALID;
+}
+
+std::string SchemaTableFieldType::getTypeName() const {
+  return typeNames()[value_];
+}
+
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

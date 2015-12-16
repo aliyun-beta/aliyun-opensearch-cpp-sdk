@@ -17,13 +17,33 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include "aliyun/opensearch/object/search_type_enum.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <apr_general.h>
+#include <string.h>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+namespace aliyun {
+namespace opensearch {
+namespace object {
+
+SearchTypeEnum::SearchTypeEnum(Value v)
+    : value_(v) {
+}
+
+SearchTypeEnum::SearchTypeEnum(std::string str) {
+  for (int i = 1; i <= kMaxValue; i++) {
+    if (strncasecmp(str.c_str(), valueNames()[i], str.length()) == 0) {
+      value_ = Value(i);
+      return;
+    }
+  }
+  value_ = INVALID;
+}
+
+std::string SearchTypeEnum::toString() {
+  return valueNames()[value_];
+}
+
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

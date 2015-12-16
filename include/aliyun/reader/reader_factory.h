@@ -17,13 +17,35 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_READER_READER_FACTORY_H_
+#define ALIYUN_READER_READER_FACTORY_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <stddef.h>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+#include "aliyun/http/format_type.h"
+#include "aliyun/reader/json_reader.h"
+#include "aliyun/reader/xml_reader.h"
+
+namespace aliyun {
+namespace reader {
+
+class ReaderFactory {
+ public:
+  typedef aliyun::http::FormatType FormatType;
+
+  static Reader* createInstance(FormatType format) {
+    if (FormatType::JSON == format) {
+      return new JsonReader();
+    }
+    if (FormatType::XML == format) {
+      return new XmlReader();
+    }
+    return NULL;
+  }
+};
+
+
+}  // namespace reader
+}  // namespace aliyun
+
+#endif  // ALIYUN_READER_READER_FACTORY_H_

@@ -17,13 +17,36 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include "aliyun/opensearch/object/schema_table_field.h"
+#include "aliyun/utils/string_utils.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+namespace aliyun {
+namespace opensearch {
+namespace object {
 
-#endif  // ALIYUN_OPENSEARCH_H_
+SchemaTableField::SchemaTableField() {
+  this->display_ = true;
+  this->primarykey_ = false;
+  this->multi_ = false;
+  this->filter_ = false;
+  this->search_ = false;
+  this->aggregate_ = false;
+}
+
+void SchemaTableField::addIndex(std::string indexStr) {
+  std::string trim = utils::StringUtils::trim(indexStr);
+
+  if (indexStr.length() == 0 || trim.length() == 0) {
+    return;
+  }
+  for (size_t i = 0; i < indexList_.size(); i++) {
+    if (indexList_[i] == trim) {
+      return;
+    }
+  }
+  indexList_.push_back(trim);
+}
+
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun

@@ -17,13 +17,21 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include <gtest/gtest.h>
+#include "aliyun/utils/base64_helper.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+using std::string;
+using aliyun::utils::Base64Helper;
 
-#endif  // ALIYUN_OPENSEARCH_H_
+TEST(Base64, encode) {
+  string encoding = "UTF-8";
+  string encode1 = Base64Helper::encode("1234567890", encoding);
+  string encode2 = Base64Helper::encode("abcdefghijklmnopqrstuvwxyz", encoding);
+  EXPECT_EQ("MTIzNDU2Nzg5MA==", encode1);
+  EXPECT_EQ("YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=", encode2);
+
+  string decode1 = Base64Helper::decode(encode1, encoding);
+  string decode2 = Base64Helper::decode(encode2, encoding);
+  EXPECT_EQ("1234567890", decode1);
+  EXPECT_EQ("abcdefghijklmnopqrstuvwxyz", decode2);
+}

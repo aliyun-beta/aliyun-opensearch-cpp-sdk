@@ -17,13 +17,30 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_AUTH_ISIGNER_H_
+#define ALIYUN_AUTH_ISIGNER_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <string>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+#include "../exception.h"
+
+namespace aliyun {
+namespace auth {
+
+class ISigner {
+ public:
+  virtual ~ISigner() {
+  }
+
+  virtual std::string getSignerName() = 0;
+
+  virtual std::string getSignerVersion() = 0;
+
+  virtual std::string signString(std::string source, std::string accessSecret)
+                                     throw(aliyun::Exception) = 0;
+};
+
+}  // namespace auth
+}  // namespace aliyun
+
+#endif  // ALIYUN_AUTH_ISIGNER_H_

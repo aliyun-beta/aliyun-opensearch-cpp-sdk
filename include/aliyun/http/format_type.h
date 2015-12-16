@@ -17,13 +17,44 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_HTTP_FORMAT_TYPE_H_
+#define ALIYUN_HTTP_FORMAT_TYPE_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <string>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+namespace aliyun {
+namespace http {
+
+class FormatType {
+ public:
+  enum Value {
+    INVALID,
+    XML,
+    JSON,
+    RAW
+  };
+
+  // implicit for convenience:
+  //   cast from Value(Value => FormatType),   explicit can not
+  //   assign from Value(FormatType <= Value), explicit need DIY
+  FormatType(Value v = INVALID);
+
+  const char* toString() const;
+
+  // for compare
+  inline operator int() const {
+    return value_;
+  }
+
+  static std::string mapFormatToAccept(FormatType format);
+
+  static FormatType mapAcceptToFormat(std::string accept);
+
+ private:
+  Value value_;
+};
+
+}  // namespace http
+}  // namespace aliyun
+
+#endif  // ALIYUN_HTTP_FORMAT_TYPE_H_

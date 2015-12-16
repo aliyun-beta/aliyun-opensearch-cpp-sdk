@@ -17,13 +17,24 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_AUTH_ICREDENTIAL_PROVIDER_H_
+#define ALIYUN_AUTH_ICREDENTIAL_PROVIDER_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+namespace aliyun {
+namespace auth {
 
-#endif  // ALIYUN_OPENSEARCH_H_
+// forward declaration
+class Credential;
+
+class ICredentialProvider {
+ public:
+  virtual ~ICredentialProvider() {
+  }
+
+  virtual Credential fresh() = 0;
+};
+
+}  // namespace auth
+}  // namespace aliyun
+
+#endif  // ALIYUN_AUTH_ICREDENTIAL_PROVIDER_H_

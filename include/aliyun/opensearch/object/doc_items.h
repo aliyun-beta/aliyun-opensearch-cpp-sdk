@@ -17,13 +17,33 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_OPENSEARCH_OBJECT_DOC_ITEMS_H_
+#define ALIYUN_OPENSEARCH_OBJECT_DOC_ITEMS_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <map>
+#include <string>
+#include <vector>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+#include "aliyun/opensearch/object/single_doc.h"
+
+namespace aliyun {
+namespace opensearch {
+namespace object {
+
+class DocItems {
+ public:
+  void addDoc(const SingleDoc& doc) {
+    docList_.push_back(doc);
+  }
+
+  std::string getJsonString() const;
+
+ private:
+  std::vector<SingleDoc> docList_;
+};
+
+}  // namespace object
+}  // namespace opensearch
+}  // namespace aliyun
+
+#endif  // ALIYUN_OPENSEARCH_OBJECT_DOC_ITEMS_H_

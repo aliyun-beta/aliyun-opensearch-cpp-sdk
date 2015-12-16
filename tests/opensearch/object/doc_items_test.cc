@@ -17,13 +17,25 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include <gtest/gtest.h>
+#include "aliyun/opensearch/object/doc_items.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+using aliyun::opensearch::object::DocItems;
+using aliyun::opensearch::object::SingleDoc;
 
-#endif  // ALIYUN_OPENSEARCH_H_
+TEST(DocItemsTest, add_json) {
+  std::map<std::string, std::string> fields;
+  fields["foo"] = "bar";
+  SingleDoc doc1("doc1", fields);
+
+  fields["have"] = "fun";
+  SingleDoc doc2("doc2", fields);
+
+  DocItems docItems;
+  docItems.addDoc(doc1);
+  docItems.addDoc(doc2);
+
+  EXPECT_EQ(
+      "{{\"cmd\":\"doc1\",\"fields\":{\"foo\":\"bar\"}},{\"cmd\":\"doc2\",\"fields\":{\"foo\":\"bar\",\"have\":\"fun\"}}}",
+      docItems.getJsonString());
+}

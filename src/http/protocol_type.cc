@@ -16,14 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <apr_general.h>
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#include "aliyun/http/protocol_type.h"
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+namespace aliyun {
 
-#endif  // ALIYUN_OPENSEARCH_H_
+namespace http {
+
+ProtocolType::ProtocolType(std::string protocol) {
+  if (strncasecmp(protocol.c_str(), "http", sizeof("http")) == 0) {
+    value_ = HTTP;
+  } else if (strncasecmp(protocol.c_str(), "https", sizeof("https")) == 0) {
+    value_ = HTTPS;
+  } else {
+    throw Exception("Unknow ProtocolType Names");
+  }
+}
+
+std::string ProtocolType::toString() {
+  static std::string enumNames[] = { "invalid", "http", "https" };
+  int v = value_;
+  return enumNames[INVALID <= v && v <= HTTPS ? v : 0];
+}
+
+}  // namespace http
+
+}  // namespace aliyun

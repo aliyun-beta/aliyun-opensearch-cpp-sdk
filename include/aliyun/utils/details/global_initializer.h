@@ -16,14 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#ifndef ALIYUN_UTILS_DETAILS_GLOBAL_INITIALIZER_H_
+#define ALIYUN_UTILS_DETAILS_GLOBAL_INITIALIZER_H_
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+// NOTE: include this header(.h) to source(.cc/.cpp) if needed.
+//       DO NOT USE FLOW CLASSES DIRECTLY!
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+namespace aliyun {
+namespace utils {
+namespace details {
 
-#endif  // ALIYUN_OPENSEARCH_H_
+class GlobalInitializer {
+ public:
+  static int initialize();
+};
+
+// for each include line in source(.cc) file,
+// it will create a copy of follow integer when program running.
+// but GlobalInitializer::initialize() is singleton like, so it works well.
+static int __globalInitializer__ = GlobalInitializer::initialize();
+
+}  // namespace details
+}  // namespace utils
+}  // namespace aliyun
+#endif  // ALIYUN_UTILS_DETAILS_GLOBAL_INITIALIZER_H_

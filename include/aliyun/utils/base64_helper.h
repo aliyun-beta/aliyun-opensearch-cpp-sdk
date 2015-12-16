@@ -17,13 +17,35 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_UTILS_BASE64_HELPER_H_
+#define ALIYUN_UTILS_BASE64_HELPER_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <string>
+#include <vector>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+#include "aliyun/utils/string_utils.h"
+
+namespace aliyun {
+namespace utils {
+
+class Base64Helper {
+ public:
+  typedef unsigned char byte;
+
+  static std::string encode(const std::vector<byte>& buffer);
+
+  static std::string encode(const byte* buffer, int length);
+
+  static std::string encode(std::string str, std::string encoding);
+
+  static std::string decode(std::string str, std::string encoding);
+
+ private:
+  static const char BASE64_CODE[];
+  static const int BASE64_DECODE[];
+};
+
+}  // namespace utils
+}  // namespace aliyun
+
+#endif  // ALIYUN_UTILS_BASE64_HELPER_H_

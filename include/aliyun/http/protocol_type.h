@@ -17,13 +17,44 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_HTTP_PROTOCOL_TYPE_H_
+#define ALIYUN_HTTP_PROTOCOL_TYPE_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <string>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+#include "../exception.h"
+
+namespace aliyun {
+namespace http {
+
+class ProtocolType {
+ public:
+  enum Value {
+    INVALID,
+    HTTP,
+    HTTPS
+  };
+
+  // implicit for convenience:
+  //   cast from Value(Value => ProtocolType),   explicit can not
+  //   assign from Value(ProtocolType <= Value), explicit need DIY
+  ProtocolType(Value v = INVALID)
+      : value_(v) {
+  }
+
+  inline operator int() {
+    return value_;
+  }
+
+  explicit ProtocolType(std::string protocol);
+
+  std::string toString();
+
+ private:
+  Value value_;
+};
+
+}  // namespace http
+}  // namespace aliyun
+
+#endif  // ALIYUN_HTTP_PROTOCOL_TYPE_H_

@@ -17,13 +17,38 @@
  * under the License.
  */
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+#ifndef ALIYUN_UTILS_STRING_UTILS_H_
+#define ALIYUN_UTILS_STRING_UTILS_H_
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+#include <sstream>
+#include <string>
 
-#endif  // ALIYUN_OPENSEARCH_H_
+namespace aliyun {
+namespace utils {
+namespace StringUtils {  // string utility functions
+
+std::string ToLowerCase(std::string str);
+
+std::string ToUpperCase(std::string str);
+
+template<typename T>
+std::string ToString(T t) {
+  std::stringstream ss;
+  ss << t;
+  return ss.str();
+}
+
+// TODO(xu): string encoding convert
+std::string ToEncoding(std::string src, std::string encoding);
+
+std::string hexString(std::string src, bool caps = true);
+
+std::string hexDump(void* ptr, int len, bool caps = true);
+
+std::string trim(std::string src);
+
+}  // namespace StringUtils
+}  // namespace utils
+}  // namespace aliyun
+
+#endif  // ALIYUN_UTILS_STRING_UTILS_H_

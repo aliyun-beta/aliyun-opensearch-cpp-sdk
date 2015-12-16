@@ -16,14 +16,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <apr_general.h>
+#include "aliyun/http/method_type.h"
 
-#ifndef ALIYUN_OPENSEARCH_H_
-#define ALIYUN_OPENSEARCH_H_
+namespace aliyun {
+namespace http {
 
-#include "opensearch/cloudsearch_client.h"
-#include "opensearch/cloudsearch_doc.h"
-#include "opensearch/cloudsearch_index.h"
-#include "opensearch/cloudsearch_search.h"
-#include "opensearch/cloudsearch_suggest.h"
+const char *MethodType::toString() const {
+  int v = value_;
+  const char* NAMES[] = {
+#define S(e) #e
+      S(INVALID), S(GET), S(PUT), S(POST), S(Delete), S(HEAD), S(OPTIONS)
+#undef S
+      };
+  return NAMES[(0 <= v && v <= OPTIONS) ? v : INVALID];
+}
 
-#endif  // ALIYUN_OPENSEARCH_H_
+MethodType::MethodType(Value v)
+    : value_(v) {
+}
+
+MethodType::MethodType(std::string method) {
+  for (int i = GET; i <= OPTIONS; i++) {
+    if (::strncasecmp(method.c_str(), valueNames()[i], method.length()) == 0) {
+      value_ = Value(i);
+      return;
+    }
+  }
+  value_ = INVALID;
+}
+
+#if 0
+MethodType &MethodType::operator=(MethodType::Value v) {
+  this->value_ = v;
+  return *this;
+}
+#endif
+
+}  // namespace http
+}  // namespace aliyun
+

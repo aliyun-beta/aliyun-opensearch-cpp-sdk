@@ -9,29 +9,29 @@ message(APR_LIBRARY: ${APR_LIBRARY})
 message(APU_LIBRARY: ${APU_LIBRARY})
 
 set(TEST_SOURCE_FILES
-        opensearch/object/SingleDocTest.cc
-        opensearch/object/DocItemsTest.cc
-        opensearch/object/TypesTest.cc
-        opensearch/object/SchemaTableTest.cc
-        opensearch/CloudsearchClientTest.cc
-        opensearch/CloudsearchSearchTest.cc
-        opensearch/CloudsearchDocTest.cc
-        opensearch/CloudsearchIndexTest.cc
-        opensearch/CloudsearchSuggestTest.cc
+        opensearch/object/single_doc_test.cc
+        opensearch/object/doc_items_test.cc
+        opensearch/object/types_test.cc
+        opensearch/object/schema_table_test.cc
+        opensearch/cloudsearch_client_test.cc
+        opensearch/cloudsearch_search_test.cc
+        opensearch/cloudsearch_doc_test.cc
+        opensearch/cloudsearch_index_test.cc
+        opensearch/cloudsearch_suggest_test.cc
 )
 
 add_executable(UnitTestes ${TEST_SOURCE_FILES})
 target_link_libraries(UnitTestes ${SDK_LIBRARIES} ${TEST_LIBRARIES})
 
 set(BASE_TEST_FILES
-        basetest/Base64Test.cc
-        basetest/CredentialTest.cc
-        basetest/HmacTest.cc
-        basetest/HttpTest.cc
-        basetest/HttpTypesTest.cc
-        basetest/ParamterHelperTest.cc
-        basetest/JsonReaderTest.cc
-        basetest/XmlReaderTest.cc
+        basetest/base64_test.cc
+        basetest/credential_test.cc
+        basetest/hmac_test.cc
+        basetest/http_test.cc
+        basetest/http_types_test.cc
+        basetest/paramter_helper_test.cc
+        basetest/json_reader_test.cc
+        basetest/xml_reader_test.cc
         )
 
 add_executable(BaseTestes ${BASE_TEST_FILES})
