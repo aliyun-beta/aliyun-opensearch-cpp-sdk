@@ -3,8 +3,8 @@
 |-----------------------------|------------------------|
 | ![unix-build-status]        | ![win-build-status]    |
 
-[travis-ci]: https://travis-ci.org/xusiwei/aocs
-[unix-build-status]: https://travis-ci.org/xusiwei/aliyun-opensearch-cpp-sdk.svg?branch=master
+[travis-ci]: https://travis-ci.org/aliyun-beta/aliyun-opensearch-cpp-sdk
+[unix-build-status]: https://travis-ci.org/aliyun-beta/aliyun-opensearch-cpp-sdk.svg?branch=master
 [appveyor-ci]: https://ci.appveyor.com/project/xusiwei/aliyun-opensearch-cpp-sdk
 [win-build-status]: https://ci.appveyor.com/api/projects/status/r27xdn5a69tvk5hi?svg=true
 

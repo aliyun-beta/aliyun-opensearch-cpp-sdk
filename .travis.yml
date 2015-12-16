@@ -20,6 +20,7 @@ before_install:
   - ./unix_build.sh
   - cd ..
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo apt-get update;
       if [ "$ARCH" == "x86" ]; then
         sudo apt-get install -qq libcurl4-openssl-dev:i386 libapr1-dev:i386 libapr1-dbg:i386 libaprutil1-dev:i386 libaprutil1-dbg:i386;
       else
