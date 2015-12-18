@@ -34,9 +34,13 @@ class Any {
       : content_(0) {
   }
 
-  // ValueType must copyable
+  // implicit for C-Style init, likes: Any a = xxx;
+  // for non POD ValueType:
+  //  1. must copyable
+  //  2. support `operator<<(stringstream&, const ValueType&)` or
+  //       `std::string StringUtils::ToString<ValutType>()`;
   template<typename ValueType>
-  explicit Any(const ValueType& value)
+  Any(const ValueType& value)
       : content_(new Holder<ValueType>(value)) {
   }
 
