@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ ! -f cpplint.py ]; then
+    wget https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py
+    chmod +x cpplint.py
+fi
+
 #filter some rule we needn't
 HEADER_FILTER='--filter=-runtime/int,-runtime/explicit'
 SOURCE_FILTER='--filter=-runtime/int,-runtime/string,-build/c++11'
