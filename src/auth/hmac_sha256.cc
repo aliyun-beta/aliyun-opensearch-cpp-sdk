@@ -103,6 +103,14 @@ HmacSha256* HmacSha256::getInstance() {
   }
   return sInstance_;
 }
+
+std::string HmacSha256::getSignerName() {
+  return "HMAC-SHA256";
+}
+
+std::string HmacSha256::getSignerVersion() {
+  return "1.0";
+}
 }  // namespace auth
 
 }  // namespace aliyun

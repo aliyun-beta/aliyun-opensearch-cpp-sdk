@@ -26,8 +26,24 @@ namespace aliyun {
 namespace utils {
 namespace details {
 
+template <typename T>
+class Singleton {
+  static T* instance_;
+ public:
+  static T* instance() {
+    if (instance_ == NULL) {
+      static T stub;
+      instance_ = &stub;
+    }
+    return instance_;
+  }
+};
+
+template <typename T>
+T* Singleton<T>::instance_ = NULL;
+
 // for apr global init/cleanup
-class AprGlobalWrapper {
+class AprGlobalWrapper : public Singleton<AprGlobalWrapper> {
  public:
   AprGlobalWrapper() {
     if (apr_initialize() != APR_SUCCESS) {
@@ -39,15 +55,10 @@ class AprGlobalWrapper {
   ~AprGlobalWrapper() {
     apr_terminate();
   }
-
-  static AprGlobalWrapper* instance() {
-    static AprGlobalWrapper stub;
-    return &stub;
-  }
 };
 
 // for curl global init/cleanup
-class CurlGlobalWrapper {
+class CurlGlobalWrapper : public Singleton<CurlGlobalWrapper> {
  public:
   CurlGlobalWrapper() {
     curl_global_init(CURL_GLOBAL_ALL);
@@ -55,11 +66,6 @@ class CurlGlobalWrapper {
 
   ~CurlGlobalWrapper() {
     curl_global_cleanup();
-  }
-
-  static CurlGlobalWrapper* instance() {
-    static CurlGlobalWrapper stub;
-    return &stub;
   }
 };
 

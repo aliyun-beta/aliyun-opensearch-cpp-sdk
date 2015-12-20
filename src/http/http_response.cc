@@ -126,32 +126,33 @@ HttpResponse HttpResponse::getResponse(HttpRequest request) {
   CURLcode rc;
   HttpResponse response;
 
-  CurlHandle curl = request.getHttpConnection();
+  CurlHandle curl;
+  request.prepareCurlHandle(&curl);
   HttpTransaction trans(curl, &request, &response);
 
-#define curl_easy_setopt_throw(curl, opt, val) \
-  rc = curl_easy_setopt(curl, opt, (val));      \
+#define curl_easy_setopt_throw(opt, val)       \
+  rc = curl_easy_setopt(curl, opt, (val));     \
   if (rc != CURLE_OK) throw CurlException(rc);
 
   // set up callbacks
   if (request.getMethod() == MethodType::PUT
       || request.getMethod() == MethodType::POST) {
-    curl_easy_setopt_throw(curl, CURLOPT_READDATA, &trans);
-    curl_easy_setopt_throw(curl, CURLOPT_READFUNCTION, RequestBodyHandler);
-    curl_easy_setopt_throw(curl, CURLOPT_INFILESIZE_LARGE,
+    curl_easy_setopt_throw(CURLOPT_READDATA, &trans);
+    curl_easy_setopt_throw(CURLOPT_READFUNCTION, RequestBodyHandler);
+    curl_easy_setopt_throw(CURLOPT_INFILESIZE_LARGE,
                            request.getContent().size());
   }
 
-  curl_easy_setopt_throw(curl, CURLOPT_HEADERDATA, &trans);
-  curl_easy_setopt_throw(curl, CURLOPT_HEADERFUNCTION, ResponseHeaderHandler);
+  curl_easy_setopt_throw(CURLOPT_HEADERDATA, &trans);
+  curl_easy_setopt_throw(CURLOPT_HEADERFUNCTION, ResponseHeaderHandler);
 
-  curl_easy_setopt_throw(curl, CURLOPT_WRITEDATA, &trans);
-  curl_easy_setopt_throw(curl, CURLOPT_WRITEFUNCTION, ResponseBodyHandler);
+  curl_easy_setopt_throw(CURLOPT_WRITEDATA, &trans);
+  curl_easy_setopt_throw(CURLOPT_WRITEFUNCTION, ResponseBodyHandler);
 
-  curl_easy_setopt_throw(curl, CURLOPT_FILETIME, 1);
-  curl_easy_setopt_throw(curl, CURLOPT_NOSIGNAL, 1);
-  curl_easy_setopt_throw(curl, CURLOPT_TCP_NODELAY, 1);  // disable Nagle
-  curl_easy_setopt_throw(curl, CURLOPT_NETRC, CURL_NETRC_IGNORED);
+  curl_easy_setopt_throw(CURLOPT_FILETIME, 1);
+  curl_easy_setopt_throw(CURLOPT_NOSIGNAL, 1);
+  curl_easy_setopt_throw(CURLOPT_TCP_NODELAY, 1);  // disable Nagle
+  curl_easy_setopt_throw(CURLOPT_NETRC, CURL_NETRC_IGNORED);
 
 #ifdef ALIYUN_TRACE
   curl_easy_setopt_throw(curl, CURLOPT_VERBOSE, 1);

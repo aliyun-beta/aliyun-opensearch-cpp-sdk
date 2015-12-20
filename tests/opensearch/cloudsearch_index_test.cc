@@ -26,37 +26,32 @@ using aliyun::opensearch::CloudsearchIndex;
 using aliyun::opensearch::CloudsearchClient;
 
 class CloudsearchIndexTest: public ::testing::Test {
-  CloudsearchClient *client_;
+  std::map<string, string> opts_;
+
+ protected:
+  CloudsearchClient client_;
+  CloudsearchIndex index_;
 
  public:
-  virtual void SetUp() {
-    std::map<string, string> opts;
-    client_ = new CloudsearchClient(
-        "BBQtaPv7l14mNRDs",
-        "ebwFrJ0f72ttx53rNm6Tlviie0prGK",
-        "http://opensearch-cn-hangzhou.aliyuncs.com",
-        opts,
-        KeyTypeEnum::ALIYUN);
-  }
-
-  CloudsearchClient &client() {
-    return *client_;
-  }
-
-  virtual void TearDown() {
-    delete client_;
+  CloudsearchIndexTest() :
+      opts_(),
+      client_("BBQtaPv7l14mNRDs",
+              "ebwFrJ0f72ttx53rNm6Tlviie0prGK",
+              "http://opensearch-cn-hangzhou.aliyuncs.com",
+              opts_,
+              KeyTypeEnum::ALIYUN),
+      index_("sagent", client_) {
   }
 };
 
 TEST_F(CloudsearchIndexTest, ctor) {
-  CloudsearchIndex index("sagent", this->client());
+  CloudsearchIndex index("sagent", client_);
   EXPECT_EQ("sagent", index.getIndexName());
 }
 
 TEST_F(CloudsearchIndexTest, status) {
-  CloudsearchIndex index("sagent", this->client());
+  CloudsearchIndex index("sagent", client_);
   string status = index.status();
-
-  printf("status: %s\n", status.c_str());
   EXPECT_GT(status.length(), 0);
 }
+

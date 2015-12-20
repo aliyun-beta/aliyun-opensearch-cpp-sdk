@@ -24,20 +24,20 @@ namespace aliyun {
 
 namespace auth {
 
-AcsURLEncoder* AcsURLEncoder::sInstance_ = NULL;
+UrlEncoder *UrlEncoder::sInstance_ = NULL;
 
-AcsURLEncoder::AcsURLEncoder()
+UrlEncoder::UrlEncoder()
     : curl_(NULL),
       uri_(NULL) {
   curl_ = curl_easy_init();
 }
 
-AcsURLEncoder::~AcsURLEncoder() {
+UrlEncoder::~UrlEncoder() {
   curl_easy_cleanup(curl_);
   curl_free(uri_);
 }
 
-AcsURLEncoder::string AcsURLEncoder::encodeString(string input) {
+UrlEncoder::string UrlEncoder::encodeString(string input) {
   if (input.length() == 0) {
     return "";
   }
@@ -46,15 +46,15 @@ AcsURLEncoder::string AcsURLEncoder::encodeString(string input) {
   return uri;
 }
 
-AcsURLEncoder* AcsURLEncoder::getInstance() {
+UrlEncoder *UrlEncoder::getInstance() {
   if (sInstance_ == NULL) {
-    static AcsURLEncoder stub;
+    static UrlEncoder stub;
     sInstance_ = &stub;
   }
   return sInstance_;
 }
 
-void AcsURLEncoder::updateUri(char* uri) {
+void UrlEncoder::updateUri(char* uri) {
   if (NULL != uri_) {
     curl_free(uri_);
   }

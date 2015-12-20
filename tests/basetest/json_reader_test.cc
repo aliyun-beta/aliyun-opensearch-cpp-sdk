@@ -40,11 +40,6 @@ class JsonReaderTest : public ::testing::Test {
     try {
       JsonReader jsonReader;
       map_ = jsonReader.read(json_, "DescribeInstancesResponse");
-
-      std::map<std::string, std::string>::iterator it;
-      for (it = map_.begin(); it != map_.end(); it++) {
-        std::cout << "[" << it->first << "] => [" << it->second << "]\n";
-      }
     } catch (JsonException& e) {
       std::cout << "JsonException: " << e.what();
     } catch (Exception& e) {
@@ -54,6 +49,15 @@ class JsonReaderTest : public ::testing::Test {
     }
   }
 };
+
+TEST_F(JsonReaderTest, printResult) {
+#if 0
+  std::map<std::string, std::string>::iterator it;
+      for (it = map_.begin(); it != map_.end(); it++) {
+        std::cout << "[" << it->first << "] => [" << it->second << "]\n";
+      }
+#endif
+}
 
 TEST_F(JsonReaderTest, numberTest) {
   EXPECT_EQ("2",
@@ -93,7 +97,7 @@ TEST_F(JsonReaderTest, listTest) {
 }
 
 // cover all escape sequence in JsonReader.
-TEST(JsonReaderTest, testEscape) {
+TEST_F(JsonReaderTest, testEscape) {
 //  escapes['\\'] = '\\';
 //  escapes['/'] = '/';
 //  escapes['"'] = '"';
@@ -141,7 +145,7 @@ std::map<std::string, std::string> safeParse(std::string content,
   return result;
 }
 
-TEST(JsonReaderTest, testBroken) {
+TEST_F(JsonReaderTest, testBroken) {
   safeParse("{", "prefix");
   safeParse("{[\"key\"}", "prefix");
   safeParse("{\"name\": \"value}", "prefix");

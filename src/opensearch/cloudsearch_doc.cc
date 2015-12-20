@@ -34,7 +34,7 @@ namespace aliyun {
 namespace opensearch {
 
 using std::string;
-using aliyun::auth::AcsURLEncoder;
+using aliyun::auth::UrlEncoder;
 using utils::StringUtils::ToString;
 
 const string CloudsearchDoc::DOC_ADD = "add";
@@ -160,9 +160,9 @@ string CloudsearchDoc::pushHADocFile(string filePath, string tableName,
     if (separator == HA_DOC_ITEM_SEPARATOR) {  // foreach doc
       lastField = "";
       string jstr = singleDoc.getJsonString();
-      int currentSize = auth::AcsURLEncoder::encode(jstr).length();
+      int currentSize = auth::UrlEncoder::encode(jstr).length();
       // FIXME(xu): why not += ?
-      totalSize = AcsURLEncoder::encode(docItems.getJsonString()).length();
+      totalSize = UrlEncoder::encode(docItems.getJsonString()).length();
       if (currentSize + totalSize >= PUSH_MAX_SIZE) {
         timeLimitCheck(&timeLimitQueue);
         result = this->push(docItems.getJsonString(), tableName);

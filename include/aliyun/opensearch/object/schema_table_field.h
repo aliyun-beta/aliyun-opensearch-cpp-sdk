@@ -111,7 +111,7 @@ class SchemaTableField {
     return type_;
   }
 
-  void setType(const SchemaTableFieldType& type) {
+  void setType(SchemaTableFieldType type) {
     this->type_ = type;
   }
 

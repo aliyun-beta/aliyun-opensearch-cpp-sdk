@@ -22,34 +22,53 @@
 
 using aliyun::opensearch::object::SchemaTable;
 using aliyun::opensearch::object::SchemaTableField;
+using aliyun::opensearch::object::SchemaTableFieldType;
 
-TEST(SchemaTableField, ctor) {
-  SchemaTableField field;
-  EXPECT_EQ(field.isDisplay(), true);
-  EXPECT_EQ(field.isPrimarykey(), false);
-  EXPECT_EQ(field.isMulti(), false);
-  EXPECT_EQ(field.isFilter(), false);
-  EXPECT_EQ(field.isSearch(), false);
-  EXPECT_EQ(field.isAggregate(), false);
+TEST(SchemaTableTest, testCtor) {
+  SchemaTable table;
+  EXPECT_EQ("", table.getTableName());
+  EXPECT_FALSE(table.isMasterTable());
+  EXPECT_EQ(0, table.getFieldList().size());
 }
 
-TEST(SchemaTableField, addIndex) {
-  SchemaTableField field;
-  field.addIndex("index1");
-  field.addIndex("index2");
-  field.addIndex("index3");
-  EXPECT_EQ(3, field.getIndexList().size());
+TEST(SchemaTableTest, testGettersAndSetters) {
+  SchemaTable table;
+  table.setMasterTable(true);
+  EXPECT_TRUE(table.isMasterTable());
+
+  table.setTableName("table-name");
+  EXPECT_EQ("table-name", table.getTableName());
 }
 
-TEST(SchemaTable, all) {
-  std::string name = "table";
+
+TEST(SchemaTableTest, testAddField) {
   SchemaTable table;
   SchemaTableField field;
 
-  table.setTableName(name);
+  field.setPrimarykey(true);
   table.addField(field);
+  EXPECT_EQ(1, table.getFieldList().size());
+  EXPECT_TRUE(table.getFieldList()[0].isPrimarykey());
 
-  EXPECT_EQ(table.getTableName(), name);
-  EXPECT_EQ(table.isMasterTable(), false);
-  EXPECT_EQ(table.getFieldList().size(), 1);
+  field.setType(SchemaTableFieldType::TEXT);
+  table.addField(field);
+  EXPECT_EQ(2, table.getFieldList().size());
+
+  field.setType(SchemaTableFieldType::STRING);
+  table.addField(field);
+  EXPECT_EQ(3, table.getFieldList().size());
+
+  field.setType(SchemaTableFieldType::FLOAT);
+  table.addField(field);
+  EXPECT_EQ(4, table.getFieldList().size());
+
+  SchemaTableField field1;
+  field1.addIndex("index1");
+  field1.setType(SchemaTableFieldType::TEXT);
+  table.addField(field1);
+  EXPECT_EQ(5, table.getFieldList().size());
+
+  field1.setType(SchemaTableFieldType::STRING);
+  table.addField(field1);
+  EXPECT_EQ(6, table.getFieldList().size());
 }

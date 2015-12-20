@@ -23,7 +23,6 @@
 #include "aliyun/utils/base64_helper.h"
 
 namespace aliyun {
-
 namespace auth {
 
 HmacSha1* HmacSha1::sInstance_ = NULL;
@@ -78,6 +77,14 @@ HmacSha1* HmacSha1::getInstance() {
   }
   return sInstance_;
 }
-}  // namespace auth
 
+std::string HmacSha1::getSignerName() {
+  return "HMAC-SHA1";
+}
+
+std::string HmacSha1::getSignerVersion() {
+  return "1.0";
+}
+
+}  // namespace auth
 }  // namespace aliyun

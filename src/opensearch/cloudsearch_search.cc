@@ -22,9 +22,7 @@
 #include <assert.h>
 #include "aliyun/utils/string_utils.h"
 
-namespace aliyun {
-namespace utils {
-namespace StringUtils {
+BEGIN_ALIYUN_TOSTRING_DECLARE
 
 template<>
 std::string ToString<opensearch::CloudsearchSearch::SummaryMap>(
@@ -85,9 +83,7 @@ std::string ToString<std::map<std::string, std::vector<std::string> > >(
   return "";
 }
 
-}  // namespace StringUtils
-}  // namespace utils
-}  // namespace aliyun
+END_ALIYUN_TOSTRING_DECLARE
 
 namespace aliyun {
 namespace opensearch {

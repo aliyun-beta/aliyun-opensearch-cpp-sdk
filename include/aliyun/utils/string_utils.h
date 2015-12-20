@@ -23,6 +23,16 @@
 #include <sstream>
 #include <string>
 
+#define BEGIN_ALIYUN_TOSTRING_DECLARE \
+namespace aliyun { \
+namespace utils {  \
+namespace StringUtils {
+
+#define END_ALIYUN_TOSTRING_DECLARE \
+}  /* StringUtils */ \
+}  /* utils */       \
+}  /* aliyun */
+
 namespace aliyun {
 namespace utils {
 namespace StringUtils {  // string utility functions

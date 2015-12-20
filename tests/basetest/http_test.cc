@@ -24,6 +24,7 @@
 #include "aliyun/http/x509_trust_all.h"
 
 using aliyun::Exception;
+using aliyun::http::CurlException;
 using aliyun::http::MethodType;
 using aliyun::http::FormatType;
 using aliyun::http::HttpRequest;
@@ -56,7 +57,7 @@ HttpResponse doHttpRequest(HttpRequest request) {
   return response;
 }
 
-TEST(HTTP, GET) {
+TEST(HttpTest, testGET) {
   HttpRequest request("http://acs.aliyun-inc.com/");
   request.setMethod(MethodType::GET);
   request.putHeaderParameter("Accept", "*/*");
@@ -69,7 +70,7 @@ TEST(HTTP, GET) {
   EXPECT_GT(response.getContent().length(), 0);
 }
 
-TEST(HTTP, PUT) {
+TEST(HttpTest, testPUT) {
   std::string content =
       "<Product name=\"Yundun\" domain=\"yundun.aliyuncs.com\"/>";
   HttpRequest request("http://acs.aliyun-inc.com/");
@@ -81,7 +82,7 @@ TEST(HTTP, PUT) {
 }
 
 // DONE: add unit test for POST, etc
-TEST(HTTP, POST) {
+TEST(HttpTest, testPOST) {
   // set up a web server on localhost
   HttpRequest request(
       "http://203.88.161.174:8080/servlet/service?user=name&pass=word");
@@ -92,7 +93,7 @@ TEST(HTTP, POST) {
   EXPECT_GT(response.getContent().length(), 0);
 }
 
-TEST(HTTP, HEAD) {
+TEST(HttpTest, testHEAD) {
   HttpRequest request("http://203.88.161.174:8080/servlet/service");
   request.setMethod(MethodType::HEAD);
 
@@ -101,7 +102,7 @@ TEST(HTTP, HEAD) {
   EXPECT_EQ(0, response.getContent().length());
 }
 
-TEST(HTTP, DeleteTest) {
+TEST(HttpTest, testDELETE) {
   HttpRequest request("http://203.88.161.174:8080/servlet/service");
   request.setMethod(MethodType::Delete);
 
@@ -109,7 +110,7 @@ TEST(HTTP, DeleteTest) {
   EXPECT_EQ("DELETE", response.getHeaderValue("Request-Method"));  // servlet
 }
 
-TEST(HTTP, OPTIONS) {
+TEST(HttpTest, testOPTIONS) {
   HttpRequest request("http://acs.aliyun-inc.com/");
   request.setMethod(MethodType::OPTIONS);
 
@@ -117,15 +118,19 @@ TEST(HTTP, OPTIONS) {
   EXPECT_EQ(0, response.getContent().length());
 }
 
-TEST(HTTPS, test) {
+TEST(HttpsTest, test) {
   {
     HttpRequest request("https://acs.aliyun-inc.com/");
     X509TrustAll trustAll;  // scoped trust
     HttpResponse response = doHttpRequest(request);
 
+    EXPECT_EQ(0, HttpRequest::getSslVerifyHost());
+    EXPECT_EQ(0, HttpRequest::getSslVerifyPeer());
     EXPECT_EQ(400, response.getStatus());
     EXPECT_GT(response.getContent().length(), 0);
   }
+  EXPECT_TRUE(HttpRequest::DEFALT_VERIFYHOST_OPT == HttpRequest::getSslVerifyHost());
+  EXPECT_TRUE(HttpRequest::DEFALT_VERIFYPEER_OPT == HttpRequest::getSslVerifyPeer());
 }
 
 void testHttpStatus(std::string url, int status) {
@@ -135,6 +140,57 @@ void testHttpStatus(std::string url, int status) {
   EXPECT_EQ(status, response.getStatus());
 }
 
-TEST(HTTP, status) {
+TEST(HttpTest, testSTATUS) {
   testHttpStatus("http://g.cn/generate_204", 204);
+}
+
+TEST(HttpTest, testCurlException) {
+  try {
+    HttpRequest request("invalid URL");
+    doHttpRequest(request);
+  } catch (std::exception& e) {
+    EXPECT_EQ(typeid(CurlException), typeid(e));
+  }
+}
+
+TEST(CurlHandleTest, testCtor) {
+  using aliyun::http::CurlHandle;
+  CurlHandle curl;
+}
+
+TEST(CurlExceptionTest, testCtor) {
+  std::string msg = "curl-exception";
+  CurlException e(msg);
+  EXPECT_EQ(msg, e.what());
+}
+
+TEST(HttpRequestTest, testCtor) {
+  HttpRequest request1;  // default ctor
+  HttpRequest request2("url");  // default ctor
+  EXPECT_EQ("url", request2.getUrl());
+
+  std::map<std::string, std::string> headers;
+  headers["key1"] = "value1";
+  headers["key2"] = "value2";
+  HttpRequest request3("url", headers);
+  EXPECT_EQ("url", request3.getUrl());
+  EXPECT_EQ(2, request3.getHeaders().size());
+}
+
+TEST(HttpRequestTest, testHeaderParameter) {
+  HttpRequest request;
+  request.putHeaderParameter("key1", "value1");
+  request.putHeaderParameter("key2", "value2");
+  request.removeHeaderParameter("key1");
+  EXPECT_EQ(1, request.getHeaders().size());
+}
+
+TEST(HttpRequestTest, testSetContent) {
+  HttpRequest request;
+  request.setContent("", "", FormatType::INVALID);
+  EXPECT_EQ(0, request.getContent().length());
+
+  std::string test_content = "test content";
+  request.setContent(test_content, "", FormatType::XML);
+  EXPECT_EQ(test_content, request.getContent());
 }

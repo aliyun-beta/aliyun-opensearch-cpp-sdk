@@ -39,7 +39,7 @@ class FormatType {
   //   assign from Value(FormatType <= Value), explicit need DIY
   FormatType(Value v = INVALID);
 
-  const char* toString() const;
+  std::string toString() const;
 
   // for compare
   inline operator int() const {

@@ -30,7 +30,7 @@ FormatType::FormatType(Value v)
     : value_(v) {
 }
 
-const char* FormatType::toString() const {
+std::string FormatType::toString() const {
 #define S(e) #e
   static const char* NAMES[] = { S(INVALID), S(XML), S(JSON), S(RAW) };
 #undef S

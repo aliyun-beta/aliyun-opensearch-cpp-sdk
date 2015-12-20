@@ -39,13 +39,9 @@ class HmacSha256 : public ISigner {
 
   ~HmacSha256();
 
-  std::string getSignerName() {
-    return "HMAC-SHA256";
-  }
+  std::string getSignerName();
 
-  std::string getSignerVersion() {
-    return "1.0";
-  }
+  std::string getSignerVersion();
 
   std::string signString(std::string source, std::string accessSecret)
       throw(aliyun::Exception);

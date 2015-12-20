@@ -32,10 +32,18 @@ namespace http {
 long HttpRequest::sSSLVerifyHost = HttpRequest::DEFALT_VERIFYHOST_OPT;
 long HttpRequest::sSSLVerifyPeer = HttpRequest::DEFALT_VERIFYPEER_OPT;
 
+
+CurlException::CurlException(CURLcode rc)
+    : Exception(curl_easy_strerror(rc)) {
+}
+
+CurlException::CurlException(std::string what)
+    : Exception(what) {
+}
+
 CurlHandle::CurlHandle()
     : head_(0),
       post_(0),
-      refs_(new int(1)),  // maybe throw bad_alloc
       curl_(NULL) {
   curl_ = curl_easy_init();
   if (NULL == curl_) {
@@ -43,23 +51,10 @@ CurlHandle::CurlHandle()
   }
 }
 
-CurlHandle::CurlHandle(const CurlHandle& rhs)
-    : head_(0),
-      post_(0) {
-  if (rhs.refs_) {
-    refs_ = rhs.refs_;
-    curl_ = rhs.curl_;
-    ++(*refs_);
-  }
-}
-
 CurlHandle::~CurlHandle() {
-  if (refs_ && --(*refs_) == 0) {
-    delete refs_;
-    curl_easy_cleanup(curl_);
-    curl_slist_free_all(head_);
-    free(post_);  // free here
-  }
+  if (curl_) curl_easy_cleanup(curl_);
+  if (head_) curl_slist_free_all(head_);
+  if (post_) free(post_);  // free here
 }
 
 HttpRequest::HttpRequest() {
@@ -139,10 +134,7 @@ void HttpRequest::setContent(std::string content, std::string encoding,
   headers_["Content-Type"] = getContentTypeValue(contentType_, encoding_);
 }
 
-CurlHandle HttpRequest::getHttpConnection() {
-  // DONE: fill parameters to a curl handle.
-  CurlHandle curl;
-
+void HttpRequest::prepareCurlHandle(CurlHandle* curl) {
   std::string url = url_;
   std::vector<std::string> urlArray;
 
@@ -160,43 +152,43 @@ CurlHandle HttpRequest::getHttpConnection() {
     throw Exception("bad URL");
   }
 
-#define curl_easy_setopt_throw(curl, opt, val) do { \
-      rc = curl_easy_setopt(curl, opt, (val));      \
+#define curl_easy_setopt_throw(opt, val) do { \
+      rc = curl_easy_setopt(*curl, opt, (val));      \
       if (rc != CURLE_OK) throw CurlException(rc);  \
   } while (0)
 
   CURLcode rc;
-  curl_easy_setopt_throw(curl, CURLOPT_URL, url.c_str());
+  curl_easy_setopt_throw(CURLOPT_URL, url.c_str());
 
   switch (method_) {
     case MethodType::GET:
-      curl_easy_setopt_throw(curl, CURLOPT_HTTPGET, 1);
+      curl_easy_setopt_throw(CURLOPT_HTTPGET, 1);
       break;
     case MethodType::PUT:
-      curl_easy_setopt_throw(curl, CURLOPT_UPLOAD, 1);
-      curl_easy_setopt_throw(curl, CURLOPT_PUT, 1);
+      curl_easy_setopt_throw(CURLOPT_UPLOAD, 1);
+      curl_easy_setopt_throw(CURLOPT_PUT, 1);
       break;
     case MethodType::HEAD:
-      curl_easy_setopt_throw(curl, CURLOPT_NOBODY, 1);
+      curl_easy_setopt_throw(CURLOPT_NOBODY, 1);
       break;
     case MethodType::POST:
-      curl_easy_setopt_throw(curl, CURLOPT_POST, 1);
+      curl_easy_setopt_throw(CURLOPT_POST, 1);
       break;
     case MethodType::Delete:
-      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+      curl_easy_setopt_throw(CURLOPT_CUSTOMREQUEST, "DELETE");
       break;
     case MethodType::OPTIONS:
-      curl_easy_setopt_throw(curl, CURLOPT_CUSTOMREQUEST, "OPTIONS");
+      curl_easy_setopt_throw(CURLOPT_CUSTOMREQUEST, "OPTIONS");
       break;
     default:
       break;
   }
 
   if (sSSLVerifyHost != DEFALT_VERIFYHOST_OPT) {
-    curl_easy_setopt_throw(curl, CURLOPT_SSL_VERIFYHOST, sSSLVerifyHost);
+    curl_easy_setopt_throw(CURLOPT_SSL_VERIFYHOST, sSSLVerifyHost);
   }
   if (sSSLVerifyPeer != DEFALT_VERIFYPEER_OPT) {
-    curl_easy_setopt_throw(curl, CURLOPT_SSL_VERIFYPEER, sSSLVerifyPeer);
+    curl_easy_setopt_throw(CURLOPT_SSL_VERIFYPEER, sSSLVerifyPeer);
   }
 
   std::string contType = getHeaderValue("Content-Type");
@@ -210,18 +202,17 @@ CurlHandle HttpRequest::getHttpConnection() {
   std::map<std::string, std::string>::iterator iter;
   for (iter = headers_.begin(); iter != headers_.end(); iter++) {
     std::string s = iter->first + ": " + iter->second;
-    curl.head_ = curl_slist_append(curl.head_, s.c_str());
+    curl->head_ = curl_slist_append(curl->head_, s.c_str());
   }
 
-  if (NULL != curl.head_) {
-    curl_easy_setopt_throw(curl, CURLOPT_HTTPHEADER, curl.head_);
+  if (NULL != curl->head_) {
+    curl_easy_setopt_throw(CURLOPT_HTTPHEADER, curl->head_);
   }
 
   if (MethodType::POST == method_ && urlArray.size() == 2) {
-    curl.post_ = ::strdup(urlArray[1].c_str());  // duplicate in heap
-    curl_easy_setopt_throw(curl, CURLOPT_POSTFIELDS, curl.post_);
+    curl->post_ = ::strdup(urlArray[1].c_str());  // duplicate in heap
+    curl_easy_setopt_throw(CURLOPT_POSTFIELDS, curl->post_);
   }
-  return curl;
 }
 
 std::string HttpRequest::getContentTypeValue(FormatType contentType,
@@ -233,6 +224,7 @@ std::string HttpRequest::getContentTypeValue(FormatType contentType,
     return FormatType::mapFormatToAccept(contentType);
   }
   return "";  // empty string.
+#undef curl_easy_setopt_throw
 }
 
 void HttpRequest::enableGzip(bool enable) {

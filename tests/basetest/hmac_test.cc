@@ -29,24 +29,27 @@ using aliyun::auth::HmacSha1;
 using aliyun::auth::HmacSha256;
 using aliyun::utils::StringUtils::hexDump;
 
-TEST(HmacSha1, test) {
-  HmacSha1 hs;
+TEST(HmacTest, testHmacSha1) {
+  HmacSha1* signer = HmacSha1::getInstance();
 
   string key = "AccessSecret";
   string msg = "this is a HmacSha1 test.";
 
   unsigned char hmac[HmacSha1::DIGEST_LENTH];
-  hs.HMAC_SHA1(hmac, reinterpret_cast<const unsigned char *>(key.c_str()),
+  signer->HMAC_SHA1(hmac, reinterpret_cast<const unsigned char *>(key.c_str()),
                key.length(),
                reinterpret_cast<const unsigned char *>(msg.c_str()),
                msg.length());
 
+  EXPECT_EQ("1.0", signer->getSignerVersion());
+  EXPECT_EQ("HMAC-SHA1", signer->getSignerName());
+
   EXPECT_EQ("47ff824f95bba3569f6bc8a91023b74b26230fad",
             hexDump(hmac, sizeof hmac, false));
 
-  EXPECT_EQ("R/+CT5W7o1afa8ipECO3SyYjD60=", hs.signString(msg, key));
+  EXPECT_EQ("R/+CT5W7o1afa8ipECO3SyYjD60=", signer->signString(msg, key));
 
-  EXPECT_EQ("axE3FUHgDyfm9/+Iep0HpZXrRwE=", HmacSha1::getInstance()->signString(
+  EXPECT_EQ("axE3FUHgDyfm9/+Iep0HpZXrRwE=", signer->signString(
       "GET&%2F&AccessKeyId%3Dtestid%26Action%3DDescribeRegions%26"
           "Format%3DXML%26RegionId%3Dregion1%26SignatureMethod%3DHMAC-SHA1%26"
           "SignatureNonce%3DNwDAxvLU6tFE0DVb%26SignatureVersion%3D1.0%26"
@@ -54,21 +57,24 @@ TEST(HmacSha1, test) {
       "testsecret&"));
 }
 
-TEST(HmacSha256, test) {
-  HmacSha256 hs;
+TEST(HmacTest, testHmacSha256) {
+  HmacSha256* signer = HmacSha256::getInstance();
 
   string msg = "this is a ShaHmac256 test.";
   string key = "AccessSecret";
 
   unsigned char hmac[32];
-  hs.HMAC_SHA256(hmac, reinterpret_cast<const unsigned char *>(key.c_str()),
-                 key.length(),
-                 reinterpret_cast<const unsigned char *>(msg.c_str()),
-                 msg.length());
+  signer->HMAC_SHA256(hmac, reinterpret_cast<const unsigned char *>(key.c_str()),
+                      key.length(),
+                      reinterpret_cast<const unsigned char *>(msg.c_str()),
+                      msg.length());
+
+  EXPECT_EQ("1.0", signer->getSignerVersion());
+  EXPECT_EQ("HMAC-SHA256", signer->getSignerName());
 
   EXPECT_EQ("3f4307077c25b5aff804e29ae71b7e3e28bd5a70cce92fa38026d0e36a742848",
             hexDump(hmac, sizeof hmac, false));
 
   EXPECT_EQ("P0MHB3wlta/4BOKa5xt+Pii9WnDM6S+jgCbQ42p0KEg=",
-            hs.signString("this is a ShaHmac256 test.", "AccessSecret"));
+            signer->signString("this is a ShaHmac256 test.", "AccessSecret"));
 }

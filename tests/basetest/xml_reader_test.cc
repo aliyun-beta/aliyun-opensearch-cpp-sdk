@@ -44,13 +44,38 @@ class XmlReaderTest : public testing::Test {
     } catch (...) {
       std::cout << "unknow exception!\n" << std::endl;
     }
+  }
 
-    for (std::map<std::string, std::string>::iterator it = map_.begin();
-         it != map_.end(); ++it) {
-      std::cout << "\"" << it->first << "\" => \"" << it->second << "\"\n";
+
+  std::map<std::string, std::string>  safeParse(std::string content,
+                                                std::string prefix) {
+    std::map<std::string, std::string> result;
+    try {
+      aliyun::reader::XmlReader reader;
+      result = reader.read(content, prefix);
+      reader.dump();
+#if 0
+      for (auto e : result) {
+        std::cout << e.first << "=>" << e.second << std::endl;
+      }
+#endif
+    } catch (std::exception& e) {
+      std::cout << "exception: " << e.what() << std::endl;
+    } catch (...) {
+      std::cout << "unknow exception!\n" << std::endl;
     }
+    return result;
   }
 };
+
+TEST_F(XmlReaderTest, printResult) {
+#if 0
+  for (std::map<std::string, std::string>::iterator it = map_.begin();
+       it != map_.end(); ++it) {
+    std::cout << "\"" << it->first << "\" => \"" << it->second << "\"\n";
+  }
+#endif
+}
 
 TEST_F(XmlReaderTest, numberTest) {
   EXPECT_EQ("1", map_["DescribeInstancesResponse.TotalCount"]);
@@ -88,61 +113,62 @@ TEST_F(XmlReaderTest, listTest) {
           "DescribeInstancesResponse.Instances[0].OperationLocks.Length"));
 }
 
-void testXml(std::string xml) {
-  try {
-    aliyun::reader::XmlReader reader;
-    std::map<std::string, std::string> map = reader.read(xml, "prefix");
-    reader.dump();
-    for (std::map<std::string, std::string>::iterator it = map.begin();
-        it != map.end(); ++it) {
-      std::cout << "\"" << it->first << "\" => \"" << it->second << "\"\n";
-    }
-  } catch (std::exception& e) {
-    std::cout << "exception: " << e.what() << std::endl;
-  } catch (...) {
-    std::cout << "unknow exception!\n" << std::endl;
-  }
-}
-
 // for side cases
-TEST(XmlReaderTest, sideCases) {
-  std::string sideCases[] = {
-      // only one child
-      "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-          "<root>"
-          "<child>No.1</child>"
-          "</root>",
+TEST_F(XmlReaderTest, sideCases) {
+  std::string prefix = "prefix";
+  std::map<std::string, std::string> result;
 
-      // more than one child has same name as 1st child
-      "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-          "<root>"
-          "<child>No.1</child>"
-          "<child>No.2</child>"
-          "</root>",
+  // only one child
+  result = safeParse("<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                         "<root>"
+                         "<child>No.1</child>"
+                         "</root>", prefix);
+  EXPECT_EQ("1", result["prefix.Length"]);
+  EXPECT_EQ("No.1", result["prefix.child"]);
+  EXPECT_EQ("No.1", result["prefix[0]"]);
 
-      // normal case
-      "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-          "<root>"
-          "<name>test name</name>"
-          "<value>test value</value>"
-          "</root>",
+  // more than one child has same name as 1st child
+  result = safeParse("<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                         "<root>"
+                         "<child>No.1</child>"
+                         "<child>No.2</child>"
+                         "</root>", prefix);
+  EXPECT_EQ("2", result["prefix.Length"]);
+  EXPECT_EQ("No.1", result["prefix[0]"]);
+  EXPECT_EQ("No.2", result["prefix[1]"]);
 
-      // normal case, with attribute
+  // normal case
+  result = safeParse("<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                         "<root>"
+                         "<name>test name</name>"
+                         "<value>test value</value>"
+                         "</root>", prefix);
+  EXPECT_EQ("test name", result["prefix.name"]);
+  EXPECT_EQ("test value", result["prefix.value"]);
+
+  // normal case, with attribute
+  result = safeParse(
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
           "<root>"
           "<config name=\"nnnn\" value=\"vvvv\">"
           "test contents"
           "</config>"
-          "</root>",
+          "</root>", prefix);
+  EXPECT_EQ("1", result["prefix.Length"]);
+  EXPECT_EQ("test contents", result["prefix.config"]);
+  EXPECT_EQ("test contents", result["prefix[0]"]);
 
-       // mixed case
-       "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-          "<root>"
-          "<name>first name</name>"
-          "<name>second name</name>"  // corrupt
-          "<value>phone number</value>"
-          "</root>" };
-  for (int i = 0; i < ARRAYSIZE(sideCases); i++) {
-    testXml(sideCases[i]);
-  }
+  // mixed case
+  result = safeParse("<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                         "<root>"
+                         "<name>first name</name>"
+                         "<name>second name</name>"  // corrupt
+                         "<value>phone number</value>"
+                         "</root>", prefix);
+  EXPECT_EQ("second name", result["prefix.name"]);
+  EXPECT_EQ("phone number", result["prefix.value"]);
+}
+
+TEST_F(XmlReaderTest, testXmlException) {
+  safeParse("<<<<xml", "prefix");
 }

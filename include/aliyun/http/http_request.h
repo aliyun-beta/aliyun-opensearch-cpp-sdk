@@ -33,21 +33,15 @@ namespace http {
 
 class CurlException : public Exception {
  public:
-  explicit CurlException(CURLcode rc)
-      : Exception(curl_easy_strerror(rc)) {
-  }
+  explicit CurlException(CURLcode rc);
 
-  explicit CurlException(std::string what)
-      : Exception(what) {
-  }
+  explicit CurlException(std::string what);
 };
 
 // guard CURL handle for exception throws
 class CurlHandle {
  public:
   CurlHandle();
-
-  CurlHandle(const CurlHandle& rhs);
 
   ~CurlHandle();
 
@@ -60,10 +54,10 @@ class CurlHandle {
   char* post_;
 
  private:
-  // disallow common assignment.
+  // noncopyable.
   CurlHandle& operator=(const CurlHandle& rhs);
+  CurlHandle(const CurlHandle& rhs);
 
-  int* refs_;
   CURL* curl_;
 };
 
@@ -132,7 +126,7 @@ class HttpRequest {
     return headers_;
   }
 
-  CurlHandle getHttpConnection();
+  void prepareCurlHandle(CurlHandle* curl);
 
   std::string getContentTypeValue(FormatType contentType, std::string encoding);
 
@@ -169,6 +163,7 @@ class HttpRequest {
   // determines whether verifies that the server cert is known.
   static long sSSLVerifyHost;  // long: follow libcurl
 
+ public:
   // default CURLOPT_SSL_VERIFYHOST is 2
   static const long DEFALT_VERIFYHOST_OPT = 2;  // long: follow libcurl
 

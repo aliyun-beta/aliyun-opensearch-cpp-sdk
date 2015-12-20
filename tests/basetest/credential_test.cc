@@ -22,20 +22,20 @@
 
 using aliyun::auth::Credential;
 
-TEST(Credential, testall) {
+TEST(CredentialTest, test) {
   Credential cred;
   std::cout << cred.getRefreshDate().toString() << std::endl;
   std::cout << cred.getExpiredDate().toString() << std::endl;
 
-  Credential cred2("key2", "scret2");
-  std::cout << cred2.getAccessKeyId() << std::endl;
-  std::cout << cred2.getAccessSecret() << std::endl;
+  Credential cred2("key2", "secret2");
+  EXPECT_EQ("key2", cred2.getAccessKeyId());
+  EXPECT_EQ("secret2", cred2.getAccessSecret());
   std::cout << cred2.getRefreshDate().toString() << std::endl;
   std::cout << cred2.getExpiredDate().toString() << std::endl;
 
-  Credential cred3("key3", "scret3", 1);
-  std::cout << cred3.getAccessKeyId() << std::endl;
-  std::cout << cred3.getAccessSecret() << std::endl;
+  Credential cred3("key3", "secret3", 1);
+  EXPECT_EQ("key3", cred3.getAccessKeyId());
+  EXPECT_EQ("secret3", cred3.getAccessSecret());
   std::cout << cred3.getRefreshDate().toString() << std::endl;
   std::cout << cred3.getExpiredDate().toString() << std::endl;
 

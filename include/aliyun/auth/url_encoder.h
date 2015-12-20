@@ -26,17 +26,17 @@
 namespace aliyun {
 namespace auth {
 
-class AcsURLEncoder {
+class UrlEncoder {
  public:
   typedef std::string string;
 
-  AcsURLEncoder();
+  UrlEncoder();
 
-  ~AcsURLEncoder();
+  ~UrlEncoder();
 
   string encodeString(string input);
 
-  static AcsURLEncoder * getInstance();
+  static UrlEncoder * getInstance();
 
   // static(class) usage
   static string encode(string in) {
@@ -66,7 +66,7 @@ class AcsURLEncoder {
   CURL* curl_;
   char* uri_;
 
-  static AcsURLEncoder* sInstance_;
+  static UrlEncoder * sInstance_;
 };
 
 }  // namespace auth

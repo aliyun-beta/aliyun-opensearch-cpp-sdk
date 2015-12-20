@@ -22,7 +22,7 @@
 namespace aliyun {
 namespace http {
 
-const char *MethodType::toString() const {
+std::string MethodType::toString() const {
   int v = value_;
   const char* NAMES[] = {
 #define S(e) #e

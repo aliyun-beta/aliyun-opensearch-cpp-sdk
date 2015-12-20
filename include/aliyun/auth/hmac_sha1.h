@@ -38,13 +38,9 @@ class HmacSha1 : public ISigner {
   std::string signString(std::string source, std::string accessSecret)
                              throw(aliyun::Exception);
 
-  std::string getSignerName() {
-    return "HMAC-SHA1";
-  }
+  std::string getSignerName();
 
-  std::string getSignerVersion() {
-    return "1.0";
-  }
+  std::string getSignerVersion();
 
   static void HMAC_SHA1(unsigned char hmac[20], const unsigned char *key,
                         int key_len, const unsigned char *message,

@@ -160,7 +160,7 @@ class CloudsearchSearch {
    *
    * @param indexes 应用名称或应用名称列表。
    */
-  void setIndex(const std::vector<std::string> indexes) {
+  void setIndex(const std::vector<std::string>& indexes) {
     this->indexes_ = indexes;
   }
 

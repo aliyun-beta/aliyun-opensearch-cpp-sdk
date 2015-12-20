@@ -23,7 +23,7 @@
 using std::string;
 using aliyun::utils::Base64Helper;
 
-TEST(Base64, encode) {
+TEST(Base64HelperTest, test) {
   string encoding = "UTF-8";
   string encode1 = Base64Helper::encode("1234567890", encoding);
   string encode2 = Base64Helper::encode("abcdefghijklmnopqrstuvwxyz", encoding);

@@ -134,8 +134,8 @@ string CloudsearchClient::buildQuery(const std::map<string, string>& params) {
   string query;
   for (std::map<string, string>::const_iterator it = params.begin();
        it != params.end(); it++) {
-    query += '&' + auth::AcsURLEncoder::encode(it->first);
-    query += '=' + auth::AcsURLEncoder::encode(it->second);
+    query += '&' + auth::UrlEncoder::encode(it->first);
+    query += '=' + auth::UrlEncoder::encode(it->second);
   }
   return query.substr(1);
 }
@@ -168,8 +168,8 @@ string CloudsearchClient::buildHttpParameterString(
   string str;
   for (std::map<string, string>::const_iterator it = params.begin();
        it != params.end(); ++it) {
-    string key = auth::AcsURLEncoder::percentEncode(it->first);
-    string val = auth::AcsURLEncoder::percentEncode(it->second);
+    string key = auth::UrlEncoder::percentEncode(it->first);
+    string val = auth::UrlEncoder::percentEncode(it->second);
     str += "&" + key + "=" + val;
   }
   return "?" + str.substr(1);
@@ -189,7 +189,7 @@ string CloudsearchClient::getAliyunSign(std::map<string, string>* params,
 
   string strToSign = buildQuery(*params);
   strToSign = method + "&%2F&"
-      + auth::AcsURLEncoder::percentEncode(strToSign);
+      + auth::UrlEncoder::percentEncode(strToSign);
   string signature = auth::HmacSha1::getInstance()->signString(
       strToSign, this->secret_ + "&");
 

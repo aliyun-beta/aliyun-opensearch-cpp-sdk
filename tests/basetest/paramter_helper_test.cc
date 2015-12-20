@@ -26,7 +26,7 @@ using aliyun::utils::ParameterHelper;
 
 #define ARRAYSIZE(a) sizeof(a)/sizeof(a[0])
 
-TEST(MD5, test) {
+TEST(ParameterHelperTest, testMD5) {
     const char *test[] = {
         "",
         "a",
@@ -53,7 +53,7 @@ TEST(MD5, test) {
   }
 }
 
-TEST(UUID, test) {
+TEST(ParameterHelperTest, testUUID) {
   int nRounds = 10000;
   std::set<std::string> dict;
 
@@ -63,7 +63,7 @@ TEST(UUID, test) {
   EXPECT_TRUE(dict.size() == nRounds);
 }
 
-TEST(DateISO8601, test) {
+TEST(ParameterHelperTest, testDateISO8601) {
   std::string dateStr = "2014-12-22T10:33:40Z";
   Date expect(2014, 12, 22, 10, 33, 40);
   try {
@@ -82,7 +82,7 @@ TEST(DateISO8601, test) {
   }
 }
 
-TEST(DateRFC2616, test) {
+TEST(ParameterHelperTest, testDateRFC2616) {
   std::string dateStr = "Wed, 16 Jan 2013 19:01:18 GMT";
   Date expect(2013, 1, 16, 19, 1, 18);
   try {
@@ -117,7 +117,7 @@ void testDate(std::string str) {
   }
 }
 
-TEST(Date, sidecases) {
+TEST(ParameterHelperTest, testDateSideCases) {
   testDate("");
   testDate("2014-12-22T10:33:40Z");
   testDate("2014-12-22 10:33:40Z");

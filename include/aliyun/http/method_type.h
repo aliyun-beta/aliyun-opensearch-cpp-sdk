@@ -51,7 +51,7 @@ class MethodType {
     OPTIONS
   };
 
-  const char * toString() const;
+  std::string toString() const;
 
   // implicit for convenience:
   //   cast from Value(Value => MethodType),   explicit can not
