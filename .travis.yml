@@ -22,9 +22,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       sudo apt-get update;
       if [ "$ARCH" == "x86" ]; then
-        sudo apt-get install -qq libcurl4-openssl-dev:i386 libapr1-dev:i386 libapr1-dbg:i386 libaprutil1-dev:i386 libaprutil1-dbg:i386;
+        sudo apt-get install -qq libcurl4-openssl-dev:i386 libapr1-dev:i386 libapr1-dbg:i386 libaprutil1-dev:i386 libaprutil1-dbg:i386 libpcre3-dev:i386 libpcre3-dbg:i386;
       else
-        sudo apt-get install -qq libcurl4-openssl-dev libapr1-dev libapr1-dbg libaprutil1-dev libaprutil1-dbg;
+        sudo apt-get install -qq libcurl4-openssl-dev libapr1-dev libapr1-dbg libaprutil1-dev libaprutil1-dbg libpcre3-dev libpcre3-dbg;
       fi
     fi
 
@@ -41,11 +41,11 @@ before_script:
      ..)
 
 script:
-  - cd build
-  - make
+  - (cd build && make)
 
 after_success:
   - echo build success
+  - ./build/tests/unittests
 
 after_failure:
   - echo build failure

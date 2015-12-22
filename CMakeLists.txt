@@ -124,6 +124,14 @@ else ()
         endif ()
     endif ()
 endif ()
+
+# use PCRE for gcc
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_PCRE=1")
+    find_path(PCRE_INCLUDE_DIR pcrecpp.h)
+    find_library(PCRE_LIBRARY pcrecpp)
+endif()
+
 set(AOSS_INCLUDES ${AOSS_INCLUDES} ${APU_INCLUDE_DIR})
 
 message(CURL_INCLUDE_DIR: ${CURL_INCLUDE_DIR})

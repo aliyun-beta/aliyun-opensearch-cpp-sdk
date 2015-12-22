@@ -20,13 +20,16 @@
 #include <ctype.h>
 #include <string>
 
+#ifdef USE_PCRE
+#include <pcrecpp.h>
+#else  // USE_PCRE
+#include <regex>
+#endif  // USE_PCRE
+
 #include "aliyun/utils/string_utils.h"
 
 namespace aliyun {
-
 namespace utils {
-
-// string utility functions
 namespace StringUtils {
 
 std::string ToLowerCase(std::string str) {
@@ -92,9 +95,17 @@ std::string trim(std::string src) {
   return dst;
 }
 
+bool RegexMatch(std::string str, std::string pat) {
+#ifdef USE_PCRE
+  pcrecpp::RE re(pat);
+  return re.FullMatch(str);
+#else  // USE_PCRE
+  std::regex re(pat);
+  return std::regex_match(str, re);
+#endif  // USE_PCRE
+}
+
 }  // namespace StringUtils
-
 }  // namespace utils
-
 }  // namespace aliyun
 

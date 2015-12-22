@@ -37,6 +37,8 @@ namespace aliyun {
 namespace utils {
 namespace StringUtils {  // string utility functions
 
+bool RegexMatch(std::string str, std::string pat);
+
 std::string ToLowerCase(std::string str);
 
 std::string ToUpperCase(std::string str);

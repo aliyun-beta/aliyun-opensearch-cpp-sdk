@@ -17,10 +17,10 @@
  * under the License.
  */
 
+#include "aliyun/utils/string_utils.h"
 #include "aliyun/opensearch/object/schema_table.h"
 
-// use C++0x(C++11) as default regex library
-#include <regex>
+using aliyun::utils::StringUtils::RegexMatch;
 
 namespace aliyun {
 namespace opensearch {
@@ -50,8 +50,7 @@ void SchemaTable::addField(SchemaTableField schemaTableField) {
       schemaTableField.addIndex("default");
     } else {
       for (auto &indexStr : schemaTableField.getIndexList()) {
-        std::regex pattern("^[_a-zA-Z][a-zA-Z0-9_]*");
-        if (!std::regex_match(indexStr, pattern)) {
+        if (!RegexMatch(indexStr, "^[_a-zA-Z][a-zA-Z0-9_]*")) {
           return;
         }
       }
@@ -68,8 +67,7 @@ void SchemaTable::addField(SchemaTableField schemaTableField) {
       schemaTableField.addIndex(schemaTableField.getFieldName());
     } else {
       for (auto &indexStr : schemaTableField.getIndexList()) {
-        std::regex pattern("^[_a-zA-Z][a-zA-Z0-9_]*");
-        if (!std::regex_match(indexStr, pattern)) {
+        if (!RegexMatch(indexStr, "^[_a-zA-Z][a-zA-Z0-9_]*")) {
           return;
         }
       }

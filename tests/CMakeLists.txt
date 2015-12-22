@@ -4,6 +4,10 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 set(TEST_LIBRARIES gtest gtest_main)
 set(SDK_LIBRARIES aliyun-opensearch ${CURL_LIBRARY} ${APR_LIBRARY} ${APU_LIBRARY})
 
+if (PCRE_LIBRARY)
+    set(SDK_LIBRARIES ${SDK_LIBRARIES} ${PCRE_LIBRARY})
+endif()
+
 message(CURL_LIBRARY: ${CURL_LIBRARY})
 message(APR_LIBRARY: ${APR_LIBRARY})
 message(APU_LIBRARY: ${APU_LIBRARY})
