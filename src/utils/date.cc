@@ -42,6 +42,7 @@ Date::Date(struct tm* tm) {
   time_ = ::mktime(&tm_);
 }
 
+// fill as a specific local date-time
 Date::Date(int year, int mon, int day, int hour, int min, int sec) {
   //  care follow members of `struct tm`:
   //    tm_year   The number of years since 1900.

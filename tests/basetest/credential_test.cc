@@ -30,16 +30,16 @@ TEST(CredentialTest, test) {
   Credential cred2("key2", "secret2");
   EXPECT_EQ("key2", cred2.getAccessKeyId());
   EXPECT_EQ("secret2", cred2.getAccessSecret());
-  std::cout << cred2.getRefreshDate().toString() << std::endl;
+  std::cout << "cred2:" << cred2.getRefreshDate().toString() << "\t";
   std::cout << cred2.getExpiredDate().toString() << std::endl;
 
   Credential cred3("key3", "secret3", 1);
   EXPECT_EQ("key3", cred3.getAccessKeyId());
   EXPECT_EQ("secret3", cred3.getAccessSecret());
-  std::cout << cred3.getRefreshDate().toString() << std::endl;
+  std::cout << "cred3:" << cred3.getRefreshDate().toString() << "\t";
   std::cout << cred3.getExpiredDate().toString() << std::endl;
 
-  EXPECT_TRUE(cred.isExpired() == false);
-  EXPECT_TRUE(cred2.isExpired() == false);
-  EXPECT_TRUE(cred3.isExpired() == true);
+  EXPECT_TRUE(cred.isExpired());
+  EXPECT_TRUE(cred2.isExpired());
+  EXPECT_FALSE(cred3.isExpired());
 }

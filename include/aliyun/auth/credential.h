@@ -54,12 +54,12 @@ class Credential {
 
   bool isExpired() const {
     if (expiredDate_.invalid()) {
-      return false;
+      return true;
     }
-    if (expiredDate_ > Date::currentUtcDate()) {
-      return false;
+    if (expiredDate_ < Date::currentUtcDate()) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   // getter and setters
@@ -102,9 +102,9 @@ class Credential {
  private:
   void setExpiredDate(int expiredHours) {
     if (expiredHours > 0) {
-      struct tm rawDate = *refreshDate_.c_tm();
-      rawDate.tm_hour += expiredHours;
-      expiredDate_ = Date(&rawDate);
+      time_t refresh_time = refreshDate_.ctime();
+      time_t expire_time = refresh_time + 3600;
+      expiredDate_ = Date(expire_time);
     }
   }
 

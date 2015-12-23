@@ -66,9 +66,8 @@ class Date {
 
   std::string format(const char* fmt) const;
 
-  // return raw handle
-  const struct tm* c_tm() const {
-    return &tm_;
+  const time_t ctime() const {
+    return time_;
   }
 
  private:
