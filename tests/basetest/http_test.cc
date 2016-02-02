@@ -84,30 +84,28 @@ TEST(HttpTest, testPUT) {
 // DONE: add unit test for POST, etc
 TEST(HttpTest, testPOST) {
   // set up a web server on localhost
-  HttpRequest request(
-      "http://203.88.161.174:8080/servlet/service?user=name&pass=word");
+  HttpRequest request("http://aliyun.com");
   request.setMethod(MethodType::POST);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_EQ("POST", response.getHeaderValue("Request-Method"));  // servlet
-  EXPECT_GT(response.getContent().length(), 0);
+  EXPECT_TRUE(response.getContent().length() > 0);
 }
 
 TEST(HttpTest, testHEAD) {
-  HttpRequest request("http://203.88.161.174:8080/servlet/service");
+  HttpRequest request("http://aliyun.com");
   request.setMethod(MethodType::HEAD);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_EQ("HEAD", response.getHeaderValue("Request-Method"));  // servlet
+  EXPECT_EQ("Tengine", response.getHeaderValue("Server"));
   EXPECT_EQ(0, response.getContent().length());
 }
 
 TEST(HttpTest, testDELETE) {
-  HttpRequest request("http://203.88.161.174:8080/servlet/service");
+  HttpRequest request("http://aliyun.com");
   request.setMethod(MethodType::Delete);
 
   HttpResponse response = doHttpRequest(request);
-  EXPECT_EQ("DELETE", response.getHeaderValue("Request-Method"));  // servlet
+  EXPECT_TRUE(response.getContent().length() > 0);
 }
 
 TEST(HttpTest, testOPTIONS) {

@@ -8,7 +8,6 @@ if not exist apr mklink /d apr apr-1.5.2
 if not exist apr-util mklink /d apr-util apr-util-1.5.4
 if not exist apr-iconv mklink /d apr-iconv apr-iconv-1.2.1
 if not exist googletest mklink /d googletest googletest-release-1.7.0
-if not exist pcre mklink /d pcre pcre-8.38
 
 echo set env %varset% ...
 

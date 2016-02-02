@@ -20,5 +20,4 @@ checkAndDownload(https://github.com/bagder/curl/releases/download/curl-7_45_0/cu
 checkAndDownload(https://github.com/apache/apr/archive/1.5.2.zip apr-1.5.2-win32-src.zip)
 checkAndDownload(https://github.com/apache/apr-util/archive/1.5.4.zip apr-util-1.5.4-win32-src.zip)
 checkAndDownload(http://www.us.apache.org/dist/apr/apr-iconv-1.2.1-win32-src-r2.zip apr-iconv-1.2.1-win32-src-r2.zip)
-checkAndDownload(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.zip pcre-8.38.zip)
 endif ()
