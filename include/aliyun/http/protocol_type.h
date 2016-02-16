@@ -22,7 +22,7 @@
 
 #include <string>
 
-#include "../exception.h"
+#include "aliyun/exception.h"
 
 namespace aliyun {
 namespace http {

@@ -24,13 +24,13 @@
 #include <map>
 #include <string>
 
-#include "../auth/url_encoder.h"
-#include "../auth/hmac_sha1.h"
-#include "../http/http_request.h"
-#include "../http/http_response.h"
-#include "../utils/date.h"
-#include "../utils/parameter_helper.h"
-#include "../utils/string_utils.h"
+#include "aliyun/auth/url_encoder.h"
+#include "aliyun/auth/hmac_sha1.h"
+#include "aliyun/http/http_request.h"
+#include "aliyun/http/http_response.h"
+#include "aliyun/utils/date.h"
+#include "aliyun/utils/parameter_helper.h"
+#include "aliyun/utils/string_utils.h"
 #include "object/key_type_enum.h"
 
 namespace aliyun {
